@@ -1,0 +1,37 @@
+<md-dialog aria-label="Create poll"  ng-cloak>
+  <form name="addPollForm">
+    <md-dialog-content style="max-width: 650px; min-width: 480px;">
+      <div class="md-dialog-content">
+        <h2>Create New Poll</h2>
+        <md-input-container class="md-block">
+            <label>Type</label>
+            <md-select ng-model="vm.poll.type">
+              <md-option ng-repeat="plugin in vm.pollTypes" 
+                         ng-value="plugin.name">
+                {{vm.inflector.humanize(plugin.name)}}
+              </md-option>
+            </md-select>   
+            <div ng-messages="addPollForm.collectionName.$error">
+              <div ng-message="required">This is required</div>
+            </div>
+            <div ng-messages="vm.serverErrors" ng-show="vm.serverErrors">
+              <div ng-message="403">You do not have permission to modify this collection</div>
+            </div>
+          </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+         Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit" 
+                   ng-click="vm.create()" 
+                   ng-disabled="addPollForm.$invalid">
+          Create
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

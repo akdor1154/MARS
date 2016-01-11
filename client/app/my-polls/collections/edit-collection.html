@@ -1,0 +1,35 @@
+<md-dialog aria-label="Edit collection"  ng-cloak>
+  <form name="editCollectionForm">
+    <md-dialog-content style="max-width:650px; min-width: 480px; ">
+      <div class="md-dialog-content">
+        <h2>Edit Collection</h2>
+        <md-input-container class="md-block">
+          <label>Name</label>
+          <input name="collectionName"
+                 required
+                 md-autofocus
+                 ng-model="vm.collection.name" >   
+          <div ng-messages="editCollectionForm.collectionName.$error">
+            <div ng-message="required">This is required</div>
+          </div>
+          <div ng-messages="vm.serverErrors" ng-show="vm.serverErrors">
+            <div ng-message="403">You do not have permission to modify this collection</div>
+          </div>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+         Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit"
+                   ng-click="vm.save()"
+                   ng-disabled="editCollectionForm.$invalid">
+          Save
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

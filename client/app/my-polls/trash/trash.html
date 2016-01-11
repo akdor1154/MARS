@@ -1,0 +1,84 @@
+<div ng-show="vm.groups.length == 0" class="background-message">
+  <div>There is nothing in your trash</div>
+</div>
+
+<div ng-show="vm.filteredGroups.length > 0" class="max-width-960">
+  <div ng-repeat="group in vm.filteredGroups">
+    <md-card>
+    
+      <md-toolbar class="bg-{{group.color}}">
+        <div class="md-toolbar-tools">
+          <h2 class="md-title" 
+              md-highlight-flags="i"
+              md-highlight-text="vm.shell.search.phrase">
+            {{ group.collection.name }} - {{ group.name }}
+          </h2>
+          <span flex></span>
+          <md-menu md-position-mode="target-right target">
+            <!-- Trigger element is a md-button with an icon -->
+            <md-button ng-click="$mdOpenMenu()" class="md-icon-button" aria-label="Open collection menu">
+              <md-icon md-menu-origin class="material-icons"> more_vert </md-icon>
+            </md-button>
+            <md-menu-content width="4">
+              <md-menu-item>
+                <md-button ng-click="vm.restoreAllGroupsInCollection(group.collection)">
+                  <md-icon class="material-icons">reply_all</md-icon>
+                  Restore All In Collection (TODO)
+                </md-button>
+              </md-menu-item>
+              <md-menu-item>
+                <md-button ng-click="destroyGroup(group)">
+                  <md-icon class="material-icons">clear</md-icon>
+                  Delete Permanently (TODO)
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </div>
+      </md-toolbar>
+      
+      <md-list>
+        <md-list-item ng-class="{ 'background-message': !poll.name }"
+                      ng-repeat="poll in group.polls"
+                      ng-show="group.deleted || poll.deleted">
+          <p md-highlight-flags="i"
+             md-highlight-text="vm.shell.search.phrase">
+            {{ poll.name || '[Unamed poll]' }}
+          </p>
+          <mars-action-progress action="poll._action">
+            <!-- 
+              .md-secondary causes the button to be created at the end 
+              of the md-list-item. This means it is no longer wrapped by 
+              mars-action-progress, and as such won't  be shown/hidden
+              properly. Adding !poll._action to ng-show is a work around 
+              to get the correct behaviour.
+            -->
+            <md-button class="md-secondary" 
+                       ng-click="vm.restorePoll(group, poll)"
+                       ng-show="poll.deleted && !poll._action">
+              Restore Poll
+            </md-button>
+          </mars-action-progress>
+        </md-list-item>
+        <md-list-item class="background-message"
+                      ng-show="group.polls.length === 0">
+          <p>There are no polls in this group</p>
+        </md-list-item>
+      </md-list>
+      
+      <div class="md-actions" 
+           layout="row" 
+           layout-align="end center"
+           ng-show="group.deleted">
+        <mars-action-progress action="group._action">
+          <md-button class="md-primary"
+                     ng-click="vm.restoreGroup(group)">
+            Restore Group
+          </md-button>
+        </mars-action-progress>
+      </div>
+      
+    </md-card>
+  </div>
+  
+</div>

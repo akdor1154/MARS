@@ -1,0 +1,23 @@
+md-whiteframe.mc-choice {
+	background-color: #fff;
+	cursor: pointer;
+	margin: 8px;
+	padding: 16px;
+}
+
+md-whiteframe.mc-choice h2 {
+	padding-right: 16px;
+	margin: 0;
+}
+
+md-whiteframe.mc-choice md-input-container {
+	padding-bottom: 2px;
+}
+
+md-whiteframe.mc-choice md-input-container .md-errors-spacer {
+	min-height: 0;
+}
+
+md-whiteframe.mc-choice.blank, md-white-space.mc-choice.blank md-icon {
+	color: rgba(0,0,0,0.26);
+}

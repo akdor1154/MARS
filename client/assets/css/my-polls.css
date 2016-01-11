@@ -1,0 +1,80 @@
+md-card, .as-sortable-placeholder {
+	margin-bottom: 28px;
+}
+
+md-card:first-child {
+	margin-top: 28px;
+}
+
+.drag-handle {
+	cursor: move;
+}
+
+.as-sortable-placeholder {
+	box-sizing: border-box;
+	background-color: #eee;
+	border: 3px dashed #ddd;
+}
+
+.background-message {
+	color: #999;
+	width: 100%;
+	margin-top: 28px;
+	text-align: center;
+}
+md-card .background-message {
+	font-style: italic;
+	width: inherit;
+	margin-top: 0;
+	text-align: left;
+}
+
+md-grid-tile-footer figcaption  {
+    width:100%;
+}
+
+
+.md-actions div.progress-wrapper {
+	width: 20px;
+	height: 20px;
+	margin: 16px;
+}
+.md-actions div.progress-wrapper md-progress-circular {
+	margin-left: -40px;
+	margin-top: -40px;
+}
+
+.action-progress {
+	color: #999;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 36px;
+	padding: 0 6px;
+}
+.action-progress md-progress-circular {
+	margin: 0 8px;
+}
+mars-action-progress.shell {
+	margin-top: 28px;
+}
+
+md-toolbar md-input-container .md-errors-spacer {
+	display: none;
+}
+
+span.highlight {
+	background: #BBDEFB;
+}
+md-toolbar span.highlight {
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.edit-poll:first-child {
+	margin-top: 28px;
+}
+.edit-poll .tools .md-title, .edit-poll .tools h3 {
+	margin: 1em 14px;
+}
+.edit-poll md-divider {
+	margin-top: 28px;
+}

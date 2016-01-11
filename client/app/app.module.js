@@ -1,0 +1,28 @@
+(function() {
+  'use strict';
+
+  angular
+    .module('app', [
+      'ngMaterial', 
+      'ngMessages',
+      'ngFileSaver',
+      'ui.router',
+      
+      'app.data',
+      'app.debounce',
+      'app.inflector',
+      'app.logger',
+      'app.plugins',
+      'app.theme',
+      
+      'app.auth',
+      'app.poll',
+      'app.result',
+      'app.myPolls',
+      
+      'plugins.bar-chart',
+      'plugins.multiple-choice',
+      'plugins.word-cloud'
+    ]);
+    
+})();

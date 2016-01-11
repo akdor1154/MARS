@@ -1,0 +1,61 @@
+<md-dialog aria-label="Create poll"  ng-cloak>
+  <form name="exportResultForm">
+  <md-dialog-content style="max-width: 650px; min-width: 480px;">
+    <div class="md-dialog-content">
+      <h2>Export Result</h2>
+      <md-input-container class="md-block">
+        <label>Poll</label>
+        <md-select required
+                   ng-change="vm.selectedPollChanged()"
+                   ng-model="vm.selectedPoll" 
+                   ng-model-options="{trackBy: '$value._id'}" >
+          <md-option ng-repeat="poll in vm.polls" 
+                     ng-value="poll">
+            {{poll.name}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Result</label>
+        <md-select required
+                   ng-change="vm.selectedResultChanged()"
+                   ng-disabled="!vm.results || vm.results.length === 0"
+                   ng-model="vm.selectedResult" 
+                   ng-model-options="{trackBy: '$value._id'}" >
+          <md-option ng-repeat="result in vm.results" 
+                     ng-value="result">
+            {{result.lastActivation.start | date:vm.resultDateFormat}} 
+            - {{result.responsesCount}} Responses
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Export Format</label>
+        <md-select required
+                   ng-change="vm.selectedExporterChanged()"
+                   ng-disabled="!vm.exporters || vm.exporters.length === 0"
+                   ng-model="vm.selectedExporter" 
+                   ng-model-options="{trackBy: '$value.name'}" >
+          <md-option ng-repeat="exporter in vm.exporters" 
+                     ng-value="exporter">
+            {{exporter.name}} ({{exporter.extension}})
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+    <md-dialog-actions>
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+          Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit" 
+                   ng-click="vm.export()"
+                   ng-disabled="exportResultForm.$invalid">
+          Export
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

@@ -1,0 +1,10 @@
+md-whiteframe.wc-response {
+	background-color: #fff;
+	cursor: pointer;
+	margin: 8px;
+	padding: 16px;
+}
+
+md-whiteframe.wc-response md-input-container .md-errors-spacer {
+	min-height: 0;
+}

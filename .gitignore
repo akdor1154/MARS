@@ -1,7 +1,10 @@
 # Node/Bower Generated Folders
 node_modules
-bower_components
+/client/assets/bower_components
 npm-debug.log
+
+# Mongodb data folder
+/data
 
 # Mac Specific Files
 .DS_Store

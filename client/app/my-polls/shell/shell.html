@@ -1,0 +1,109 @@
+<md-sidenav layout="column"
+            class="md-sidenav-left md-whiteframe-z2"
+            md-component-id="left"
+            md-is-locked-open="$mdMedia('gt-md')"
+            ng-include="'app/my-polls/shell/side-nav.html'" >
+</md-sidenav>
+
+<div flex layout="column">
+  <md-toolbar class="md-whiteframe-1dp" ng-hide="vm.shell.search.show">
+    <div class="md-toolbar-tools">
+      <md-button aria-label="Settings" 
+                 class="md-icon-button md-secondary" 
+                 hide-gt-md
+                 ng-click="vm.openLeftMenu()" >
+        <md-icon class="material-icons">menu</md-icon>
+      </md-button>
+      <md-button aria-label="Go back"
+                 class="md-icon-button" 
+                 ng-click="vm.goBack()"
+                 ng-show="vm.shell.back.state" >
+          <md-tooltip>Back</md-tooltip>
+          <md-icon class="material-icons">arrow_back</md-icon>
+      </md-button>
+      <h3>{{ vm.shell.title }}</h3>
+      <span flex></span>
+      <md-button aria-label="Search"
+                 class="md-icon-button" 
+                 ng-click="vm.shell.showSearch()"
+                 ng-show="vm.shell.search.callback" >
+          <md-tooltip>Search</md-tooltip>
+          <md-icon class="material-icons">search</md-icon>
+      </md-button>
+      <md-button aria-label="Preview polls"
+                 class="md-icon-button" 
+                 ng-click="vm.goToState('poll', { preview: true })">
+        <md-tooltip>Preview polls</md-tooltip>
+        <md-icon class="material-icons">visibility</md-icon>
+      </md-button>
+      <md-menu md-position-mode="target-right target" >
+        <md-button aria-label="Account"
+                   class="md-icon-button" 
+                   ng-click="$mdOpenMenu($event)">
+          <md-icon class="material-icons">account_circle</md-icon>
+        </md-button>
+        <md-menu-content width="3" >
+          <md-menu-item>
+            <md-button ng-click="vm.logout()">
+              Sign out
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <md-menu md-position-mode="target-right target">
+        <!-- Trigger element is a md-button with an icon -->
+        <md-button aria-label="Open menu"
+                   class="md-icon-button" 
+                   ng-show="vm.shell.menu.show" 
+                   ng-click="$mdOpenMenu()" >
+          <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item ng-repeat="item in vm.shell.menu.items">
+            <md-button ng-click="item.callback()">
+              <md-icon md-menu-align-target class="material-icons" ng-show="item.icon">{{item.icon}}</md-icon>
+              {{item.label}}
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+  </md-toolbar>
+  
+  <md-toolbar class="md-hue-1 md-whiteframe-2dp"
+              mars-focus-when="vm.shell.search.show"
+              md-theme="search"
+              ng-show="vm.shell.search.show">
+    <div class="md-toolbar-tools">
+      <md-button aria-label="Close search"
+                 class="md-icon-button"
+                 ng-click="vm.shell.hideSearch()">
+        <md-icon class="material-icons">arrow_back</md-icon>
+      </md-button>
+      <md-input-container flex>
+        <label>&nbsp;</label>
+        <input placeholder="Search..."
+               mars-autofocus
+               ng-model="vm.shell.search.phrase" 
+               ng-change="vm.shell.searchPhraseChanged()">
+      </md-input-container>
+      <md-button aria-label="Close search"
+                 class="md-icon-button"
+                 ng-click="vm.shell.hideSearch()">
+        <md-icon class="material-icons">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-content flex layout="column" class="md-hue-1">
+    <a id="top"></a>
+    <mars-action-progress action="vm.action"
+                          class="shell"
+                          orientation="vertical" 
+                          md-diameter="50px">
+      <div ui-view layout-fill layout="row"></div>
+    </mars-action-progress>
+  </md-content>
+  
+</div>
+

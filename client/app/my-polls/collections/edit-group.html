@@ -1,0 +1,52 @@
+<md-dialog aria-label="Edit group"  ng-cloak>
+  <form name="editGroupForm">
+    <md-dialog-content style="max-width:650px; min-width: 480px; min-height:500px; ">
+      <div class="md-dialog-content">
+        <h2>Edit Group</h2>
+        <md-input-container class="md-block">
+          <label>Name</label>
+          <input name="groupName" 
+                 required 
+                 md-autofocus
+                 ng-disabled="vm.action"
+                 ng-model="vm.group.name">   
+          <div ng-messages="editGroupForm.groupName.$error">
+            <div ng-message="required">This is required</div>
+          </div>
+          <div ng-messages="vm.serverErrors" ng-show="vm.serverErrors">
+            <div ng-message="403">You do not have permission to modify this group</div>
+          </div>
+        </md-input-container>
+        <h4>Color</h4>
+        <md-grid-list
+          md-cols-sm="6" md-cols-md="6" md-cols-gt-md="6"
+          md-row-height-gt-md="1:1" md-row-height="2:2"
+          md-gutter="12px" md-gutter-gt-sm="8px" >
+          
+          <md-grid-tile class="bg-{{color}}" 
+                        ng-repeat="color in vm.colors" 
+                        ng-class="{'md-whiteframe-2dp': vm.group.color === color}"
+                        ng-click="vm.action || (vm.group.color = color)">
+            <md-grid-tile-footer ng-show="vm.group.color === color">
+              <h3 style="margin: 0 4px; text-align: center">{{vm.inflector.humanize(color)}}</h3>
+            </md-grid-tile-footer>
+          </md-grid-tile>
+          
+        </md-grid-list>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+         Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit" 
+                   ng-click="vm.save()" 
+                   ng-disabled="editGroupForm.$invalid">
+          Save
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

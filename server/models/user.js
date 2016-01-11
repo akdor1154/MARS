@@ -1,0 +1,76 @@
+var mongoose = require('mongoose')
+  , Schema = mongoose.Schema
+  , Promise = require('bluebird')
+  , bcrypt = require('bcrypt')
+  , _ = require('underscore')
+  , errors = require('../utils/errors')
+  , log = require('../utils/log');
+
+  
+var userSchema = new Schema({
+	username: { type: String, index: true }, 
+  password: String,
+  group: String,
+	name: {
+    first: String,
+    last: String
+  },
+	subscriptions: [{ type: Schema.Types.ObjectId, ref: 'PollCollection', index: true }]
+}, { collection: 'users' });
+userSchema.set('toObject', { retainKeyOrder: true });
+
+
+userSchema.statics.getSubscriptions = function(userId) {
+  return User.findById(userId, 'subscriptions')
+    .exec()
+    .then(function(user) {
+      if (!user)
+        return Promise.reject(errors.notFound('User', userId));
+      return user.subscriptions;
+    });
+}
+
+userSchema.statics.subscribeToCollection = function(userId, collectionToken) {
+  collectionToken = collectionToken.toUpperCase();
+  var PollCollection = mongoose.model('PollCollection');
+  return PollCollection.findOne({ token: collectionToken })
+    .select('_id')
+    .exec()
+    .then(function(collection) {
+      if (!collection)
+        return Promise.reject(errors.notFound('Collection', 'token:' + collectionToken));
+      return User.update(
+        { _id: userId }, 
+        { $addToSet: { subscriptions: collection._id } }
+      ).exec().return(collection._id);
+    });
+}
+
+
+userSchema.methods.isPasswordValid = function(password) {
+  var user = this;
+  return new Promise(function(resolve, reject) {
+    bcrypt.compare(password, user.password, function(err, res) {
+      if (err)
+        return reject(err);
+      resolve(res);
+    }); 
+  });
+}
+
+userSchema.methods.hashPassword = function() {
+  var user = this;
+  return new Promise(function(resolve, reject) {
+    bcrypt.hash(user.password, 10, function(err, hash) {
+      if (err)
+        return reject(err);
+      user.password = hash;
+      resolve(user);
+    }); 
+  });
+}
+
+
+var User = mongoose.model('User', userSchema);
+
+module.exports = User;

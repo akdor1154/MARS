@@ -1,0 +1,10 @@
+<div ng-hide="action" ng-transclude></div>
+<div class="action-progress" 
+     layout="{{orientation === 'vertical' ? 'column' : 'row'}}" 
+     layout--align="center center"
+     ng-show="action">
+  <md-progress-circular md-diameter="{{mdDiameter || '24px'}}"
+                        md-mode="indeterminate">
+  </md-progress-circular>
+  {{action | uppercase}}
+</div>

@@ -1,0 +1,40 @@
+<form name="editPollForm"
+      ng-controller="MultipleChoicePollEditController as vm">
+  <md-card>
+    <md-card-content layout="row" layout-align="start center"> 
+      <md-input-container style="font-size: larger" flex>
+        <label>Question</label>
+        <textarea name="question"
+                  required
+                  mars-autofocus
+                  ng-model="poll.data.question"
+                  ng-change="vm.questionChanged(poll)" >
+        </textarea>
+        <div ng-messages="editPollForm.question.$error">
+          <div ng-message="required">This is required</div>
+        </div>
+      </md-input-container>
+    </md-card-content>
+  </md-card>
+
+  <md-whiteframe class="md-whiteframe-2dp mc-choice" 
+                 layout="row" 
+                 layout-align="start center" 
+                 ng-class="{ blank: choice.blank }" 
+                 ng-repeat="choice in poll.data.choices track by $index">
+    <h2>{{choice.label}}</h2>
+    <md-input-container flex>
+      <label>{{ choice.blank ? 'Start typing to create choice' : 'Text' }}</label>
+      <input ng-model="choice.text" 
+             ng-change="vm.choiceValueChanged($index, choice.text)">
+    </md-input-container>
+    <md-button aria-label="Delete Choice" 
+               class="md-icon-button" 
+               tabindex="-1"
+               ng-click="vm.removeChoice($index)" 
+               ng-show="!choice.blank" >
+      <md-icon class="material-icons">close</md-icon>
+      <md-tooltip>Delete choice</md-tooltip>
+    </md-button>
+  </md-whiteframe>
+</form>

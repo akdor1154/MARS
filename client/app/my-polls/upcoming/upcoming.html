@@ -1,0 +1,37 @@
+<div ng-show="upcomingVm.groups.length > 0" class="max-width-960">
+  <div ng-repeat="group in upcomingVm.filteredGroups">
+    <md-card>
+
+      <md-toolbar class="bg-{{group.color}}">
+        <div class="md-toolbar-tools">
+          <h2 class="md-title" 
+              md-highlight-flags="i"
+              md-highlight-text="vm.shell.search.phrase">
+            {{ group.collection.name }} - {{ group.name }}
+          </h2>
+          <span flex></span>
+          <md-button class="md-icon-button md-secondary" 
+                     aria-label="Finished Group" 
+                     ng-click="upcomingVm.markGroupAsDone($index)">
+            <md-icon class="material-icons">check</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <md-list>
+        <md-list-item ng-class="{ 'background-message': !poll.name }"
+                      ng-click="upcomingVm.activatePoll(poll)"
+                      ng-repeat="poll in shownPolls = (group.polls | filter:{deleted:'!'})" >
+          <p md-highlight-flags="i"
+             md-highlight-text="vm.shell.search.phrase">
+            {{ poll.name || '[Unamed poll]' }}
+          </p>
+        </md-list-item>
+        <md-list-item class="background-message"
+                      ng-show="shownPolls.length === 0">
+          <p>There are no polls in this group</p>
+        </md-list-item>
+      </md-list>
+    </md-card>
+  </div>
+</div>

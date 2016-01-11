@@ -1,0 +1,60 @@
+<div flex layout="column">
+	<md-toolbar class="md-whiteframe-1dp">
+	  <div class="md-toolbar-tools">
+      <h2>
+        <span>Mars</span>
+      </h2>
+      <span flex></span>
+      <md-menu>
+        <md-button aria-label="Resume result"
+                   ng-click="$mdOpenMenu($event)"
+                   ng-hide="vm.result.active && (!vm.pastResults || vm.pastResults.length === 0)">
+          Resume
+        </md-button>
+        <md-menu-content width="10">
+          <md-menu-item ng-show="!vm.result.active">
+            <md-button ng-click="vm.resume(vm.result)">
+              <md-icon class="material-icons">restore</md-icon>
+              This result
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider ng-show="!vm.result.active"></md-menu-divider>
+          <md-menu-item ng-repeat="pastResult in vm.pastResults">
+            <md-button ng-click="vm.resumePast(pastResult)">
+              {{pastResult.start | date:'EEEE, dd MMMM yyyy, hh:mma'}}
+              - {{ pastResult.responsesCount }} Responses
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <md-button class="md-icon-button"
+                 aria-label="Close result"
+                 ng-show="vm.isOwner" 
+                 ng-click="vm.close()">
+        <md-icon class="material-icons">close</md-icon>
+      </md-button>
+	  </div>
+	</md-toolbar>
+
+	<md-content flex layout-padding class="md-hue-1">
+    <div class="max-width-960">
+      <mars-plugin mars-plugin-name="vm.result.type"
+                   mars-plugin-view="result.view"
+                   poll="vm.poll"
+                   result="vm.result"></mars-plugin>
+    </div>
+	</md-content>
+  
+  <md-toolbar style="background: rgba(0,0,0,0.54);" ng-show="vm.result.active">
+    <div class="md-toolbar-tools">
+      <span>To respond to this poll, join the feed: <span class="md-accent">{{vm.result.token}}</span></span>
+    </div>
+  </md-toolbar>
+  
+  <md-toolbar class="md-warn" ng-show="vm.result && !vm.result.active">
+    <div class="md-toolbar-tools">
+      <span>The poll is inactive</span>
+      <span flex></span>
+    </div>
+  </md-toolbar>
+</div>

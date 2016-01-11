@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+  <title>MARS</title>
+
+  <meta name="viewport" content="initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" type="text/css" href="assets/bower_components/angular-material/angular-material.css">
+  <link rel="stylesheet" type="text/css" href="assets/bower_components/roboto-fontface/css/roboto-fontface.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="assets/bower_components/ng-sortable/dist/ng-sortable.min.css">
+
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/bg-colors.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/my-polls.css">
+  
+  <link rel="stylesheet" type="text/css" href="plugins/multiple-choice/multiple-choice.css">
+  <link rel="stylesheet" type="text/css" href="plugins/word-cloud/word-cloud.css">
+  
+</head>
+<body lang="en" layout="column" class="ng-scope">
+
+  <div ui-view layout="row" flex></div>
+
+	<script type="text/javascript" src="assets/bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="assets/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script type="text/javascript" src="assets/bower_components/angular-material/angular-material.min.js"></script>
+  <script type="text/javascript" src="assets/bower_components/angular-animate/angular-animate.min.js"></script>
+  <script type="text/javascript" src="assets/bower_components/angular-aria/angular-aria.min.js"></script>
+  <script type="text/javascript" src="assets/bower_components/angular-messages/angular-messages.min.js"></script>
+  <script type="text/javascript" src="assets/bower_components/angular-file-saver/dist/angular-file-saver.bundle.min.js"></script>
+  <script type="text/javascript" src="assets/bower_components/underscore/underscore-min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript" src="app/app.module.js"></script>
+  <script type="text/javascript" src="app/app.config.js"></script>
+  <script type="text/javascript" src="app/app.run.js"></script>
+	
+  <script type="text/javascript" src="app/core/data/data.module.js"></script>
+  <script type="text/javascript" src="app/core/data/csv-writer.service.js"></script>
+	<script type="text/javascript" src="app/core/data/mars.service.js"></script>
+
+	<script type="text/javascript" src="app/core/debounce/debounce.module.js"></script>
+	<script type="text/javascript" src="app/core/debounce/debounce.service.js"></script>
+  
+	<script type="text/javascript" src="app/core/inflector/inflector.module.js"></script>
+	<script type="text/javascript" src="app/core/inflector/inflector.provider.js"></script>
+  
+	<script type="text/javascript" src="app/core/logger/logger.module.js"></script>
+	<script type="text/javascript" src="app/core/logger/logger.js"></script>
+  
+	<script type="text/javascript" src="app/core/plugins/plugins.module.js"></script>
+	<script type="text/javascript" src="app/core/plugins/constants.js"></script>
+	<script type="text/javascript" src="app/core/plugins/plugin.directive.js"></script>
+	<script type="text/javascript" src="app/core/plugins/plugins.provider.js"></script>
+	<script type="text/javascript" src="app/core/plugins/poll-plugin.service.js"></script>
+	<script type="text/javascript" src="app/core/plugins/result-plugin.service.js"></script>
+  
+	<script type="text/javascript" src="app/core/theme/theme.module.js"></script>
+	
+  <script type="text/javascript" src="app/auth/auth.module.js"></script>
+	<script type="text/javascript" src="app/auth/auth.states.js"></script>
+	<script type="text/javascript" src="app/auth/auth.service.js"></script>
+	<script type="text/javascript" src="app/auth/login.js"></script>
+  
+  <script type="text/javascript" src="app/poll/poll.module.js"></script>
+  <script type="text/javascript" src="app/poll/poll.states.js"></script>
+  <script type="text/javascript" src="app/poll/poll.service.js"></script>
+  <script type="text/javascript" src="app/poll/poll.js"></script>
+  <script type="text/javascript" src="app/poll/poll.subscribe.js"></script>
+
+  <script type="text/javascript" src="app/result/result.module.js"></script>
+  <script type="text/javascript" src="app/result/result.states.js"></script>
+  <script type="text/javascript" src="app/result/result.service.js"></script>
+  <script type="text/javascript" src="app/result/result.js"></script>
+	
+	<script type="text/javascript" src="app/my-polls/my-polls.module.js"></script>
+	<script type="text/javascript" src="app/my-polls/my-polls.states.js"></script>
+	<script type="text/javascript" src="app/my-polls/my-polls.service.js"></script>
+	<script type="text/javascript" src="app/my-polls/shell/shell.js"></script>
+	<script type="text/javascript" src="app/my-polls/shell/shell.service.js"></script>
+  <script type="text/javascript" src="app/my-polls/shell/add-collection.js"></script>
+	<script type="text/javascript" src="app/my-polls/shell/action-progress.directive.js"></script>
+	<script type="text/javascript" src="app/my-polls/shell/focus-when.directive.js"></script>
+	<script type="text/javascript" src="app/my-polls/shell/scroll-to.directive.js"></script>
+	<script type="text/javascript" src="app/my-polls/upcoming/upcoming.js"></script>
+  <script type="text/javascript" src="app/my-polls/collections/view-collection.js"></script>
+  <script type="text/javascript" src="app/my-polls/collections/edit-collection.js"></script>
+  <script type="text/javascript" src="app/my-polls/collections/add-group.js"></script>
+	<script type="text/javascript" src="app/my-polls/collections/edit-group.js"></script>
+	<script type="text/javascript" src="app/my-polls/collections/export-result.js"></script>
+	<script type="text/javascript" src="app/my-polls/collections/add-poll.js"></script>
+	<script type="text/javascript" src="app/my-polls/collections/edit-polls.js"></script>
+	<script type="text/javascript" src="app/my-polls/trash/trash.js"></script>
+	
+	<script type="text/javascript" src="plugins/bar-chart/bar-chart.plugin.js"></script>
+	<script type="text/javascript" src="plugins/bar-chart/bar-chart.directive.js"></script>
+	
+	<script type="text/javascript" src="plugins/multiple-choice/multiple-choice.plugin.js"></script>
+	<script type="text/javascript" src="plugins/multiple-choice/multiple-choice.poll.edit.js"></script>
+	<script type="text/javascript" src="plugins/multiple-choice/multiple-choice.poll.view.js"></script>
+	<script type="text/javascript" src="plugins/multiple-choice/multiple-choice.result.export.all-responses-csv.js"></script>
+	<script type="text/javascript" src="plugins/multiple-choice/multiple-choice.result.export.final-responses-csv.js"></script>
+	<script type="text/javascript" src="plugins/multiple-choice/multiple-choice.result.view.js"></script>
+	
+  <script type="text/javascript" src="plugins/word-cloud/word-cloud.plugin.js"></script>
+  <script type="text/javascript" src="plugins/word-cloud/word-cloud.directive.js"></script>
+  <script type="text/javascript" src="plugins/word-cloud/word-cloud.poll.edit.js"></script>
+  <script type="text/javascript" src="plugins/word-cloud/word-cloud.poll.view.js"></script>
+	<script type="text/javascript" src="plugins/word-cloud/word-cloud.result.export.all-responses-csv.js"></script>
+	<script type="text/javascript" src="plugins/word-cloud/word-cloud.result.export.final-responses-csv.js"></script>
+  <script type="text/javascript" src="plugins/word-cloud/word-cloud.result.view.js"></script>
+  
+</body>
+</html>

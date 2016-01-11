@@ -1,0 +1,68 @@
+<div class="edit-poll" ng-repeat="poll in vm.polls"
+     mars-scroll-to="poll-{{$index}}"
+     mars-scroll-when="poll._isNew">
+  
+  <a id="poll-{{$index}}"></a>
+  
+  <div class="tools" layout="row" layout-align="start center">
+    <div class="md-title md-primary">
+      Poll {{$index + 1}}: {{vm.inflector.humanize(poll.type)}}
+    </div>
+    <span flex></span>
+    <mars-action-progress action="poll._action ? poll._action : (poll._isSaving ? 'Saving' : null)"
+                          md-diameter="36px">
+    </mars-action-progress>
+    <md-button class="md-icon-button" 
+               aria-label="Reorder: move up"
+               ng-disabled="$first"
+               ng-click="vm.reorderPoll($index, $index - 1)">
+      <md-tooltip>
+        Move up
+      </md-tooltip>
+      <md-icon class="material-icons">arrow_upward</md-icon>
+    </md-button>
+    <md-button class="md-icon-button" 
+               aria-label="Reorder: move down"
+               ng-disabled="$last"
+               ng-click="vm.reorderPoll($index, $index + 1)">
+      <md-tooltip>
+        Move down
+      </md-tooltip>
+      <md-icon class="material-icons">arrow_downward</md-icon>
+    </md-button>
+    <md-button class="md-icon-button" 
+               aria-label="Delete poll"
+               ng-click="vm.deletePoll($index)"
+               ng-disabled="poll._isSaving">
+      <md-tooltip>
+        Delete
+      </md-tooltip>
+      <md-icon class="material-icons">delete</md-icon>
+    </md-button>
+  </div>
+  
+  <!-- <div mars-focus-when="poll._isNew"> -->
+    <!-- 
+      mars-focus-when isn't working with mars-plugin. For the time being
+      stick with ng-include
+    
+    <mars-plugin mars-plugin-name="poll.type"
+                 mars-plugin-view="poll.edit"
+                 poll="poll"></mars-plugin>
+    -->
+    <ng-include mars-focus-when="poll._isNew"
+                src="vm.pollEditTemplate(poll)"></ng-include>
+  <!-- </div> -->
+                   
+  <md-divider ng-show="!$last"></md-divider>
+  
+</div>
+
+<div layout="column" layout-align="center center">
+  <md-button aria-label="New Group"
+             style="color: rgba(0,0,0,0.54);"
+             ng-click="vm.addPoll()">
+    <md-icon class="material-icons">add</md-icon>
+    New Poll
+  </md-button> 
+</div>
