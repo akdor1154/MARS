@@ -178,7 +178,7 @@
         return marsService.request('poll delete', { _id: poll._id })
           .then(function() {
             poll.group.polls.splice(pollIndex(poll), 1);
-            log.info('Deleted poll: ' + poll._id);
+            $log.info('Deleted poll: ' + poll._id);
           });
       }
     };

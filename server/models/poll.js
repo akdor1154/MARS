@@ -160,6 +160,13 @@ pollSchema.statics.ownerUpdateById = function(ownerId, id, update, options) {
 }
 
 
+pollSchema.methods.hasOwner = function(userId) {
+  var poll = this;
+  return _.some(poll.owners, function(owner) {
+    return owner.toString() === userId;
+  });
+}
+
 pollSchema.methods.addToGroup = function() {
   var PollGroup = mongoose.model('PollGroup'),
       poll = this;
