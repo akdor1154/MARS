@@ -1,3 +1,12 @@
+<div layout="column" 
+     layout-fill 
+     layout-align="center center" 
+     class="background-message"
+     ng-show="upcomingVm.groups.length == 0" >
+  <div>You have no upcoming polls</div>
+  <div>Mark polls as upcoming by clicking the <md-icon class="material-icons">autorenew</md-icon> button</div>
+</div>
+
 <div ng-show="upcomingVm.groups.length > 0" class="max-width-960">
   <div ng-repeat="group in upcomingVm.filteredGroups">
     <md-card>
