@@ -65,6 +65,11 @@
       $mdDialog.show({
         templateUrl: 'app/my-polls/shell/add-collection.html',
         controller: 'AddCollectionController as vm'
+      }).then(function(collection) {
+        $mdSidenav('left').toggle();
+        $state.go('myPolls.collections.viewCollection', { 
+          collectionId: collection._id 
+        });
       });
     }
     
