@@ -29,9 +29,9 @@
     "angular-messages": "~1.4.8",
     "angular-file-saver": "~1.0.2",
     "d3": "~3.5.10",
-    "d3-cloud": "~1.2.1"
+    "d3-cloud": "~1.2.1",
     "roboto-fontface": "~0.4.2",
-    "underscore": "~1.8.3",
+    "underscore": "~1.8.3"
   },
   "resolutions": {
     "angular": "~1.4.0"
