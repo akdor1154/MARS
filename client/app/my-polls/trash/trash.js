@@ -54,9 +54,10 @@
     }
     
     function restoreGroup(group) {
+      $log.debug('Restore group: ' + group.name);
       group._action = 'Restoring';
       myPollsService.restoreGroup(group).then(function() {
-        delete group._isRestoring;
+        delete group._action;
         vm.groups.splice(vm.groups.indexOf(group), 1);
         var filteredIndex = vm.filteredGroups.indexOf(group);
         if (filteredIndex >= 0)
@@ -67,7 +68,7 @@
     function restorePoll(group, poll) {
       poll._action = 'Restoring';
       myPollsService.restorePoll(poll).then(function() {
-        poll._action = null;
+        delete poll._action;
         if (group.deleted || _hasDeletedPolls(group))
           return;
         vm.groups.splice(vm.groups.indexOf(group), 1);
