@@ -29,6 +29,7 @@
       register: register,
       $get: Plugins
     }
+    provider.$get.$inject = ['$rootScope', '$q', '$window', '$document'];
     return provider;
     
     
@@ -53,7 +54,6 @@
     }
 
     
-    Plugins.$injector = ['$rootScope', '$q', '$window', '$document'];
     
     function Plugins($rootScope, $q, $window, $document) {
       
