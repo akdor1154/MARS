@@ -52,8 +52,7 @@
         });
         
       }, function(err) {
-        $log.error(err);
-        //$state.go('auth.login');
+        $state.go('auth.login');
       })
     }
     
