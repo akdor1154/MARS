@@ -478,6 +478,27 @@ module.exports = function(
           respondWithError('result viewer', err);
         });
     });
+    
+/**
+ * Search for a user
+ *
+ */
+    socket.on('user search', function(data) {
+      log.trace('Socket: search user', data);
+      confirmHasFields(data, 'phrase')
+        .then(function() {
+          return User.search(data.phrase, data.group)
+            .select('name username')
+            .exec();
+        })
+        .then(function(users) {
+          log.debug('users = ', users);
+          socket.emit('user search', users);
+        })
+        .catch(function(err) {
+          respondWithError('user search', err);
+        });
+    });
 		
 /**
  * Client disconnected

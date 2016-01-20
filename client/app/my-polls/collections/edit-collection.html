@@ -1,4 +1,6 @@
-<md-dialog aria-label="Edit collection"  ng-cloak>
+<md-dialog aria-label="Edit collection" 
+           class="edit-collection" 
+           ng-cloak>
   <form name="editCollectionForm">
     <md-dialog-content style="max-width:650px; min-width: 480px; ">
       <div class="md-dialog-content">
@@ -16,6 +18,34 @@
             <div ng-message="403">You do not have permission to modify this collection</div>
           </div>
         </md-input-container>
+        <h4>Owners</h4>
+        <md-list>
+          <md-list-item ng-repeat="owner in vm.collection.owners">
+            <md-icon aria-label="Remove owner"
+                       ng-click="vm.removeOwner(owner)">person</md-icon>
+            <p>{{ owner.name.first }} {{ owner.name.last }} ({{ owner.username }})</p>
+            <md-icon aria-label="Remove owner"
+                     class="md-secondary"
+                     ng-click="vm.removeOwner(owner)"
+                     ng-hide="owner._id === vm.user._id">clear</md-icon>
+          </md-list-item>
+        </md-list>
+        <div class="icon-autocomplete" layout="row">
+          <md-icon>add</md-icon>
+          <md-autocomplete flex 
+                           required
+                           md-floating-label="Add owner"
+                           md-items="item in vm.searchUsers(vm.addOwnerText)"
+                           md-min-length="3"
+                           md-no-cache="true"
+                           md-search-text="vm.addOwnerText"
+                           md-selected-item="vm.addOwnerSelectedUser"
+                           md-selected-item-change="vm.addOwner(vm.addOwnerSelectedUser)">
+            <md-item-template>
+              <span md-highlight-text="vm.addOwnerText">{{item.name.first}} {{item.name.last}} ({{item.username}})</span>
+            </md-item-template>
+          </md-autocomplete>
+        </div>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center">

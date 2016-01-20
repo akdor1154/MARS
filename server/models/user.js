@@ -25,6 +25,8 @@ var userSchema = new Schema({
 }, { collection: 'users' });
 userSchema.set('toObject', { retainKeyOrder: true });
 
+userSchema.index({ 'name.first': 'text', 'name.last': 'text', 'username': 'text' });
+
 
 userSchema.statics.getSubscriptions = function(userId) {
   return User.findById(userId, 'subscriptions')
@@ -34,6 +36,20 @@ userSchema.statics.getSubscriptions = function(userId) {
         return Promise.reject(errors.notFound('User', userId));
       return user.subscriptions;
     });
+}
+
+userSchema.statics.search = function(phrase, group) {
+  var phraseRegex = new RegExp(
+    phrase.replace(/[\\^$.|?*+()\[\]]/g, '\\$&'), 'i');
+  conditions = { 
+    $or: [
+      { username: phraseRegex },
+      { 'name.first': phraseRegex },
+      { 'name.last': phraseRegex }
+    ]
+  };
+  group && (conditions.group = group);  
+  return User.find(conditions);
 }
 
 userSchema.statics.subscribeToCollection = function(userId, collectionToken) {

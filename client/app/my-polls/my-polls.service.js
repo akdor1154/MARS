@@ -16,6 +16,7 @@
     
     return {
       activatePoll: activatePoll,
+      cascadeOwners: cascadeOwners,
       createCollection: createCollection,
       createGroup: createGroup,
       createPoll: createPoll,
@@ -34,6 +35,7 @@
       restoreGroup: restoreGroup,
       restorePoll: restorePoll,
       searchGroups: searchGroups,
+      searchUsers: searchUsers,
       swapGroups: swapGroups,
       swapPolls: swapPolls,
       updateCollection: updateCollection,
@@ -48,6 +50,24 @@
     function activatePoll(poll) {
       return marsService.request('poll activate', {
         _id: poll._id
+      });
+    }
+    
+/** 
+ * Cascades a collection's owners array down to all groups and polls within
+ * the collection
+ *
+ */
+    function cascadeOwners(collection) {
+      if (!angular.isArray(collection.groups))
+        return
+      collection.groups.forEach(function(group) {
+        group.owners = collection.owners;
+        if (!angular.isArray(group.polls))
+          return;
+        group.polls.forEach(function(poll) {
+          poll.owners = group.owners;
+        });
       });
     }
     
@@ -345,6 +365,18 @@
       });
     }
     
+/** 
+ * Returns a list of users that match the search phrase
+ *
+ */
+  function searchUsers(phrase, group) {
+    if (!phrase || phrase.length < 3)
+      return;
+    var data = { phrase: phrase };
+    group && (data.group = group);
+    return marsService.request('user search', data);
+  }
+    
 /**
  * Swap the collection and position of two groups
  *
@@ -384,7 +416,7 @@
     
     function updateCollection(collection, keys, response) {
       var collectionCopy = marsService.clone(collection, keys);
-      marsService.depopulate(collectionCopy, 'groups');
+      marsService.depopulate(collectionCopy, ['groups', 'owners']);
       
       if (response)
         collectionCopy._response = (response === true ? 'updated' : response);
@@ -403,7 +435,7 @@
     
     function updateGroup(group, keys, response) {
       var groupCopy = marsService.clone(group, keys);
-      marsService.depopulate(groupCopy, 'polls');
+      marsService.depopulate(groupCopy, ['owners', 'polls']);
       
       if (_.isObject(groupCopy.collection)) {
         groupCopy.pollCollection = group.collection._id;
@@ -427,7 +459,7 @@
     
     function updatePoll(poll, keys, response) {
       var pollCopy = marsService.clone(poll, keys);
-      marsService.depopulate(pollCopy, ['group', 'pollCollection']);
+      marsService.depopulate(pollCopy, ['group', 'owners', 'pollCollection']);
       
       if (response)
         groupCopy._response = (response === true ? 'updated' : response);
@@ -471,6 +503,8 @@
         group.upcoming = new Date(group.upcoming);
       if (angular.isString(group.deleted))
         group.deleted = new Date(group.deleted);
+      if (group.collection)
+        group.owners = group.collection.owners;
       if (angular.isArray(group.polls)) {
         group.polls = group.polls.map(function(poll) {
           return _revivePoll(poll, group);
@@ -489,6 +523,7 @@
         poll.deleted = new Date(poll.deleted);
       poll.group = group;
       poll.pollCollection = group.pollCollection;
+      poll.owners = group.owners;
       return poll;
     }
   

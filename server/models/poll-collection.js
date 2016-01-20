@@ -20,6 +20,28 @@ pollCollectionSchema.set('toObject', { retainKeyOrder: true });
 var updateOmittedFields = ['_id'];
 
 
+pollCollectionSchema.pre('update', function(next) {
+  var query = this.getQuery()
+      update = this.getUpdate();
+  if (_.has(update, '$set') && _.has(update['$set'], 'owners')) {
+    _validOwners(update['$set'].owners)
+      .then(function(owners) {
+        update['$set'].owners = owners;
+        return PollCollection.cascadeOwners(query._id, owners)
+          .return(owners);
+      })
+      .then(function(owners) {
+        return _addToOwnersSubscriptions(query._id, owners);
+      })
+      .then(next)
+      .catch(next);
+  }
+  else {
+    next();
+  }
+});
+
+
 pollCollectionSchema.statics.create = function(fields) {
   var User = mongoose.model('User');
   if (!fields.token)
@@ -28,6 +50,17 @@ pollCollectionSchema.statics.create = function(fields) {
     .save()
     .then(function(collection) {
       return collection.addToOwnersSubscriptions();
+    })
+    .then(function(collection) {
+      return new Promise(function(resolve, reject) {
+        // Using populate().execPopulate() isn't so back to a callback
+        // until it's fixed.
+        collection.populate('owners', 'name username', function(err, c) {
+          if (err)
+            reject(err);
+          resolve(c);
+        });
+      });
     });
 }
 
@@ -39,6 +72,18 @@ pollCollectionSchema.statics.cascadeDelete = function(id, date) {
     { deleted: date },
     { multi: true }
   ).exec().return();
+}
+
+pollCollectionSchema.statics.cascadeOwners = function(id, owners) {
+  var PollGroup = mongoose.model('PollGroup'),
+      Poll = mongoose.model('Poll'),
+      conditions = { pollCollection: id },
+      fields = { owners: owners },
+      options = { multi: true }
+  return Promise.all([
+    PollGroup.update(conditions, fields, options),
+    Poll.update(conditions, fields, options)
+  ]).return();
 }
 
 pollCollectionSchema.statics.ownerFindById = function(ownerId, id, projection, options) {
@@ -81,6 +126,10 @@ pollCollectionSchema.statics.ownerList = function(ownerId) {
     .populate({
       path: 'groups',
       populate: { path: 'polls', model: Poll }
+    })
+    .populate({
+      path: 'owners', 
+      select: 'username name'
     })
     .exec();
 }
@@ -147,25 +196,29 @@ pollCollectionSchema.methods.hasOwner = function(userId) {
 }
 
 pollCollectionSchema.methods.addToOwnersSubscriptions = function() {
-  var User = mongoose.model('User'),
-      collection = this;
-  return User.update(
-    { _id: collection.owners }, 
-    { $addToSet: { subscriptions: collection._id } },
-    { multi: true }
-  ).exec().return(collection);
+  var collection = this;
+  return _addToOwnersSubscriptions(collection._id, collection.owners)
+    .return(collection);
 }
 
 pollCollectionSchema.methods.removeFromOwnersSubscriptions = function() {
   var User = mongoose.model('User'),
       collection = this;
   return User.update(
-    { _id: collection.owners }, 
+    { _id: { $in: collection.owners } }, 
     { $pull: { subscriptions: collection._id } },
     { multi: true }
   ).exec().return(collection);
 }
 
+function _addToOwnersSubscriptions(id, owners) {
+  var User = mongoose.model('User');
+  return User.update(
+    { _id: { $in: owners } }, 
+    { $addToSet: { subscriptions: id } },
+    { multi: true }
+  ).exec().return();
+}
 
 function _generateToken() {
   var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -177,6 +230,16 @@ function _generateToken() {
     buffer[i] = chars[bytes[i] % len];
   
   return buffer.join('');  
+}
+
+function _validOwners(owners) {
+  var User = mongoose.model('User');
+  return User.find({ _id: { $in: owners }, group: 'poller' })
+    .select('_id')
+    .exec()
+    .then(function(users) {
+      return _.pluck(users, '_id');
+    });
 }
 
 

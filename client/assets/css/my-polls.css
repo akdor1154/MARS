@@ -29,10 +29,17 @@ md-card .background-message {
 	text-align: left;
 }
 
+.md-dialog-content h4 {
+	margin-bottom: 0;
+}
+
+.md-dialog-content md-list md-list-item {
+	padding-left: 0;
+}
+
 md-grid-tile-footer figcaption  {
     width:100%;
 }
-
 
 .md-actions div.progress-wrapper {
 	width: 20px;
@@ -71,6 +78,20 @@ md-toolbar span.highlight {
 
 span.title-number {
 	padding-right: 1em;
+}
+
+.edit-collection .icon-autocomplete md-icon {
+	margin-top: 24px;
+	padding-right: 32px;
+}
+.edit-collection .icon-autocomplete md-autocomplete {
+	padding-right: 40px;
+}
+.edit-collection .icon-autocomplete md-autocomplete md-input-container {
+	margin-bottom: 0;
+}
+.edit-collection .icon-autocomplete md-autocomplete md-input-container .md-errors-spacer {
+	display: none;
 }
 
 .edit-poll:first-child {
