@@ -51,6 +51,14 @@
           }
         ]
       })
+      .state('auth.logout', {
+        onEnter: [
+            '$window',
+            function($window) {
+              $window.location.assign('./logout');
+            }
+          ]
+      })
       .state('auth.forbidden', {
         onEnter: [
             '$rootScope',

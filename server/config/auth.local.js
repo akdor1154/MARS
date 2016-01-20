@@ -49,7 +49,7 @@ module.exports = function(passport, User) {
     
     logout: function(req, res) {
       req.logout();
-      res.send();
+      res.redirect('/');
     }
     
   }

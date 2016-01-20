@@ -78,7 +78,7 @@
     }
     
     function logout() {
-      auth.logout();
+      $state.go('auth.logout');
     }
     
     function openLeftMenu() {

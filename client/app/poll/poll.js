@@ -61,7 +61,7 @@
     }
     
     function logout() {
-      auth.logout();
+      $state.go('auth.logout');
     }
     
     function nextPoll() {
