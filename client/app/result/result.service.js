@@ -14,7 +14,7 @@
       deactivate: deactivate,
       getActivations: getActivations,
       resume: resume,
-      subscribe
+      subscribe: subscribe
     }
     
     function deactivate(resultId) {
