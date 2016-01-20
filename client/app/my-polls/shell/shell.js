@@ -49,6 +49,8 @@
         myPollsService.getCollections().then(function(collections) {
           vm.action = null;
           vm.collections = collections;
+          if (collections.length === 0)
+            return $state.go('myPolls.help.gettingStarted');
         });
         
       }, function(err) {

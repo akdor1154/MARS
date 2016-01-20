@@ -9,13 +9,18 @@
   
   function run($log, $rootScope, $state) {
     
-    // The state 'myPolls' provides the shell, but it should not be the final
-    // destination. Redirect 'myPolls' to 'myPolls.upcoming'.
     $rootScope.$on('$stateChangeStart', 
       function(event, toState, toParams, fromState, fromParams) {
+        // The state 'myPolls' provides the shell, but it should not be the final
+        // destination. Redirect 'myPolls' to 'myPolls.upcoming'.
         if (toState.name === 'myPolls') {
           event.preventDefault();
           $state.go('myPolls.upcoming');
+        }
+        // Redirect 'myPolls.help' to 'myPolls.help.default'.
+        if (toState.name === 'help') {
+          event.preventDefault();
+          $state.go('myPolls.help.default');
         }
       }
     );

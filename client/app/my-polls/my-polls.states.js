@@ -126,6 +126,19 @@
           templateUrl: 'app/my-polls/trash/trash.html',
           controller: 'TrashController as vm'
         })
+        .state('myPolls.help', {
+          url: '/help',
+          template: '<ui-view class="max-width-960" />',
+        })
+        .state('myPolls.help.default', {
+          templateUrl: 'app/my-polls/help/help.html',
+          controller: 'HelpController as vm',
+        })
+        .state('myPolls.help.gettingStarted', {
+          url: '/getting-started',
+          templateUrl: 'app/my-polls/help/getting-started.html',
+          controller: 'GettingStartedController as vm',
+        })
     }
   
 })();

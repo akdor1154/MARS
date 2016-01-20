@@ -69,6 +69,10 @@ md-toolbar span.highlight {
 	background: rgba(255, 255, 255, 0.4);
 }
 
+span.title-number {
+	padding-right: 1em;
+}
+
 .edit-poll:first-child {
 	margin-top: 28px;
 }
@@ -77,4 +81,11 @@ md-toolbar span.highlight {
 }
 .edit-poll md-divider {
 	margin-top: 28px;
+}
+
+.getting-started {
+	padding: 16px 32px;
+}
+.getting-started h3 {
+	margin-top: 2em;
 }
