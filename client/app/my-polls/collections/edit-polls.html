@@ -1,3 +1,12 @@
+<div layout="column" 
+     layout-fill 
+     layout-align="center center" 
+     class="background-message"
+     ng-show="vm.polls.length == 0" >
+  <div>There are no polls in this group</div>
+  <div>Try clicking the plus icon to add a new poll</div>
+</div>
+
 <div class="edit-poll" ng-repeat="poll in vm.polls"
      mars-scroll-to="poll-{{$index}}"
      mars-scroll-when="poll._isNew">
