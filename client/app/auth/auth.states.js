@@ -12,19 +12,44 @@
       .state('auth', {
         template: '<ui-view />'
       })
+      .state('auth.entry', {
+        url: '/',
+        onEnter: [
+          '$state',
+          'auth',
+          function($state, auth) {
+            auth.isAuthenticated().
+              then(function(user) {
+                $state.go(user.group === 'poller' ? 'myPolls' : 'poll');
+              })
+              .catch(function() {
+                $state.go('auth.login');
+              });
+          }
+        ]
+      })
       .state('auth.login', {
         onEnter: [
-            '$state',
-            '$mdDialog',
-            function($state, $mdDialog, $log) {
-              $mdDialog.show({
-                templateUrl: 'app/auth/login.html',
-                controller: 'LoginController as vm'
-              }).finally(function() {
-                $state.go('poll');
-              });
+            '$window',
+            function($window) {
+              $window.location.assign('./login');
             }
           ]
+      })
+      .state('auth.loginForm', {
+        url: '/login',
+        onEnter: [
+          '$mdDialog',
+          '$state',
+          function($mdDialog, $state) {
+            $mdDialog.show({
+              templateUrl: 'app/auth/login.html',
+              controller: 'LoginController as vm'
+            }).finally(function() {
+              $state.go('auth.entry');
+            });
+          }
+        ]
       })
       .state('auth.forbidden', {
         onEnter: [

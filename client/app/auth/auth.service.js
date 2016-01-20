@@ -5,9 +5,9 @@
     .module('app.auth')
     .factory('auth', auth);
       
-  auth.$inject = ['$log', '$http', '$q', '$window'];
+  auth.$inject = ['$log', '$http', '$q', '$state'];
   
-  function auth($log, $http, $q, $window) {
+  function auth($log, $http, $q, $state) {
     $log = $log.getInstance('auth');
   
     var _user = null;
@@ -44,12 +44,11 @@
     }
     
     function logout(user) {
-      return $http.post('logout').then(function(res) {
+      return $http.get('logout').then(function(res) {
         $log.info('Logged out: ', _user.username);
         _user = null;
       }).then(function() {
-        $window.location.hash = '';
-        $window.location.reload();
+        $state.go('auth.entry');
       }).catch(function(res) {
         $log.error('Log out failed: ', res.status + ' - ' + res.data);
         return $q.reject({ code: res.status, message: res.data });

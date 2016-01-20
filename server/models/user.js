@@ -13,9 +13,15 @@ var userSchema = new Schema({
   group: String,
 	name: {
     first: String,
-    last: String
+    last: String,
+    initials: String,
+    nickname: String
   },
-	subscriptions: [{ type: Schema.Types.ObjectId, ref: 'PollCollection', index: true }]
+  department: String,
+  division: String,
+  location: String,
+  source: String,
+	subscriptions: [{ type: Schema.Types.ObjectId, ref: 'PollCollection', index: true, default: [] }]
 }, { collection: 'users' });
 userSchema.set('toObject', { retainKeyOrder: true });
 

@@ -3,10 +3,9 @@ var express = require('express'),
     passport = require('passport'),
     log = require('../utils/log');
 
-function auth(User) {
+function auth(authConfig, User) {
   
   router.post('/is-authenticated', function(req, res, next) {
-    log.trace('/is-authenticated');
     if (req.user) {
       User.findById(req.user)
         .exec()
@@ -19,30 +18,26 @@ function auth(User) {
     }
   });
   
-  router.post('/login', function(req, res, next) {
-    log.trace('/login');
-    passport.authenticate('local', function(err, user, info) {
-      if (err) {
-        log.error(err);
-        return next(err);
-      }
-      if (!user) {
-        log.info('Login failed: ', info);
-        return res.status(401).json('Invalid credentials');
-      }
-      req.login(user, function(err) {
-        log.info('Logged in', req.user._id.toString());
-        log.debug(req.user);
-        return res.json(user);
-      });
-    })(req, res, next);
+  router.get('/login', function(req, res, next) {
+    if (_.isFunction(authConfig.login))
+      authConfig.login(req, res);
   });
   
-  router.post('/logout', function(req, res, next) {
-    log.info('Logged out', req.user.toString());
-    req.logout();
-    res.send();
+  router.post('/login', function(req, res, next) {
+    if (_.isFunction(authConfig.process))
+      authConfig.process(req, res);
   });
+  
+  router.get('/logout', function(req, res, next) {
+    if (_.isFunction(authConfig.logout))
+      authConfig.logout(req, res);
+  });
+  
+  function useJsonRedirect(res) {
+    res.redirect = function(url) {
+      res.json({ url: url });
+    }
+  }
   
   return router;
 }
