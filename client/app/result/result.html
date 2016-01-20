@@ -18,7 +18,7 @@
               This result
             </md-button>
           </md-menu-item>
-          <md-menu-divider ng-show="!vm.result.active"></md-menu-divider>
+          <md-menu-divider ng-show="!vm.result.active && vm.pastResults.length"></md-menu-divider>
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
             <md-button ng-click="vm.resumePast(pastResult)">
               {{pastResult.start | date:'EEEE, dd MMMM yyyy, hh:mma'}}
