@@ -45,11 +45,6 @@
         if (user.group !== 'poller')
           return $state.go('auth.forbidden');
         
-        // Jump to myPolls.upcoming if arriving here directly
-        // (by URL or back button)
-        if ($state.current.name === 'myPolls')
-          $state.go('myPolls.upcoming');
-        
         vm.action = 'Loading';
         myPollsService.getCollections().then(function(collections) {
           vm.action = null;
@@ -57,7 +52,8 @@
         });
         
       }, function(err) {
-        $state.go('auth.login');
+        $log.error(err);
+        //$state.go('auth.login');
       })
     }
     

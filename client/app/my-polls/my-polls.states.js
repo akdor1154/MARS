@@ -10,34 +10,21 @@
     function statesConfig($stateProvider) {
       $stateProvider
         .state('myPolls', {
+          url: '/my-polls',
           templateUrl: 'app/my-polls/shell/shell.html',
           controller: 'ShellController as vm'
         })
-        // Entry state that automatically redirects to myPolls.upcoming .
-        // Setting a url for the parent myPolls state means if the user
-        // presses back they can end up at the myPolls state which should
-        // never happen. The user should always be in one of the child 
-        // states of myPolls.
-        .state('myPolls.entry', {
-          url: '/my-polls',
-          onEnter: [
-            '$state',
-            function($state) {
-              $state.go('myPolls');
-            }
-          ]
-        })
         .state('myPolls.upcoming', {
-          url: '/my-polls/upcoming',
+          url: '/upcoming',
           templateUrl: 'app/my-polls/upcoming/upcoming.html',
           controller: 'UpcomingController as upcomingVm'
         })
         .state('myPolls.collections', {
-          templateUrl: 'app/my-polls/collections/collections.html',
-          //controller: 'CollectionsController as vm'
+          url: '/collection',
+          template: '<ui-view class="max-width-960"/>'
         })
         .state('myPolls.collections.viewCollection', {
-          url: '/my-polls/collection/:collectionId',
+          url: '/:collectionId',
           templateUrl: 'app/my-polls/collections/view-collection.html',
           controller: 'ViewCollectionController as vm'
         })
@@ -110,7 +97,7 @@
           ]
         })
         .state('myPolls.collections.editPolls', {
-          url: '/my-polls/collection/:collectionId/:groupId/edit',
+          url: '/:collectionId/:groupId/edit',
           templateUrl: 'app/my-polls/collections/edit-polls.html',
           controller: 'EditPollsController as vm'
         })
@@ -135,7 +122,7 @@
           ]
         })
         .state('myPolls.trash', {
-          url: '/my-polls/trash',
+          url: '/trash',
           templateUrl: 'app/my-polls/trash/trash.html',
           controller: 'TrashController as vm'
         })
