@@ -4,9 +4,7 @@ var express = require('express')
   , log = require('./utils/log')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
-  , mongoose = require('mongoose')
   , session = require('express-session')
-  , MongoStore = require('connect-mongo')(session)
   , passport = require('passport')
   , passportSocketIo = require('passport.socketio');
 
@@ -28,10 +26,9 @@ log.debug('Using \'tracer\' instead of \'express\' for logging');
 app.use(require('morgan')('dev', { stream: log.stream }));
 
 /**
- * Mongoose
+ * Database Config
  */
-mongoose.connect('mongodb://localhost/mars');
-mongoose.Promise = require('bluebird');
+var db = require('./config/database')();
 
 /**
  * Models
@@ -49,25 +46,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+/**
+ * Session Config
+ */
+var sessionConfig = require('./config/session')(session, db);
+app.use(session(sessionConfig));
 
 /**
- * Session using connect-mongo
+ * Authentication Config
  */
-var sessionSecret = 'Lg\NHAfa$F%%`1:eQMD6 QiHYO*kW7b-c6#+' // CHANGE THIS ON PRODUCTION SERVER
-var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
-app.use(session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore
-}));
-
-/**
- * Passport
- */
+var authConfig = require('./config/auth')(passport, User);
 app.use(passport.initialize());
 app.use(passport.session());
-require('./utils/passport.local.js')(User);
 
 /**
  * Socket.io
@@ -81,8 +71,8 @@ app.io = io;
 io.use(passportSocketIo.authorize({
   cookieParser: cookieParser,
   key: 'connect.sid',
-  secret: sessionSecret,
-  store: sessionStore,
+  secret: sessionConfig.secret,
+  store: sessionConfig.store,
   onAuthorizeFail: function (data, message, error, accept){
     log.error('data = ', data);
     log.error('message = ', message);
@@ -91,7 +81,7 @@ io.use(passportSocketIo.authorize({
 }));
 
 /**
- * View engine
+ * View Engine
  */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -108,6 +98,7 @@ var pollsSocket = require('./routes/polls-socket')(
       User
     ),
     auth = app.use('/', require('./routes/auth')(
+      authConfig,
       User
     ));  
     
