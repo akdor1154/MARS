@@ -5,6 +5,7 @@
     .module('app', [
       'ngMaterial', 
       'ngMessages',
+      'ngSanitize',
       'ngFileSaver',
       'ui.router',
       

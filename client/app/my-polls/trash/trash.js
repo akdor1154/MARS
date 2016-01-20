@@ -8,6 +8,7 @@
   TrashController.$inject = [
     '$log', 
     '$anchorScroll',
+    '$mdDialog',
     '$scope',
     '$state',
     'shell',  
@@ -17,6 +18,7 @@
   function TrashController(
       $log, 
       $anchorScroll,
+      $mdDialog,
       $scope, 
       $state, 
       shell, 
@@ -29,6 +31,7 @@
     
     vm.groups = null;
     vm.filteredGroups = null;
+    vm.deleteGroupPermanently = deleteGroupPermanently;
     vm.restoreAllGroupsInCollection = restoreAllGroupsInCollection;
     vm.restoreGroup = restoreGroup;
     vm.restorePoll = restorePoll;
@@ -49,6 +52,23 @@
       $anchorScroll('top');
     }
     
+    function deleteGroupPermanently(group) {
+      $mdDialog.show(
+        $mdDialog.confirm()
+          .title('Delete Group Permanently')
+          .htmlContent('Are you sure you would like to delete the group ' + group.name + '? <br/><strong>This can not be undone.</strong>')
+          .ok('Yes')
+          .cancel('Cancel')
+      ).then(function() {
+        group._action = 'Deleting';
+        return myPollsService.deleteGroup(group, true);
+      })
+      .then(function() {
+        delete group._action;
+        _removeGroup(group);
+      });
+    }
+    
     function restoreAllGroupsInCollection(collection) {
       //  TODO: trash.restoreAllGroupsInCollection()
     }
@@ -58,10 +78,7 @@
       group._action = 'Restoring';
       myPollsService.restoreGroup(group).then(function() {
         delete group._action;
-        vm.groups.splice(vm.groups.indexOf(group), 1);
-        var filteredIndex = vm.filteredGroups.indexOf(group);
-        if (filteredIndex >= 0)
-          vm.filteredGroups.splice(filteredIndex, 1);
+        _removeGroup(group);
       });
     }
     
@@ -83,6 +100,13 @@
       return _.some(group.polls, function(poll) {
         return _.isDate(poll.deleted);
       });
+    }
+    
+    function _removeGroup(group) {
+      vm.groups.splice(vm.groups.indexOf(group), 1);
+      var filteredIndex = vm.filteredGroups.indexOf(group);
+      if (filteredIndex >= 0)
+        vm.filteredGroups.splice(filteredIndex, 1);
     }
     
     function _searchCallback(phrase) {
