@@ -6,6 +6,9 @@ npm-debug.log
 # Mongodb data folder
 /data
 
+# Gzipped files
+*.gz
+
 # Mac Specific Files
 .DS_Store
 
