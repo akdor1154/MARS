@@ -14,6 +14,7 @@
       'app.inflector',
       'app.logger',
       'app.plugins',
+      'app.templates',
       'app.theme',
       
       'app.auth',

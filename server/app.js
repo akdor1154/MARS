@@ -2,6 +2,7 @@ var express = require('express')
   , path = require('path')
   , favicon = require('serve-favicon')
   , log = require('./utils/log')
+  , gzipStatic = require('connect-gzip-static')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
   , session = require('express-session')
@@ -109,7 +110,8 @@ var pollsSocket = require('./routes/polls-socket')(
     
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(express.static(path.join(__dirname, '..', 'client')));
+//app.use(express.static(path.join(__dirname, '..', 'client')));
+app.use(gzipStatic(path.join(__dirname, '..', 'client')));
 
 //app.use('/polls', polls);
 //app.use('/results', results);
