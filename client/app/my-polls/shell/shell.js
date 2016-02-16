@@ -10,6 +10,7 @@
     '$state', 
     '$mdDialog',
     '$mdSidenav',
+    '$window',
     'auth',
     'shell',
     'myPollsService'
@@ -17,11 +18,12 @@
     
   function ShellController(
       $log,
-      $state, 
+      $state,
       $mdDialog,
-      $mdSidenav, 
-      auth, 
-      shell, 
+      $mdSidenav,
+      $window,
+      auth,
+      shell,
       myPollsService
     ) {
     $log = $log.getInstance('ShellController');
@@ -36,6 +38,7 @@
     vm.goToState = goToState;
     vm.logout = logout;
     vm.openLeftMenu = openLeftMenu;
+    vm.openExternal = openExternal;
     vm.shell = shell;
     
     activate();
@@ -87,6 +90,9 @@
       $mdSidenav('left').toggle();
     }
     
+    function openExternal (url) {
+      $window.open(url, '', 'width=640, height=480');
+    }
   }
   
 })();

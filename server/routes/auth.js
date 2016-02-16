@@ -38,7 +38,39 @@ function auth(authConfig, User) {
       res.json({ url: url });
     }
   }
-  
+
+  // Add user for testing
+  router.get('/secretAddUser', function(req, res) {
+    var user = new User({
+      username: 'staff1',
+      password: '123',
+      group: 'poller',
+      name: {
+        first: 'Staff',
+        last: '1'
+      }
+    });
+
+    user.hashPassword()
+    .then(function() {
+      return user.save();
+    })
+    .then(function(savedUser) {
+      res.json({
+        success: true,
+        user: user,
+        savedUser: savedUser
+      });
+    })
+    .catch(function(err) {
+      res.json({
+        success: false,
+        err: err
+      })
+    });
+  });
+
+
   return router;
 }
 
