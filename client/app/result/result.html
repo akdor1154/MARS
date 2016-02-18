@@ -5,22 +5,27 @@
         <span>Mars</span>
       </h2>
       <span flex></span>
+      <md-button aria-label="Lock result"
+                 ng-click="vm.toggleActive()">
+        <md-icon class="svg-icons">{{vm.result.active ? 'lock' : 'lock_open'}}</md-icon>
+        <md-tooltip>{{vm.result.active ? 'Lock poll' : 'Unlock poll'}}</md-tooltip>
+      </md-button>
       <md-menu>
         <md-button aria-label="Resume result"
                    ng-click="$mdOpenMenu($event)"
-                   ng-hide="vm.result.active && (!vm.pastResults || vm.pastResults.length === 0)">
-          Resume
+                   ng-hide="!vm.pastResults || vm.pastResults.length === 0">
+          Past Results
         </md-button>
         <md-menu-content width="10">
-          <md-menu-item ng-show="!vm.result.active">
+          <!-- <md-menu-item ng-show="!vm.result.active">
             <md-button ng-click="vm.resume(vm.result)">
               <md-icon class="material-icons">restore</md-icon>
               This result
             </md-button>
           </md-menu-item>
-          <md-menu-divider ng-show="!vm.result.active && vm.pastResults.length"></md-menu-divider>
+          <md-menu-divider ng-show="!vm.result.active && vm.pastResults.length"></md-menu-divider> -->
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
-            <md-button ng-click="vm.resumePast(pastResult)">
+            <md-button ng-click="vm.viewPast(pastResult)">
               {{pastResult.start | date:'EEEE, dd MMMM yyyy, hh:mma'}}
               - {{ pastResult.responsesCount }} Responses
             </md-button>
@@ -53,7 +58,7 @@
   
   <md-toolbar class="md-warn" ng-show="vm.result && !vm.result.active">
     <div class="md-toolbar-tools">
-      <span>The poll is inactive</span>
+      <span>The poll is locked, responses will not be accepted</span>
       <span flex></span>
     </div>
   </md-toolbar>

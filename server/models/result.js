@@ -13,7 +13,8 @@ var resultSchema = new Schema({
   active: { type: Boolean, default: false, index: true },
 	activations: [{ 
     start: Date,
-    end: Date
+    end: Date,
+    user: { type: Schema.Types.ObjectId, ref: 'User', index: true }
   }],
   responses: [{
     user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -27,7 +28,7 @@ var resultSchema = new Schema({
 resultSchema.set('toObject', { retainKeyOrder: true });
 
 
-resultSchema.statics.activate = function(resultId) {
+resultSchema.statics.activate = function(resultId, userId) {
   return Result.findById(resultId)
     .exec()
     .then(function(result) {
@@ -35,7 +36,7 @@ resultSchema.statics.activate = function(resultId) {
         return Promise.reject(errors.notFound('Result', resultId));
       if (result.active)
         return Promise.reject(errors.resultAlreadyActive());
-      return result.activate();
+      return result.activate(userId);
     });
 }
 
@@ -65,7 +66,17 @@ resultSchema.statics.deactivate = function(resultId) {
     });
 }
 
-resultSchema.statics.resume = function(resultId, fromId) {
+resultSchema.statics.getActiveForUser = function(userId, fields) {
+  var query = Result.find({
+    'activations.user': userId,
+    'activations.end': null
+  });
+  if (fields)
+    query = query.select(fields);
+  return query.exec();
+} 
+
+resultSchema.statics.resume = function(resultId, fromId, userId) {
   var result;
   return Result.findById(resultId)
     .populate('poll')
@@ -84,7 +95,7 @@ resultSchema.statics.resume = function(resultId, fromId) {
         result.mergeActivations(removedResult);
         result.mergeResponses(removedResult);
       }
-      return result.activate();
+      return result.activate(userId);
     });
 }
 
@@ -102,11 +113,12 @@ resultSchema.statics.saveResponse = function(resultId, response) {
 };
 
 
-resultSchema.methods.activate = function() {
+resultSchema.methods.activate = function(userId) {
+  log.debug('userId = ', userId);
   var result = this;
   if (result.active)
     return Promise.resolve(result);
-  result.activations.push({ start: new Date(), end: null });
+  result.activations.push({ start: new Date(), end: null, user: userId });
   result.active = true;
   return result.save();
 }

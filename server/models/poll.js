@@ -18,25 +18,45 @@ var pollSchema = new Schema({
 pollSchema.set('toObject', { retainKeyOrder: true });
 pollSchema.set('toJSON', { minimize: false });
 
-
 var updateOmittedFields = ['_id', 'group', 'pollCollection'];
 
 
-pollSchema.statics.activate = function(pollId) {
-  var Result = mongoose.model('Result');
-  return Poll.findById(pollId)
-    .populate('pollCollection', 'token')
-    .exec()
-    .then(function(poll) {
+pollSchema.statics.activate = function(pollId, userId) {
+  var Result = mongoose.model('Result'),
+      poll;
+  return Result.findOne({
+    'poll': pollId,
+    'activations.user': userId,
+    'activations.end': null
+  }).populate('poll')
+    .then(function(activeResult) {
+      if (activeResult) {
+        log.debug('Cached: ', activeResult);
+        return { activeResult: activeResult }; }
+      return Poll.findById(pollId)
+        .populate('pollCollection', 'token')
+        .exec()
+    })
+    .then(function(p) {
+      if (p.activeResult)
+        return p;
+      poll = p;
       return Result
         .createForPoll(poll)
-        .activate()
-        .then(function(result) {
-          result.poll = poll;
-          return result;
-        });
+        .activate(userId)
+    })
+    .then(function(p) {
+      if (p.activeResult) {
+        log.debug('Cached: ', p.activeResult);
+        return p.activeResult; }
+      var result = p;
+      result.poll = poll;
+      result.pollCollection = result.pollCollection._id;
+      return result;
     });
 }
+
+
 
 pollSchema.statics.create = function(fields) {
   fields._isNew = true;

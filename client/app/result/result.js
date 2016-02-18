@@ -37,9 +37,10 @@
     vm.result = null;
     vm.resultViewTemplate = resultViewTemplate;
     vm.resume = resume;
-    vm.resumePast = resumePast;
     vm.showClose = false;
     vm.toast = null;
+    vm.toggleActive = toggleActive;
+    vm.viewPast = viewPast;
     
     var closeState = null
       , closeStateParams = null;
@@ -62,11 +63,14 @@
             vm.poll = result.poll;
             vm.result = result;
             vm.isOwner = _.contains(result.pollCollection.owners, user._id);
+            resultService.onResultActivate($scope, onResultActivate);
+            resultService.onResultDeactivate($scope, onResultDeactivate);
             return resultService.getActivations(result.poll._id);
           })
           .then(function(activations) {
             vm.pastResults = _.filter(activations, function(a) {
-              return a._id != vm.result._id;
+              return a._id != vm.result._id
+                  && a.responsesCount > 0;
             });
           }).catch(function(err) {
             $log.error(err);
@@ -90,28 +94,59 @@
       $state.go(closeState, closeStateParams);
     }
     
+    function deactivate(result) {
+      if (!result.active)
+        return;
+      resultService.deactivate(result._id).then(function() {
+        result.active = false;
+      });
+    }
+    
+    function onResultActivate(event, result) {
+      if (result._id === vm.result._id)
+        vm.result.active = true;
+    }
+    
+    function onResultDeactivate(event, result) {
+      if (result._id === vm.result._id)
+        vm.result.active = false;
+    }
+    
     function resultViewTemplate(poll) {
       return 'plugins/' + result.type + '/' + result.type + '.result.edit.html';
     }
     
     function resume(result) {
+      if (result.active)
+        return;
       resultService.resume(result._id).then(function(resumedResult) {
         result.activations = resumedResult.activations;
         result.active = true;
       });
     }
     
-    function resumePast(pastResult) {
-      var fromId = vm.result.active ? vm.result._id : false;
-      resultService.resume(pastResult._id, fromId)
-        .then(function(resumedResult) {
-          vm.result.active = false;
-          $state.go('result', { 
-            resultId: resumedResult._id,
-            closeState: closeState,
-            closeStateParams: closeStateParams
-          });
-        });
+    function toggleActive() {
+      vm.result.active
+        ? deactivate(vm.result)
+        : resume(vm.result);
+    }
+    
+    function viewPast(pastResult) {
+      $state.go('result', { 
+        resultId: pastResult._id,
+        closeState: closeState,
+        closeStateParams: closeStateParams
+      });
+      // var fromId = vm.result.active ? vm.result._id : false;
+      // resultService.resume(pastResult._id, fromId)
+        // .then(function(resumedResult) {
+          // vm.result.active = false;
+          // $state.go('result', { 
+            // resultId: resumedResult._id,
+            // closeState: closeState,
+            // closeStateParams: closeStateParams
+          // });
+        // });
     }
     
     $scope.$on('$destroy', function() {

@@ -24,6 +24,10 @@ module.exports = function(
  * These are tracked so that they can be deactivated when the socket is disconnected.
  */
     var activeResults = [];
+    Result.getActiveForUser(socket.request.user, '_id')
+      .then(function(results) {
+        activeResults = _.pluck(results, '_id');
+      });
    
 /**
  * Join a room for each subscription
@@ -238,14 +242,14 @@ module.exports = function(
  */
 		socket.on('poll activate', function(data) {
 			log.trace('Socket: poll activate', data);
-      Poll.activate(data._id)
+      Poll.activate(data._id, socket.request.user)
         .then(function(result) {
           log.info('Poll activated', data._id)
           log.debug(result);
           activeResults.push(result._id);
-          socket.to(result.pollCollection._id.toString())
+          socket.to(result.pollCollection.toString())
             .emit('poll activate', _.pick(result, '_id', 'poll'));
-          log.debug('Sent to room: ' + result.pollCollection._id.toString());
+          log.debug('Sent to room: ' + result.pollCollection.toString());
           socket.emit('poll activate', _.pick(result, '_id'));
         })
         .then(null, function(err) {
@@ -388,6 +392,7 @@ module.exports = function(
         })
         .then(function(response) {
           response._id = data._id;
+          log.debug('Send to: ', data._id);
           socket.to(data._id).emit('response', response);
         })
         .catch(function(err) {
@@ -418,9 +423,10 @@ module.exports = function(
       log.trace('Socket: result deactivate');
       Result.deactivate(data._id)
         .then(function(deactivatedResult) {
-          log.info('Deactivated result: ', deactivatedResult._id);
+          log.info('Deactivated result: ', deactivatedResult._id.toString());
           socket.to(deactivatedResult.pollCollection.toString())
             .emit('result deactivate', _.pick(deactivatedResult, '_id'));
+          socket.emit('result deactivate', _.pick(deactivatedResult, '_id'));
         })
         .then(null, function(err) {
           respondWithError('result deactivate', err);
@@ -444,7 +450,7 @@ module.exports = function(
             socket.to(deactivatedResult.pollCollection.toString())
               .emit('result deactivate', _.pick(deactivatedResult, '_id'));
           }
-          return Result.resume(data._id, data.from)
+          return Result.resume(data._id, data.from, socket.request.user);
         })
         .then(function(result) {
           log.info('Result activated: ' + data._id)
@@ -476,6 +482,7 @@ module.exports = function(
           if (!result)
             throw new errors.notFound('Result', data._id);
           socket.join(result._id.toString());
+          log.debug('Result viewer joined room: ', result._id.toString());
           socket.emit('result viewer', result);
         })
         .then(null, function(err) {
