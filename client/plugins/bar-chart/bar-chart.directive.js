@@ -59,6 +59,15 @@
             .attr('fill', function(d) {
               return color(d.label);
             });
+            
+          // Add {n}/{total} label to bar
+          bar.append('text')
+            .attr('x', labelMargin)
+            .attr('y', barHeight / 2)
+            .attr('dy', '0.35em')
+            .text(function(d) {
+              return '0/0';
+            });
                   
           // Add text for labels
           bar.append('text')
@@ -83,7 +92,15 @@
                   return d.value;
                 })])
                 .range([0, width]),
+              barWidths = [],
+              total = 0,
               transitionDuration = transitionDuration || 300;
+          
+          // Get total number of votes
+          data.forEach(function(d) {
+            barWidths.push(xScale(d.value));
+            total += d.value;
+          });
           
           var bar = svg.selectAll('g')
             .data(data)
@@ -93,12 +110,32 @@
               return 'translate(' + x + ',' + y + ')';
             });
               
-          bar.selectAll('rect')
+          bar.select('rect')
             .transition()
               .duration(transitionDuration)
-              .attr('width', function(d) {
-                return xScale(d.value);
+              .attr('width', function(d, i) {
+                return barWidths[i];
               });
+                  
+          bar.select('text')
+            .text(function(d, i) {
+              return d.value.toString() + '/' + total;
+            })
+            .transition()
+              .duration(transitionDuration)
+              .attr('x', function(d, i) {
+                var textWidth = this.getComputedTextLength(),
+                    x = labelMargin + barWidths[i];
+                return textWidth + 32 > barWidths[i]
+                  ? (barWidths[i] > 0 ? x + 16 : x)
+                  : x - 16;
+              })
+              .attr('text-anchor', function(d, i) {
+                var textWidth = this.getComputedTextLength();
+                return textWidth + 32 > barWidths[i]
+                  ? 'start'
+                  : 'end';
+              })
         }
         
         // Initial render
