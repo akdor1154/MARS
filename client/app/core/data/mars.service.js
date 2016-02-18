@@ -37,18 +37,19 @@
     }
     
     
-    function depopulate(obj, keys) {
+    function depopulate(obj, keys, idField) {
+      idField = idField || '_id';
       if (angular.isString(keys)) {
         keys = [keys];
       }
       if (angular.isArray(keys)) {
         keys.forEach(function(key) {
-          if (angular.isObject(obj[key]) && _.has(obj[key], '_id'))
-            obj[key] = obj[key]._id;
+          if (angular.isObject(obj[key]) && _.has(obj[key], idField))
+            obj[key] = obj[key][idField];
           else if (angular.isArray(obj[key]))
             obj[key] = _.map(obj[key], function(subObj) {
-              return _.has(subObj, '_id')
-                ? subObj._id
+              return _.has(subObj, idField)
+                ? subObj[idField]
                 : subObj
             });
         });
