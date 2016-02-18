@@ -63,10 +63,14 @@
     function searchUsers(phrase) {
       return myPollsService.searchUsers(phrase, 'poller')
         .then(function(users) {
-          var ownerIds = _.pluck(vm.collection.owners, '_id');
+          var owners = _.pluck(vm.collection.owners, 'username');
           return _.filter(users, function(user) {
-            return !_.contains(ownerIds, user._id);
+            return !_.contains(owners, user.username);
           });
+        })
+        .catch(function(err) {
+          if (err.code && err.code === 404)
+            return [];
         });
     }
     

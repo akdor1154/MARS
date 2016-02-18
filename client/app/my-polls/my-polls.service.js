@@ -416,7 +416,8 @@
     
     function updateCollection(collection, keys, response) {
       var collectionCopy = marsService.clone(collection, keys);
-      marsService.depopulate(collectionCopy, ['groups', 'owners']);
+      marsService.depopulate(collectionCopy, 'groups');
+      marsService.depopulate(collectionCopy, 'owners', 'username');
       
       if (response)
         collectionCopy._response = (response === true ? 'updated' : response);
