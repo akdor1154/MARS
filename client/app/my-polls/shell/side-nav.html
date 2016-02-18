@@ -40,9 +40,14 @@
         <p>Settings</p>
     </md-list-item>
 
-    <md-list-item ng-click="vm.goToState('myPolls.help.gettingStarted')">
+    <md-list-item ng-click="vm.openExternal('https://drive.google.com/a/monash.edu/file/d/0B3jrsLjSGHrINktCaDlxV29WUnc/view?usp=sharing')">
         <md-icon class="material-icons"> help </md-icon>
-        <p>Help and Support</p>
+        <p>User Guide</p>
+    </md-list-item>
+
+    <md-list-item ng-click="vm.openExternal('https://docs.google.com/a/monash.edu/forms/d/1Qg91GKcnJxiflAIHqekrHzyBRGmmHwktGRw1mYYFvWQ/viewform')">
+        <md-icon class="material-icons"> bug_report </md-icon>
+        <p>Help us improve!</p>
     </md-list-item>
 
   </md-list>
