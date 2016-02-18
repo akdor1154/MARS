@@ -7,7 +7,6 @@ var mongoose = require('mongoose'),
 
 module.exports = function(
     io, 
-    authConfig,
     Poll, 
     PollCollection, 
     PollGroup,
@@ -135,9 +134,6 @@ module.exports = function(
     socket.on('collection update', function(data) {
       log.trace('Socket: collection update', data);
       confirmHasFields(data, '_id')
-        .then(function() {
-          return User.populateSyncedUsers(data.owners, authConfig);
-        })
         .then(function() {
           var ownerId = socket.request.user;
           return (data._response === 'updated')
@@ -498,8 +494,9 @@ module.exports = function(
       log.trace('Socket: search user', data);
       confirmHasFields(data, 'phrase')
         .then(function() {
-          var conditions = _.pick(data, 'group');
-          return User.search(data.phrase, conditions, authConfig);
+          return User.search(data.phrase, data.group)
+            .select('name username')
+            .exec();
         })
         .then(function(users) {
           log.debug('users = ', users);

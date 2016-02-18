@@ -34,10 +34,6 @@ module.exports.internal = function(err) {
 }
 
 
-module.exports.notSupported = function(message) {
-  return new MarsError(10000, message || 'Not supported');
-}
-
 module.exports.missingFields = function(fields) {
   return new MarsError(10001, 'Missing required fields', {
     fields: fields

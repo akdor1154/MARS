@@ -11,79 +11,33 @@ module.exports = function(url) {
   });
   
   return {
-    filterFromObject: filterFromObject, 
-    getUser: getUser,
-    getUsers: getUsers
+    getUser: getUser
   }
   
-  function getUser(base, options) {
-    options.sizeLimit = 1; 
-    return getUsers(base, options)
-      .then(function(users) {
-        return _.first(users);
-      });
-  }
   
-  function getUsers(base, options) {
+  function getUser(filter, base, attributes) {
     return new Promise(function(resolve, reject) {
-      var users = [];
-      // Merge options with defaults
-      options = _.extend({
-          scope: 'sub'
-        }, options);
-      if (_.isObject(options.filter) 
-          && !ldapjs.filters.isFilter(options.filter)) {
-        options.filter = filterFromObject(options.filter);
-      }
-      client.search(base, options, function(error, result) {
+      var userFound = false;
+      client.search(base, {
+        scope: 'sub',
+        attributes: attributes || [],
+        filter: filter
+      }, function(error, result) {
         if (error)
           return reject(error);
         result.on('searchEntry', function(entry) {
-          users.push(entry.object);
+          userFound = true;
+          resolve(entry.object);
         });
         result.on('error', function(err) {
           reject(err);
         });
         result.on('end', function(result) {
-          if (users.length > 0)
-            resolve(users);
-          else
-            reject(errors.notFound('User', options.filter));
+          if (!userFound)
+            reject(errors.notFound('User', filter));
         });
       });
     });
-  }
-  
-  function filterFromObject(obj, outerFilter) {
-    var filters = [];
-    for (var field in obj) {
-      var value = obj[field];
-      if (ldapjs.filters.isFilter(value))
-        filters.push(value);
-      switch (field) {
-        case '$and': 
-          filters.push(
-            filterFromObject(value, ldapjs.filters.AndFilter)
-          );
-          break;
-        case '$or': 
-          filters.push(
-            filterFromObject(value, ldapjs.filters.OrFilter)
-          );
-          break;
-        default: 
-          filters.push(
-            new ldapjs.filters.EqualityFilter({ 
-              attribute: field, value: value 
-            })
-          );
-      }
-    }
-    if (filters.length > 1) {
-      outerFilter = outerFilter || ldapjs.filters.AndFilter;
-      return new outerFilter({ filters: filters });
-    }
-    return _.first(filters);
   }
   
 }

@@ -63,9 +63,9 @@
     function searchUsers(phrase) {
       return myPollsService.searchUsers(phrase, 'poller')
         .then(function(users) {
-          var owners = _.pluck(vm.collection.owners, 'username');
+          var ownerIds = _.pluck(vm.collection.owners, '_id');
           return _.filter(users, function(user) {
-            return !_.contains(owners, user.username);
+            return !_.contains(ownerIds, user._id);
           });
         })
         .catch(function(err) {

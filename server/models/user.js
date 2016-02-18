@@ -8,10 +8,10 @@ var mongoose = require('mongoose')
 
   
 var userSchema = new Schema({
-  username: { type: String, index: true }, 
+	username: { type: String, index: true }, 
   password: String,
   group: String,
-  name: {
+	name: {
     first: String,
     last: String,
     initials: String,
@@ -21,7 +21,7 @@ var userSchema = new Schema({
   division: String,
   location: String,
   source: String,
-  subscriptions: [{ type: Schema.Types.ObjectId, ref: 'PollCollection', index: true, default: [] }]
+	subscriptions: [{ type: Schema.Types.ObjectId, ref: 'PollCollection', index: true, default: [] }]
 }, { collection: 'users' });
 userSchema.set('toObject', { retainKeyOrder: true });
 
@@ -38,33 +38,18 @@ userSchema.statics.getSubscriptions = function(userId) {
     });
 }
 
-userSchema.statics.populateSyncedUsers = function(usernames, authConfig) {
-  var promises = [];
-  if (_.isFunction(authConfig.syncUser)) {
-    usernames.forEach(function(username, i) {
-      promises.push(
-        authConfig.syncUser(username).then(function(user) {
-          usernames[i] = user;
-        })
-      );
-    });
-  }
-  else {
-    usernames.forEach(function(username, i) {
-      promises.push(
-        User.findOne({ username: username }).then(function(user) {
-          usernames[i] = user;
-        })
-      );
-    });
-  }
-  return Promise.all(promises);
-}
-
-userSchema.statics.search = function(phrase, conditions, authConfig) {
-  if (_.isFunction(authConfig.searchUsers))
-    return authConfig.searchUsers(phrase, conditions);
-  return errors.notSupported('Auth config doesn\'t support searching for users');
+userSchema.statics.search = function(phrase, group) {
+  var phraseRegex = new RegExp(
+    phrase.replace(/[\\^$.|?*+()\[\]]/g, '\\$&'), 'i');
+  conditions = { 
+    $or: [
+      { username: phraseRegex },
+      { 'name.first': phraseRegex },
+      { 'name.last': phraseRegex }
+    ]
+  };
+  group && (conditions.group = group);  
+  return User.find(conditions);
 }
 
 userSchema.statics.subscribeToCollection = function(userId, collectionToken) {
@@ -82,6 +67,7 @@ userSchema.statics.subscribeToCollection = function(userId, collectionToken) {
       ).exec().return(collection._id);
     });
 }
+
 
 userSchema.methods.isPasswordValid = function(password) {
   var user = this;
@@ -108,4 +94,5 @@ userSchema.methods.hashPassword = function() {
 
 
 var User = mongoose.model('User', userSchema);
+
 module.exports = User;

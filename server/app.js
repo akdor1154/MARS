@@ -92,7 +92,6 @@ app.set('view engine', 'jade');
  */
 var pollsSocket = require('./routes/polls-socket')(
       io, 
-      authConfig,
       Poll, 
       PollCollection, 
       PollGroup,
