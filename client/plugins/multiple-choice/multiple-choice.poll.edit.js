@@ -48,13 +48,13 @@
       });
     }
     
-    function choiceValueChanged(index, value) {
-      if (value) {
-        vm.poll.data.choices[index].blank = false;
+    function choiceValueChanged(index, choice) {
+      if (choice.text || angular.isDefined(choice.correct)) {
+        choice.blank = false;
         pollPluginService.updatePoll(vm.poll);
       }
-      if (index === $scope.poll.data.choices.length - 1) {
-        if (value)
+      if (index === vm.poll.data.choices.length - 1) {
+        if (choice.text)
           newChoice();
       }
     }
@@ -76,6 +76,7 @@
         label: String.fromCharCode(65 + index),
         type: 'multiple-choice-text-choice',
         text: '',
+        correct: false,
         blank: true
       });
     }

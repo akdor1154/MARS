@@ -18,6 +18,10 @@ md-whiteframe.mc-choice md-input-container .md-errors-spacer {
 	min-height: 0;
 }
 
+md-whiteframe.mc-choice md-checkbox {
+	margin: 0 0 0 24px;
+}
+
 md-whiteframe.mc-choice.blank, md-white-space.mc-choice.blank md-icon {
 	color: rgba(0,0,0,0.26);
 }

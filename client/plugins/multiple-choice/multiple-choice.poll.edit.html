@@ -22,12 +22,19 @@
                  layout-align="start center" 
                  ng-class="{ blank: choice.blank }" 
                  ng-repeat="choice in poll.data.choices track by $index">
-    <h2>{{choice.label}}</h2>
+    <h2>{{choice.label}}</h2> 
     <md-input-container flex>
       <label>{{ choice.blank ? 'Start typing to create choice' : 'Text' }}</label>
       <input ng-model="choice.text" 
-             ng-change="vm.choiceValueChanged($index, choice.text)">
+             ng-change="vm.choiceValueChanged($index, choice)">
     </md-input-container>
+    <md-checkbox aria-label="Correct choice"
+                 flex="initial" 
+                 ng-change="vm.choiceValueChanged($index, choice)"
+                 ng-model="choice.correct"
+                 ng-show="!choice.blank">
+      <md-tooltip>Correct</md-tooltip>
+    </md-checkbox>
     <md-button aria-label="Delete Choice" 
                class="md-icon-button" 
                tabindex="-1"
