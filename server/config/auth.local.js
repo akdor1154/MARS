@@ -26,32 +26,48 @@ module.exports = function(passport, User) {
     done(null, userId);
   });
   
-  
   return {
+    login: login,
+    logout: logout,
+    process: process,
+    searchUsers: searchUsers
+  }
+  
     
-    login: function(req, res) {
-      res.redirect('./#/login');
-    },
+  function login(req, res) {
+    res.redirect('./#/login');
+  }
     
-    process: function(req, res) {
-      passport.authenticate('local', function(err, user, info) {
-        if (err) {
-          throw err;
-        }
-        if (!user) {
-          return res.status(401).json('Invalid credentials');
-        }
-        req.login(user, function(err) {
-          return res.json(user);
-        });
-      })(req, res);
-    },
+  function logout(req, res) {
+    req.logout();
+    res.redirect('/');
+  }
     
-    logout: function(req, res) {
-      req.logout();
-      res.redirect('/');
-    }
-    
+  function process(req, res) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) {
+        throw err;
+      }
+      if (!user) {
+        return res.status(401).json('Invalid credentials');
+      }
+      req.login(user, function(err) {
+        return res.json(user);
+      });
+    })(req, res);
+  }
+  
+  function searchUsers(phrase, conditions) {
+    conditions = conditions || {};
+    conditions['$or'] = conditions['$or'] || [];
+    var phraseRegex = new RegExp(
+      phrase.replace(/[\\^$.|?*+()\[\]]/g, '\\$&'), 'i');
+    conditions['$or'].push({ username: phraseRegex });    
+    conditions['$or'].push({ 'name.first': phraseRegex });    
+    conditions['$or'].push({ 'name.last': phraseRegex });
+    return User.find(conditions)
+      .select('username name.first name.last')
+      .exec();
   }
 
 }
