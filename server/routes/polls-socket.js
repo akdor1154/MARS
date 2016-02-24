@@ -248,7 +248,7 @@ module.exports = function(
           log.debug('Sent to room: ' + result.pollCollection.toString());
           socket.emit('poll activate', _.pick(result, '_id'));
         })
-        .then(null, function(err) {
+        .catch(function(err) {
           respondWithError('poll activate', err);
         });
 		});
@@ -453,7 +453,7 @@ module.exports = function(
             .emit('result deactivate', _.pick(deactivatedResult, '_id'));
           socket.emit('result deactivate', _.pick(deactivatedResult, '_id'));
         })
-        .then(null, function(err) {
+        .catch(function(err) {
           respondWithError('result deactivate', err);
         });
     });
@@ -485,7 +485,7 @@ module.exports = function(
             .emit('result resume', _.pick(result, '_id', 'activations', 'poll'));
           socket.emit('result resume', _.pick(result, '_id'));
         })
-        .then(null, function(err) {
+        .catch(function(err) {
           respondWithError('result resume', err);
         });
     });
@@ -510,7 +510,7 @@ module.exports = function(
           log.debug('Result viewer joined room: ', result._id.toString());
           socket.emit('result viewer', result);
         })
-        .then(null, function(err) {
+        .catch(function(err) {
           respondWithError('result viewer', err);
         });
     });
