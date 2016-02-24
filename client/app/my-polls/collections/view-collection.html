@@ -90,7 +90,7 @@
     
     <md-list>
       <md-list-item ng-class="{ 'background-message': !poll.name }"
-                    ng-click="vm.activatePoll(poll)"
+                    ng-click="vm.viewResult(poll)"
                     ng-repeat="poll in shownPolls = (group.polls | filter:{deleted:'!'})" >
         <p md-highlight-flags="i"
            md-highlight-text="vm.shell.search.phrase">

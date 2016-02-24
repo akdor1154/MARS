@@ -31,7 +31,6 @@
     /* jshint validthis: true */
     var vm = this;
     
-    vm.activatePoll = activatePoll;
     vm.addGroup = addGroup;
     vm.collection = null;
     vm.deleteGroup = deleteGroup;
@@ -45,6 +44,7 @@
     vm.saveTimeout = null;
     vm.shell = shell;
     vm.toggleUpcoming = toggleUpcoming;
+    vm.viewResult = viewResult;
     
     activate();
     
@@ -65,12 +65,6 @@
       $anchorScroll('top');
     }
     
-    function activatePoll(poll) {
-      $log.debug('activatePoll: ', poll._id);
-      myPollsService.activatePoll(poll).then(function(result) {
-        $state.go('result', { resultId: result._id });
-      });
-    }
     
     function addGroup() {
       $state.go('myPolls.collections.viewCollection.addGroup', {
@@ -159,6 +153,19 @@
     function toggleUpcoming(group) {
       group.upcoming = isUpcoming(group) ? null : new Date();
       myPollsService.updateGroup(group, 'upcoming');
+    }
+    
+    function viewResult(poll) {
+      $log.debug('viewResult: ', poll._id);
+      var resultCallback = function(result) {
+        $state.go('result', { resultId: result._id });
+      };
+      return myPollsService.getLastResult(poll)
+        .then(resultCallback)
+        .catch(function(err) {
+          if (err.code && err.code === 404)
+            return myPollsService.createResult(poll).then(resultCallback);
+        });
     }
     
     

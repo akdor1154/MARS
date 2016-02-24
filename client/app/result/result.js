@@ -32,6 +32,7 @@
     var vm = this;
     
     vm.close = close;
+    vm.createResult = createResult;
     vm.isOwner = false;
     vm.poll = null;
     vm.result = null;
@@ -40,7 +41,7 @@
     vm.showClose = false;
     vm.toast = null;
     vm.toggleActive = toggleActive;
-    vm.viewPast = viewPast;
+    vm.viewResult = viewResult;
     
     var closeState = null
       , closeStateParams = null;
@@ -94,6 +95,10 @@
       $state.go(closeState, closeStateParams);
     }
     
+    function createResult() {
+      return resultService.createResult(vm.poll._id).then(viewResult);
+    }
+    
     function deactivate(result) {
       if (!result.active)
         return;
@@ -131,9 +136,9 @@
         : resume(vm.result);
     }
     
-    function viewPast(pastResult) {
+    function viewResult(result) {
       $state.go('result', { 
-        resultId: pastResult._id,
+        resultId: result._id,
         closeState: closeState,
         closeStateParams: closeStateParams
       });

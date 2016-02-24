@@ -311,6 +311,22 @@ module.exports = function(
     });
     
 /**
+ * Create a result for a poll
+ *
+ */
+  socket.on('result create', function(data) {
+    log.trace('result create', data);
+    Poll.createResult(data._id, socket.request.user)
+      .then(function(result) {
+        log.debug('Result', result);
+        socket.emit('result create', result);
+      })
+      .catch(function(err) {
+        respondWithError('result create', err);
+      });
+  });
+    
+/**
  * List all active polls that the user is subscribed to
  *
  * Polls are listed in the order in which they were activated.
@@ -346,7 +362,20 @@ module.exports = function(
         .catch(function(err) {
           respondWithError('poll list results', err);
         });
-    });    
+    });  
+
+    
+    socket.on('poll last result', function(data) {
+      log.trace('Socket: poll last result', data);
+      Poll.getLastResult(data._id, socket.request.user)
+        .then(function(result) {
+          log.debug('result =', result);
+          socket.emit('poll last result', _.pick(result, '_id'));
+        })
+        .catch(function(err) {
+          respondWithError('poll last result', err);
+        });
+    });
 
         
 /**

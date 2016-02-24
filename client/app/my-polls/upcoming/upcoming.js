@@ -20,10 +20,10 @@
     /* jshint validthis: true */
     var vm = this;
     
-    vm.activatePoll = activatePoll;
     vm.filteredGroups = null;
     vm.groups = null;
     vm.markGroupAsDone = markGroupAsDone;
+    vm.viewResult = viewResult;
     
     activate();
     
@@ -37,12 +37,6 @@
       $anchorScroll('top');
     }
     
-    function activatePoll(poll) {
-      $log.debug('activatePoll: ', poll._id);
-      myPollsService.activatePoll(poll).then(function(result) {
-        $state.go('result', { resultId: result._id });
-      });
-    }
     
     function markGroupAsDone(index) {
       var group = vm.groups.splice(index, 1);
@@ -52,6 +46,20 @@
       group.upcoming = null;
       myPollsService.updateGroup(group, 'upcoming');
     }
+    
+    function viewResult(poll) {
+      $log.debug('viewResult: ', poll._id);
+      var resultCallback = function(result) {
+        $state.go('result', { resultId: result._id });
+      };
+      return myPollsService.getLastResult(poll)
+        .then(resultCallback)
+        .catch(function(err) {
+          if (err.code && err.code === 404)
+            return myPollsService.createResult(poll).then(resultCallback);
+        });
+    }
+    
     
     function _searchCallback(phrase) {
       vm.filteredGroups = myPollsService.searchGroups(vm.groups, phrase);

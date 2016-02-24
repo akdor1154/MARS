@@ -15,12 +15,17 @@
     marsService.on('result deactivate', _onResultDeactivate);
     
     return {
+      createResult: createResult,
       deactivate: deactivate,
       getActivations: getActivations,
       onResultActivate: onResultActivate,
       onResultDeactivate: onResultDeactivate,
       resume: resume,
       subscribe: subscribe
+    }
+    
+    function createResult(pollId) {
+      return marsService.request('result create', { _id: pollId });
     }
     
     function deactivate(resultId) {

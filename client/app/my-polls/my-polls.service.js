@@ -20,6 +20,7 @@
       createCollection: createCollection,
       createGroup: createGroup,
       createPoll: createPoll,
+      createResult: createResult,
       deleteCollection: deleteCollection,
       deleteGroup: deleteGroup,
       deletePoll: deletePoll,
@@ -27,6 +28,7 @@
       getCollections: getCollections,
       getGroup: getGroup,
       getGroups: getGroups,
+      getLastResult: getLastResult,
       getResult: getResult,
       getResults: getResults,
       groupIndex: groupIndex,
@@ -105,6 +107,15 @@
           createdGroup.collection.groups.push(createdGroup);
           return createdGroup;
         });
+    }
+    
+    
+/**
+ * Create a result for a poll
+ *
+ */
+    function createResult(poll) {
+      return marsService.request('result create', { _id: poll._id });
     }
   
 /**
@@ -267,6 +278,14 @@
         return _.flatten(_.pluck(collections, 'groups'));
       });
     } 
+    
+/**
+ * Get the ID of the most recent result for a poll
+ *
+ */
+    function getLastResult(poll) {
+      return marsService.request('poll last result', { _id: poll._id });
+    }
     
 /**
  * Get a result with the specified ID

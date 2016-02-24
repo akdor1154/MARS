@@ -66,6 +66,20 @@ pollSchema.statics.create = function(fields) {
     });
 }
 
+pollSchema.statics.createResult = function(pollId) {
+  var Result = mongoose.model('Result');
+  return Poll.findById(pollId)
+    .populate('pollCollection', 'token')
+    .exec()
+    .then(function(poll) {
+      return Result.createForPoll(poll).save()
+        .then(function(result) {
+          result.poll = poll;
+          return result;
+        });
+    });
+}
+
 pollSchema.statics.getActivations = function(pollId) {
   var Result = mongoose.model('Result');
   if (_.isString(pollId))
@@ -94,6 +108,21 @@ pollSchema.statics.getActivations = function(pollId) {
         // Start time, descending
         function(a) { return -a.start; }
       );
+    });
+}
+
+pollSchema.statics.getLastResult = function(pollId, userId) {
+  var Result = mongoose.model('Result');
+  return Result.findOne({
+    'poll': pollId,
+    'activations.user': userId,
+  }).sort('-activations.start')
+    .select('_id')
+    .exec()
+    .then(function(result) {
+      if (!result)
+        return Promise.reject(errors.notFound('Result'));
+      return result;
     });
 }
 

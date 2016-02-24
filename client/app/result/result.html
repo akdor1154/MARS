@@ -9,6 +9,15 @@
                  ng-click="vm.toggleActive()">
         <md-icon class="svg-icons">{{vm.result.active ? 'lock' : 'lock_open'}}</md-icon>
         <md-tooltip>{{vm.result.active ? 'Lock poll' : 'Unlock poll'}}</md-tooltip>
+      </md-button><!-- 
+      <md-button aria-label="New result"
+                 ng-click="vm.newResult">
+        New Result
+      </md-button> -->
+      <md-button aria-label="Reset poll"
+                 ng-click="vm.createResult()">
+        <md-icon class="svg-icons">autorenew</md-icon>
+        <md-tooltip>Reset poll</md-tooltip>
       </md-button>
       <md-menu>
         <md-button aria-label="Resume result"
@@ -25,7 +34,7 @@
           </md-menu-item>
           <md-menu-divider ng-show="!vm.result.active && vm.pastResults.length"></md-menu-divider> -->
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
-            <md-button ng-click="vm.viewPast(pastResult)">
+            <md-button ng-click="vm.viewResult(pastResult)">
               {{pastResult.start | date:'EEEE, dd MMMM yyyy, hh:mma'}}
               - {{ pastResult.responsesCount }} Responses
             </md-button>
