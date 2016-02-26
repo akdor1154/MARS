@@ -26,10 +26,10 @@
         var parentElement = ele[0];
     
         var barHeight = parseInt(attrs.barHeight) || 20,
-            barPadding = parseInt(attrs.barPadding) || 5,
+            barPadding = parseInt(attrs.barPadding) || 60,
             fontSize = parseInt(attrs.fontSize) || 20,
             labelMargin = parseInt(attrs.labelMargin) || 0;
-                
+
         var svg = d3.select(parentElement)
           .append('svg')
           .style('width', '100%');
@@ -55,7 +55,7 @@
           bar.append('rect')
             .attr('width', 0)
             .attr('height', barHeight)
-            .attr('x',  labelMargin)
+            .attr('x', labelMargin)
             .attr('fill', function(d) {
               return color(d.label);
             });
@@ -78,6 +78,15 @@
             .text(function(d) {
               return d.label;
             });
+          
+          // Add text for answer options
+          bar.append('text')
+            .attr('class', 'option-text')
+            .attr('x', labelMargin)
+            .text(function(d) {
+              return d.text;
+            })
+            .each(wrap); // wrap is a helper function for elipsis ie: '...'
         }
         
         scope.update = function(data, transitionDuration) {
@@ -106,7 +115,7 @@
             .data(data)
             .attr('transform', function(d, i) {
               var x = 0;
-              var y = i * (barHeight + barPadding);
+              var y = i * (barHeight + barPadding) + barHeight;
               return 'translate(' + x + ',' + y + ')';
             });
               
@@ -136,6 +145,16 @@
                   ? 'start'
                   : 'end';
               })
+
+          // Update text for answer options
+          bar.select('.option-text')
+            .attr('x', labelMargin)
+            .attr('dy', '-10px')
+            .text(function(d) {
+              return d.text;
+            })
+            .each(wrap); // wrap is a helper function for elipsis ie: '...'
+
         }
         
         // Initial render
@@ -157,6 +176,21 @@
         scope.$watch('data', function(newData, oldData) {
           return scope.update(newData);
         }, true);
+
+        // Wrap text helper function
+        // http://stackoverflow.com/questions/15975440/add-ellipses-to-overflowing-text-in-svg
+        function wrap() {
+            var self = d3.select(this),
+                textLength = self.node().getComputedTextLength(),
+                text = self.text(),
+                width = d3.select(parentElement).node().offsetWidth - labelMargin;
+                console.log('textlength ' + textLength)
+            while (textLength > (width - 2) && text.length > 0) {
+                text = text.slice(0, -1);
+                self.text(text + '...');
+                textLength = self.node().getComputedTextLength();
+            }
+        }
 
       });
     }
