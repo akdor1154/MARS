@@ -68,7 +68,7 @@
             .attr('y', 1.3 * barHeight)
             .attr('dy', '0.35em')
             .text(function(d) {
-              return '0/0';
+              return '0%';
             });
                   
           // Add text for labels
@@ -133,7 +133,9 @@
                   
           bar.select('text.choice-percentage')
             .text(function(d, i) {
-              return d.value.toString() + '/' + total;
+              return total > 0
+                ? Math.round(100 * d.value / total) + '%'
+                : '0%';
             })
             .transition()
               .duration(transitionDuration)
