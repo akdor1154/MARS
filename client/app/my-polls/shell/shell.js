@@ -36,6 +36,7 @@
     vm.collections = null;
     vm.goBack = goBack;
     vm.goToState = goToState;
+    vm.isState = isState;
     vm.logout = logout;
     vm.openLeftMenu = openLeftMenu;
     vm.openExternal = openExternal;
@@ -80,6 +81,13 @@
     function goToState(state, params) {
       $state.go(state, params);
       $mdSidenav('left').close();
+    }
+    
+    function isState(stateName, stateParams) {
+      var result = $state.current.name.lastIndexOf(stateName, 0) === 0;
+      if (stateParams)
+        result &= _.matcher(stateParams)($state.params);
+      return result;
     }
     
     function logout() {

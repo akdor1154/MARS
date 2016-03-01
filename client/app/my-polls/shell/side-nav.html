@@ -8,7 +8,8 @@
 <md-content>
   <md-list>
 
-    <md-list-item ng-click="vm.goToState('myPolls.upcoming')">
+    <md-list-item ng-click="vm.goToState('myPolls.upcoming')"
+                  ng-class="{ 'bg-selected': vm.isState('myPolls.upcoming') }">
         <md-icon class="material-icons"> insert_chart </md-icon>
         <p>Upcoming Polls</p>
     </md-list-item>
@@ -17,7 +18,8 @@
     <md-subheader>Collections</md-subheader>
 	
     <md-list-item ng-repeat="collection in vm.collections | filter: { deleted: '!' }" 
-                  ng-click="vm.goToState('myPolls.collections.viewCollection', { collectionId: collection._id })">
+                  ng-click="vm.goToState('myPolls.collections.viewCollection', { collectionId: collection._id })"
+                  ng-class="{ 'bg-selected': vm.isState('myPolls.collection', { collectionId: collection._id }) }">
       <md-icon class="material-icons">keyboard_arrow_right</md-icon>
       <p>{{ collection.name }}</p>
     </md-list-item>
@@ -30,7 +32,8 @@
     <md-divider></md-divider>
     <md-subheader>Management</md-subheader>
 	
-    <md-list-item ng-click="vm.goToState('myPolls.trash')">
+    <md-list-item ng-click="vm.goToState('myPolls.trash')"
+                  ng-class="{ 'bg-selected': vm.isState('myPolls.trash') }">
         <md-icon class="material-icons"> delete </md-icon>
         <p>Trash</p>
     </md-list-item>
