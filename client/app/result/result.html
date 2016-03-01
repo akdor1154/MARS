@@ -23,6 +23,7 @@
                    ng-click="$mdOpenMenu($event)"
                    ng-hide="!vm.pastResults || vm.pastResults.length === 0">
           <md-icon>history</md-icon>
+        <md-tooltip>Past results</md-tooltip>
         </md-button>
         <md-menu-content width="10">
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
