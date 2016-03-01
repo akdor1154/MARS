@@ -34,7 +34,7 @@ pollSchema.statics.activate = function(pollId, userId) {
         log.debug('Cached: ', activeResult);
         return { activeResult: activeResult }; }
       return Poll.findById(pollId)
-        .populate('pollCollection', 'token')
+        .populate('pollCollection', 'name token')
         .exec()
     })
     .then(function(p) {

@@ -517,7 +517,7 @@ module.exports = function(
         .then(function() {
           return Result.findById(data._id)
           .populate('poll')
-          .populate('pollCollection', 'owners')
+          .populate('pollCollection', 'name owners')
           .exec()
         })
         .then(function(result) {

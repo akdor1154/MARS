@@ -88,6 +88,8 @@
     
     function _viewPoll(result) {
       if (result === null) {
+        vm.poll = null;
+        vm.result = null;
         $state.go('poll.none');
       }
       else {

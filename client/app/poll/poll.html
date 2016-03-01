@@ -4,7 +4,7 @@
               ng-class="{ 'bg-blue-grey': vm.isPreview }">
     <div class="md-toolbar-tools">
       <h2>
-        <span>Mars</span>
+        <span>{{vm.poll ? vm.poll.pollCollection.name : 'Mars'}}</span>
       </h2>
       <span flex></span>
       <md-button class="md-icon-button" 

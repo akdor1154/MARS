@@ -2,7 +2,7 @@
 	<md-toolbar class="md-whiteframe-1dp">
 	  <div class="md-toolbar-tools">
       <h2>
-        <span>Mars</span>
+        <span>{{vm.result ? vm.result.pollCollection.name : 'Mars'}}</span>
       </h2>
       <span flex></span>
       <md-button aria-label="Lock result"

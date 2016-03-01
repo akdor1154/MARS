@@ -118,6 +118,8 @@ resultSchema.statics.resume = function(resultId, fromId, userId) {
         result.mergeActivations(removedResult);
         result.mergeResponses(removedResult);
       }
+      result.poll.pollCollection = result.pollCollection;
+      result.pollCollection = result.pollCollection._id;
       return result.activate(userId);
     });
 }
@@ -137,7 +139,6 @@ resultSchema.statics.saveResponse = function(resultId, response) {
 
 
 resultSchema.methods.activate = function(userId) {
-  log.debug('userId = ', userId);
   var result = this;
   if (result.active)
     return Promise.resolve(result);
