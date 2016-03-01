@@ -26,7 +26,7 @@
         var parentElement = ele[0];
     
         var barHeight = parseInt(attrs.barHeight) || 20,
-            barPadding = parseInt(attrs.barPadding) || 60,
+            barPadding = parseInt(attrs.barPadding) || 5,
             fontSize = parseInt(attrs.fontSize) || 20,
             labelMargin = parseInt(attrs.labelMargin) || 0;
 
@@ -40,7 +40,7 @@
           // Nothing to render if there's no data
           if (!data) return;
 
-          var height = data.length * (barHeight + barPadding),
+          var height = data.length * (1.8 * barHeight + barPadding),
               color = d3.scale.category20();
           
           svg.attr('height', height);
@@ -56,14 +56,16 @@
             .attr('width', 0)
             .attr('height', barHeight)
             .attr('x', labelMargin)
+            .attr('y', 0.8 * barHeight)
             .attr('fill', function(d) {
               return color(d.label);
             });
             
           // Add {n}/{total} label to bar
           bar.append('text')
+            .attr('class', 'choice-percentage')
             .attr('x', labelMargin)
-            .attr('y', barHeight / 2)
+            .attr('y', 1.3 * barHeight)
             .attr('dy', '0.35em')
             .text(function(d) {
               return '0/0';
@@ -71,6 +73,7 @@
                   
           // Add text for labels
           bar.append('text')
+            .attr('class', 'choice-label')
             .attr('x', 10)
             .attr('y', barHeight / 2)
             .attr('dy', '0.35em')
@@ -79,14 +82,16 @@
               return d.label;
             });
           
-          // Add text for answer options
+          // Add text for choices
           bar.append('text')
-            .attr('class', 'option-text')
+            .attr('class', 'choice-text')
             .attr('x', labelMargin)
+            .attr('y', barHeight / 2)
+            .attr('dy', '0.35em')
             .text(function(d) {
               return d.text;
             })
-            .each(wrap); // wrap is a helper function for elipsis ie: '...'
+            .each(truncate); // truncate is a helper function for elipsis ie: '...'
         }
         
         scope.update = function(data, transitionDuration) {
@@ -115,7 +120,7 @@
             .data(data)
             .attr('transform', function(d, i) {
               var x = 0;
-              var y = i * (barHeight + barPadding) + barHeight;
+              var y = i * (1.8 * barHeight + barPadding);
               return 'translate(' + x + ',' + y + ')';
             });
               
@@ -126,7 +131,7 @@
                 return barWidths[i];
               });
                   
-          bar.select('text')
+          bar.select('text.choice-percentage')
             .text(function(d, i) {
               return d.value.toString() + '/' + total;
             })
@@ -146,14 +151,10 @@
                   : 'end';
               })
 
-          // Update text for answer options
-          bar.select('.option-text')
-            .attr('x', labelMargin)
-            .attr('dy', '-10px')
-            .text(function(d) {
-              return d.text;
-            })
-            .each(wrap); // wrap is a helper function for elipsis ie: '...'
+          // Update truncation for choice text
+          bar.select('.choice-text')
+            .text(function(d) { return d.text; })
+            .each(truncate); // truncate is a helper function for elipsis ie: '...'
 
         }
         
@@ -177,19 +178,18 @@
           return scope.update(newData);
         }, true);
 
-        // Wrap text helper function
+        // Truncate text helper function
         // http://stackoverflow.com/questions/15975440/add-ellipses-to-overflowing-text-in-svg
-        function wrap() {
-            var self = d3.select(this),
-                textLength = self.node().getComputedTextLength(),
-                text = self.text(),
-                width = d3.select(parentElement).node().offsetWidth - labelMargin;
-                console.log('textlength ' + textLength)
-            while (textLength > (width - 2) && text.length > 0) {
-                text = text.slice(0, -1);
-                self.text(text + '...');
-                textLength = self.node().getComputedTextLength();
-            }
+        function truncate() {
+          var self = d3.select(this),
+              textLength = self.node().getComputedTextLength(),
+              text = self.text(),
+              width = d3.select(parentElement).node().offsetWidth - labelMargin;
+          while (textLength > (width - 2) && text.length > 0) {
+            text = text.slice(0, -1);
+            self.text(text + '...');
+            textLength = self.node().getComputedTextLength();
+          }
         }
 
       });
