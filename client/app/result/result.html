@@ -26,13 +26,6 @@
           Past Results
         </md-button>
         <md-menu-content width="10">
-          <!-- <md-menu-item ng-show="!vm.result.active">
-            <md-button ng-click="vm.resume(vm.result)">
-              <md-icon class="material-icons">restore</md-icon>
-              This result
-            </md-button>
-          </md-menu-item>
-          <md-menu-divider ng-show="!vm.result.active && vm.pastResults.length"></md-menu-divider> -->
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
             <md-button ng-click="vm.viewResult(pastResult)">
               {{pastResult.start | date:'EEEE, dd MMMM yyyy, hh:mma'}}
