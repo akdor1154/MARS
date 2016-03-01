@@ -17,6 +17,7 @@
     
     return {
       beforeSave: beforeSave,
+      getLastResponse: getLastResponse,
       submitResponse: submitResponse,
       updatePoll: updatePoll
     }
@@ -26,6 +27,13 @@
       scope.$on('$destroy', function() {
         delete obj.__beforeSave;
       });
+    }
+    
+    function getLastResponse(result) {
+      var data = {
+        _id: marsService.id(result)
+      }
+      return marsService.request('result last response', data);
     }
     
     function submitResponse(result, response) {

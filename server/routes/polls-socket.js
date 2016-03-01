@@ -459,6 +459,23 @@ module.exports = function(
     });
     
 /**
+ * Get a users last response to a poll
+ *
+ */
+    socket.on('result last response', function(data) {
+      log.trace('Socket: result last response', data);
+      confirmHasFields(data, '_id')
+      Result.getLastResponseForUser(data._id, socket.request.user)
+        .then(function(response) {
+          log.debug('response = ', response);
+          socket.emit('result last response', response);
+        })
+        .catch(function(err) {
+          respondWithError('result last response', err);
+        });
+    });
+    
+/**
  * Resume a result
  *
  */

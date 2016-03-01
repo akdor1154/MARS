@@ -76,10 +76,33 @@ resultSchema.statics.getActiveForUser = function(userId, fields) {
   return query.exec();
 } 
 
+resultSchema.statics.getLastResponseForUser = function(resultId, userId) {
+  if (_.isString(resultId))
+    resultId = new mongoose.Types.ObjectId(resultId);
+  if (_.isString(userId))
+    userId = new mongoose.Types.ObjectId(userId);
+  return Result.aggregate()
+    .match({'_id': resultId })
+    .limit(1)
+    .unwind('$responses')
+    .match({ 'responses.user': userId })
+    .sort({ 'responses.time': -1 })
+    .limit(1)
+    .project({ 
+      user: '$responses.user',
+      data: '$responses.data',
+      _id: '$responses._id',
+      time: '$responses.time'
+    })
+    .exec()
+    .get(0);
+}
+
 resultSchema.statics.resume = function(resultId, fromId, userId) {
   var result;
   return Result.findById(resultId)
     .populate('poll')
+    .populate('pollCollection', 'name')
     .exec()
     .then(function(r) {
       result = r;
