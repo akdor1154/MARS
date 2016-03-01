@@ -6,20 +6,23 @@
       </h2>
       <span flex></span>
       <md-button aria-label="Lock result"
+                 class="md-icon-button" 
                  ng-click="vm.toggleActive()">
         <md-icon class="svg-icons">{{vm.result.active ? 'lock' : 'lock_open'}}</md-icon>
         <md-tooltip>{{vm.result.active ? 'Lock poll' : 'Unlock poll'}}</md-tooltip>
       </md-button>
       <md-button aria-label="Reset poll"
+                 class="md-icon-button" 
                  ng-click="vm.createResult()">
         <md-icon class="svg-icons">autorenew</md-icon>
         <md-tooltip>Reset poll</md-tooltip>
       </md-button>
       <md-menu>
-        <md-button aria-label="Resume result"
+        <md-button aria-label="Past results"
+                   class="md-icon-button" 
                    ng-click="$mdOpenMenu($event)"
                    ng-hide="!vm.pastResults || vm.pastResults.length === 0">
-          Past Results
+          <md-icon>history</md-icon>
         </md-button>
         <md-menu-content width="10">
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
@@ -30,8 +33,8 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      <md-button class="md-icon-button"
-                 aria-label="Close result"
+      <md-button aria-label="Close result"
+                 class="md-icon-button"
                  ng-show="vm.isOwner" 
                  ng-click="vm.close()">
         <md-icon class="material-icons">close</md-icon>
