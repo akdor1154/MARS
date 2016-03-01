@@ -70,7 +70,6 @@ gulp.task('build-js', ['build-template-cache'], function() {
 gulp.task('build-socket.io', function() {
   return gulp.src(['client/assets/bower_components/socket.io-client/socket.io.js' ])
     .pipe(rename('client/assets/bower_components/socket.io-client/socket.io.min.js'))
-    .pipe(debug())
     .pipe(uglify().on('error', gutil.log))
     .pipe(gulp.dest('.'));
 });
@@ -97,7 +96,7 @@ gulp.task('build-template-cache', function() {
  * Compress static files
  *
  */
-gulp.task('gzip', ['build-css', 'build-js', 'build-socket.io'], function() {
+gulp.task('gzip', function() {
   return gulp.src([
     'client/**/*.min.js', 
     'client/**/*.min.css',
@@ -109,4 +108,26 @@ gulp.task('gzip', ['build-css', 'build-js', 'build-socket.io'], function() {
   ])
     .pipe(gzip({ append: true, threshold: '1kb' }))
     .pipe(gulp.dest('client/'));
+});
+
+gulp.task('watch', function() {
+  // Javascript
+  gulp.watch([
+    'client/app/**/*.js',
+    '!client/app/**/*.min.js',
+    'client/plugins/**/*.js',
+    '!client/plugins/**/*.min.js',
+  ], ['build-js']);
+  // CSS
+  gulp.watch([
+    'client/assets/css/**/*.css',
+    '!client/app/css/**/*.min.css',
+    'client/plugins/**/*.css',
+    '!client/plugins/**/*.min.css',
+  ], ['build-css']);
+  // HTML
+  gulp.watch([
+    'client/app/**/*.html',
+    'client/plugins/**/*.html'
+  ], ['build-js']);
 });
