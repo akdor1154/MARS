@@ -133,8 +133,8 @@
                   
           bar.select('text.choice-percentage')
             .text(function(d, i) {
-              return total > 0
-                ? Math.round(100 * d.value / total) + '%'
+              return d.value > 0
+                ? '(' + d.value + ')  ' + Math.round(100 * d.value / total) + '%'
                 : '0%';
             })
             .transition()
