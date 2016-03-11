@@ -41,7 +41,13 @@
           if (!data) return;
 
           var height = data.length * (1.8 * barHeight + barPadding),
-              color = d3.scale.category20();
+              color = d3.scale.ordinal()
+                .range([
+                  '#f44336', '#00BCD4', '#FFC107', '#607D8B', '#673AB7',
+                  '#2196F3', '#03A9F4', '#3F51B5', '#009688', '#4CAF50',
+                  '#8BC34A', '#CDDC39', '#FFEB3B', '#E91E63', '#FF9800',
+                  '#FF5722', '#795548', '#9E9E9E', '#9C27B0'
+                ]);
           
           svg.attr('height', height);
           
