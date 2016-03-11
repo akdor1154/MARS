@@ -10,6 +10,8 @@ Setup
 
 Development Environment
 ---------------------
+From repository root:
+* `gulp watch`
 * `nodemon`
 
 Monash Production Environment
