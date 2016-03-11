@@ -8,8 +8,8 @@
       <md-button aria-label="Lock result"
                  class="md-icon-button" 
                  ng-click="vm.toggleActive()">
-        <md-icon class="svg-icons">{{vm.result.active ? 'lock' : 'lock_open'}}</md-icon>
-        <md-tooltip>{{vm.result.active ? 'Lock poll' : 'Unlock poll'}}</md-tooltip>
+        <md-icon class="svg-icons">{{vm.result.active ? 'pause_circle_outline' : 'play_circle_outline'}}</md-icon>
+        <md-tooltip>{{vm.result.active ? 'Pause poll' : 'Start poll'}}</md-tooltip>
       </md-button>
       <md-button aria-label="Reset poll"
                  class="md-icon-button" 
