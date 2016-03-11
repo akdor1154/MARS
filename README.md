@@ -12,14 +12,7 @@ Development Environment
 ---------------------
 * `nodemon`
 
-Production Environment
+Monash Production Environment
 ----------------------
-* `sudo PORT=80 forever start ./bin/www`
-
-Note: Ensure MongoDB is running with `service mongod start`
-
-TODO
-----
-* Use $templateCache for view parts
-* Merge into single minified javascript and css files
-* Move plugins into separate repositories
+* Ensure MongoDB is running with `service mongod start`
+* Run the MARS service `service mars start`
