@@ -36,6 +36,7 @@
     vm.activating = false;
     vm.addPoll = addPoll;
     vm.deletePoll = deletePoll;
+    vm.copyToClipboard = copyToClipboard;
     vm.group = null;
     vm.inflector = inflector;
     vm.isSaving = false;
@@ -82,7 +83,50 @@
         myPollsService.deletePoll(poll, poll._isNew);
       });
     }
+
+    function copyToClipboard (index) {
+      // Adapted from: http://stackoverflow.com/questions/
+      // 400212/how-do-i-copy-to-the-clipboard-in-javascript
       
+      var poll = vm.polls[index];
+      var choices = poll.data.choices;
+      
+      if (poll.type !== 'multiple-choice')
+        return
+
+      // Create a dummy textarea with question text inside
+      var textArea = document.createElement("textarea");
+      textArea.style.position = 'fixed';
+      textArea.style.top = 0;
+      textArea.style.left = 0;
+      textArea.style.width = '2em';
+      textArea.style.height = '2em';
+      textArea.style.padding = 0;
+      textArea.style.border = 'none';
+      textArea.style.outline = 'none';
+      textArea.style.boxShadow = 'none';
+      textArea.style.background = 'transparent';
+      textArea.value = poll.data.question + '\n\n';
+
+      for (var i = 0; i < choices.length - 1; i++) {
+        textArea.value += choices[i].label + ') ' + choices[i].text
+        if (i !== choices.length - 2)
+          textArea.value += '\n'
+      }
+
+      document.body.appendChild(textArea);
+
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.log('Oops, unable to copy');
+      }
+
+      document.body.removeChild(textArea);
+    }
+
     function pollEditTemplate(poll) {
       return 'plugins/' + poll.type + '/' + poll.type + '.poll.edit.html';
     }

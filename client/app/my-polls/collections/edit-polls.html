@@ -40,6 +40,14 @@
       <md-icon class="material-icons">arrow_downward</md-icon>
     </md-button>
     <md-button class="md-icon-button" 
+               aria-label="Copy to clipboard"
+               ng-click="vm.copyToClipboard($index)">
+      <md-tooltip>
+        Copy to Clipboard
+      </md-tooltip>
+      <md-icon class="material-icons">content_copy</md-icon>
+    </md-button>
+    <md-button class="md-icon-button" 
                aria-label="Delete poll"
                ng-click="vm.deletePoll($index)"
                ng-disabled="poll._isSaving">
