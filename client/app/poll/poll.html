@@ -5,6 +5,7 @@
     <div class="md-toolbar-tools">
       <h2>
         <span>{{vm.poll ? vm.poll.pollCollection.name : 'Mars'}}</span>
+        <span ng-hide="vm.poll" style="font-size: 0.5em;">beta</span>
       </h2>
       <span flex></span>
       <md-button class="md-icon-button" 
