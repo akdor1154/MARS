@@ -59,17 +59,6 @@
       }
     }
     
-    function questionChanged(poll) {
-      poll.name = poll.data.question;
-      pollPluginService.updatePoll(poll);
-    }
-    
-    function removeChoice(index) {
-      vm.poll.data.choices.splice(index, 1);
-      relabelChoices();
-      pollPluginService.updatePoll(vm.poll, true);
-    }
-    
     function newChoice() {
       var index = vm.poll.data.choices.length;
       vm.poll.data.choices.push({
@@ -81,10 +70,21 @@
       });
     }
     
+    function questionChanged(poll) {
+      poll.name = poll.data.question;
+      pollPluginService.updatePoll(poll);
+    }
+    
     function relabelChoices() {
       vm.poll.data.choices.forEach(function(choice, index) {
         choice.label = String.fromCharCode(65 + index);
       });
+    }
+    
+    function removeChoice(index) {
+      vm.poll.data.choices.splice(index, 1);
+      relabelChoices();
+      pollPluginService.updatePoll(vm.poll, true);
     }
     
   }
