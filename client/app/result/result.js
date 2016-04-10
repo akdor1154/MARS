@@ -84,8 +84,6 @@
       $log.debug('close');
       if (!closeState)
         closeState = 'myPolls';
-      $log.debug('closeState = ', closeState);
-      $log.debug('closeStateParams = ', closeStateParams);
       $state.go(closeState, closeStateParams);
     }
     
