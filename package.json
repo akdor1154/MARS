@@ -1,6 +1,19 @@
 {
-  "name": "melts-basic",
-  "version": "0.3.0",
+  "name": "mars",
+  "version": "0.4.0",
+  "homepage": "https://github.com/SLC3/MARS",
+  "authors": [
+    "Nathan <nathansherburn@gmail.com>",
+    "Andrew <aj1331@users.noreply.github.com>"
+  ],
+  "description": "Monash Audience Response System",
+  "keywords": [
+    "polling",
+    "audience",
+    "response",
+    "engagement"
+  ],
+  "license": "MIT",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",

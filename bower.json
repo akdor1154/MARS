@@ -1,11 +1,12 @@
 {
-  "name": "melts",
-  "version": "0.0.1",
-  "homepage": "https://github.com/SLC3/melts",
+  "name": "mars",
+  "version": "0.4.0",
+  "homepage": "https://github.com/SLC3/MARS",
   "authors": [
-    "Nathan <nathansherburn@gmail.com>"
+    "Nathan <nathansherburn@gmail.com>",
+    "Andrew <aj1331@users.noreply.github.com>"
   ],
-  "description": "Monash eLearning Tools Audience Response System",
+  "description": "Monash Audience Response System",
   "main": "index.html",
   "keywords": [
     "polling",

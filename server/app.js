@@ -7,7 +7,9 @@ var express = require('express')
   , bodyParser = require('body-parser')
   , session = require('express-session')
   , passport = require('passport')
-  , passportSocketIo = require('passport.socketio');
+  , passportSocketIo = require('passport.socketio')
+  , pjson = require('../package.json');
+
 
 
 /**
@@ -18,7 +20,7 @@ var app = express();
 /**
  * MARS version info
  */
-log.info('MARS 0.3.0');
+log.info('MARS ' + pjson.version);
 
 /**
  * Logging using tracer
