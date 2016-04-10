@@ -113,15 +113,28 @@ pollSchema.statics.getActivations = function(pollId) {
 
 pollSchema.statics.getLastResult = function(pollId) {
   var Result = mongoose.model('Result');
-  return Result.findOne({
-    'poll': pollId
-  }).sort('-activations.start')
-    .select('_id')
+  if (_.isString(pollId))
+    pollId = new mongoose.Types.ObjectId(pollId); 
+  return Result.aggregate({ $match: { poll: pollId }})
+    .project('_id activations._id')
+    // Mongoose doesn't have any way to provide options to the 
+    // Aggregate#unwind, so do it manually
+    .append({
+      $unwind: {
+        path: '$activations', 
+        preserveNullAndEmptyArrays: true 
+      }
+    })
+    .project({
+      order: { $ifNull: ['$activations._id', '$_id'] }
+    })
+    .sort('-order')
+    .limit(1)
     .exec()
-    .then(function(result) {
-      if (!result)
+    .then(function(results) {
+      if (!results || results.length === 0)
         return Promise.reject(errors.notFound('Result'));
-      return result;
+      return results[0];
     });
 }
 

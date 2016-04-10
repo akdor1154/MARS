@@ -327,6 +327,9 @@ module.exports = function(
     log.trace('result create', data);
     Poll.createResult(data._id, socket.request.user)
       .then(function(result) {
+        return result.save();
+      })
+      .then(function(result) {
         log.debug('Result', result);
         socket.emit('result create', result);
       })
