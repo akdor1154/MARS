@@ -19,7 +19,7 @@
       })
       .state('poll.view', {
         templateUrl: 'app/poll/poll.view.html'
-      })
+      });
   }
   
 })();
