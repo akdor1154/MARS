@@ -1,0 +1,36 @@
+<md-dialog aria-label="My feeds" 
+           class="my-feeds" 
+           ng-cloak>
+  <form name="myFeedsForm">
+    <md-dialog-content style="max-width:650px; min-width: 480px; ">
+      <div class="md-dialog-content">
+        <h2>My Feeds</h2>
+        <!--<h4>Feeds</h4>-->
+        <p ng-hide="vm.action || vm.subscriptions.length > 0">You have not joined any feeds.</p>
+        <md-list ng-show="vm.subscriptions.length > 0">
+          <md-list-item ng-repeat="subscription in vm.subscriptions">
+            <!--<md-icon aria-label="Unsubscribe from {{subscription.title}}"
+                      ng-click="vm.unsubscribe(subscription)">person</md-icon>-->
+            <p>{{ subscription.name }}</p>
+            <md-button aria-label="Remove feed: {{subscription.name}}"
+                       class="md-icon-button md-secondary"
+                       ng-click="vm.unsubscribe(subscription)">
+              <md-icon>clear</md-icon>
+              <md-tooltip>Remove feed</md-tooltip>
+            </md-button>
+          </md-list-item>
+        </md-list>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+      <mars-action-progress action="vm.action">
+        <md-button style="margin-right:20px;"
+                   type="submit"
+                   ng-click="vm.close()"
+                   ng-disabled="myFeedsForm.$invalid">
+          Close
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

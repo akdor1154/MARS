@@ -137,6 +137,35 @@ module.exports = function(
     });
     
 /**
+ * Unsubscribe the logged in user from a collection
+ *
+ */
+    socket.on('collection unsubscribe', function(data) {
+      log.trace('Socket: collection unsubscribe', data);
+      confirmHasFields(data, '_id')
+        .then(function() {
+          return User.unsubscribeFromCollection(socket.request.user, data._id);
+        })
+        .then(function() {
+          log.info(
+            'User %s unsubscribed from %s', 
+            socket.request.user, 
+            data._id.toString()
+          );
+          socket.leave(data._id.toString());
+          log.info(
+            'User %s left room %s', 
+            socket.request.user, 
+            data._id.toString()
+          );
+          socket.emit('collection unsubscribe');
+        })
+        .catch(function(err) {
+          respondWithError('collection unsubscribe', err);
+        });
+    });
+    
+/**
  * Update a collection
  *
  */
@@ -587,6 +616,24 @@ module.exports = function(
         })
         .catch(function(err) {
           respondWithError('user search', err);
+        });
+    });
+    
+/**
+ * Get a list of subscriptions for the current user
+ *
+ */
+    socket.on('user subscriptions', function(data) {
+      log.trace('Socket: user subscriptions');
+      if (!socket.request.user)
+        return respondWithError('user subscriptions', errors.forbidden());
+      User.getSubscriptions(socket.request.user, 'name')
+        .then(function(subscriptions) {
+          log.debug('subscriptions = ', subscriptions);
+          socket.emit('user subscriptions', subscriptions);
+        })
+        .catch(function(err) {
+          respondWithError('user subscriptions', err);
         });
     });
     

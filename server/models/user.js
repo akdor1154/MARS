@@ -28,9 +28,13 @@ userSchema.set('toObject', { retainKeyOrder: true });
 userSchema.index({ 'name.first': 'text', 'name.last': 'text', 'username': 'text' });
 
 
-userSchema.statics.getSubscriptions = function(userId) {
-  return User.findById(userId, 'subscriptions')
-    .exec()
+userSchema.statics.getSubscriptions = function(userId, populate) {
+  var query = User.findById(userId, 'subscriptions');
+  if (populate === true)
+    query.populate('subscriptions');
+  else if (populate)
+    query.populate('subscriptions', populate);
+  return query.exec()
     .then(function(user) {
       if (!user)
         return Promise.reject(errors.notFound('User', userId));
@@ -66,6 +70,15 @@ userSchema.statics.subscribeToCollection = function(userId, collectionToken) {
         { $addToSet: { subscriptions: collection._id } }
       ).exec().return(collection._id);
     });
+}
+
+userSchema.statics.unsubscribeFromCollection = function(userId, collectionId) {
+  if (_.isString(collectionId))
+    collectionId = new mongoose.Types.ObjectId(collectionId);
+  return User.update(
+    { _id: userId }, 
+    { $pull: { subscriptions: collectionId } }
+  ).exec();
 }
 
 

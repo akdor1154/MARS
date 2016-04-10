@@ -27,10 +27,12 @@
     return ({
       activePoll: activePoll,
       getActivePolls: getActivePolls,
+      getSubscriptions: getSubscriptions,
       nextActivePoll: nextActivePoll,
       onActivePollsChanged: onActivePollsChanged,
       prevActivePoll: prevActivePoll,
-      subscribe: subscribe
+      subscribe: subscribe,
+      unsubscribe: unsubscribe
     });
     
 /**
@@ -66,6 +68,14 @@
         },
         $q.reject
       );
+    }
+    
+/**
+ * Get all subscriptions for the current user
+ * 
+ */
+    function getSubscriptions() {
+      return marsService.request('user subscriptions');
     }
     
 /**
@@ -137,6 +147,15 @@
             $log.info('Subscribed to collection: ', collectionToken);
           }
         );
+    }
+    
+/**
+ * Unsubscribe to view polls belonging the collection identified 
+ * by collectionId
+ *
+ */
+    function unsubscribe(subscription) {
+      return marsService.request('collection unsubscribe', subscription);
     }
     
 /**
