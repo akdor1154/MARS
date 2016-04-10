@@ -374,9 +374,13 @@ module.exports = function(
     });  
 
     
+/**
+ * Get the most recently created result for a poll
+ * 
+ */
     socket.on('poll last result', function(data) {
       log.trace('Socket: poll last result', data);
-      Poll.getLastResult(data._id, socket.request.user)
+      Poll.getLastResult(data._id)
         .then(function(result) {
           log.debug('result =', result);
           socket.emit('poll last result', _.pick(result, '_id'));

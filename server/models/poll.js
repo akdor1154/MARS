@@ -111,11 +111,10 @@ pollSchema.statics.getActivations = function(pollId) {
     });
 }
 
-pollSchema.statics.getLastResult = function(pollId, userId) {
+pollSchema.statics.getLastResult = function(pollId) {
   var Result = mongoose.model('Result');
   return Result.findOne({
-    'poll': pollId,
-    'activations.user': userId,
+    'poll': pollId
   }).sort('-activations.start')
     .select('_id')
     .exec()
