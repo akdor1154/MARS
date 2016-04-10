@@ -2,32 +2,53 @@ var gulp = require('gulp')
   , cssnano = require('gulp-cssnano')
   , concat = require('gulp-concat')
   , debug = require('gulp-debug')
-  , gzip = require('gulp-gzip')
+  , gutil = require('gulp-util')
   , htmlmin = require('gulp-htmlmin')
   , ignore = require('gulp-ignore')
+  , livereload = require('gulp-livereload')
+  , plumber = require('gulp-plumber')
   , rename = require('gulp-rename')
+  , sourcemaps = require('gulp-sourcemaps')
   , templateCache = require('gulp-angular-templatecache')
-  , uglify = require('gulp-uglify')
-  , gutil = require('gulp-util');
+  , uglify = require('gulp-uglify');
+  
+  
+var config = {
+  JS: [
+    'client/app/**/*.module.js', 
+    'client/app/**/*.js',
+    'client/plugins/**/*plugin.js',
+    'client/plugins/**/*.js',
+    '!client/app/app.min.js'
+  ],
+  CSS: [
+    'client/app/**/*.css',
+    'client/assets/css/**/*.css',
+    'client/plugins/**/*.css',
+    '!client/assets/css/app.min.css'
+  ],
+  HTML: [
+    'client/app/**/*.html',
+    'client/plugins/**/*.html'
+  ]
+};
+
+  
   
 /**
  * Default task
  *
  */
-gulp.task('default', function() {
-  gutil.log('Gulp is working!');
-});
+gulp.task('default', ['build']);
 
 /**
  * Run all build tasks
  *
  */
 gulp.task('build', [
-  'build-css', 
-  'build-template-cache',
+  'build-css',
   'build-js',
-  'build-socket.io',
-  'gzip'
+  'build-socket.io'
 ]);
 
 /**
@@ -35,15 +56,14 @@ gulp.task('build', [
  *
  */
 gulp.task('build-css', function() {
-  return gulp.src([
-    'client/app/**/*.css',
-    'client/assets/css/**/*.css',
-    'client/plugins/**/*.css',
-    '!client/assets/css/app.min.css'
-  ])
-    .pipe(concat('app.min.css'))
-    .pipe(cssnano())
-    .pipe(gulp.dest('client/assets/css/'));
+  return gulp.src(config.CSS)
+    .pipe(plumber(onError))
+    .pipe(sourcemaps.init())
+      .pipe(concat('app.min.css'))
+      .pipe(cssnano())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('client/assets/css/'))
+    .pipe(livereload());
 });
 
 /**
@@ -51,16 +71,14 @@ gulp.task('build-css', function() {
  *
  */
 gulp.task('build-js', ['build-template-cache'], function() {
-  return gulp.src([
-    'client/app/**/*.module.js', 
-    'client/app/**/*.js',
-    'client/plugins/**/*plugin.js',
-    'client/plugins/**/*.js',
-    '!client/app/app.min.js'
-  ])
-    .pipe(concat('app.min.js'))
-    .pipe(uglify().on('error', gutil.log))
-    .pipe(gulp.dest('client/app/'));
+  return gulp.src(config.JS)
+    .pipe(plumber(onError))
+    .pipe(sourcemaps.init())
+      .pipe(concat('app.min.js'))
+      .pipe(uglify().on('error', gutil.log))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('client/app/'))
+    .pipe(livereload());
 });
 
 /**
@@ -79,7 +97,7 @@ gulp.task('build-socket.io', function() {
  *
  */
 gulp.task('build-template-cache', function() {
-  return gulp.src(['client/app/**/*.html', 'client/plugins/**/*.html'])
+  return gulp.src(config.HTML)
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(templateCache({ 
       filename: 'templates.js',
@@ -93,41 +111,21 @@ gulp.task('build-template-cache', function() {
 });
 
 /**
- * Compress static files
- *
+ * Watch for changes to files, run any necessary build actions then livereload.
  */
-gulp.task('gzip', function() {
-  return gulp.src([
-    'client/**/*.min.js', 
-    'client/**/*.min.css',
-    'client/**/*.svg',
-    'client/**/*.ttf',
-    '!client/assets/bower_components/angular-material/demos/**/*.*',
-    '!client/assets/bower_components/angular-material/modules/**/*.js',
-    '!client/assets/bower_components/angular-material/modules/**/*.css'
-  ])
-    .pipe(gzip({ append: true, threshold: '1kb' }))
-    .pipe(gulp.dest('client/'));
+gulp.task('watch', function() {
+  livereload.listen();
+  gulp.watch(config.JS, ['build-js']);
+  gulp.watch(config.CSS, ['build-css']);
+  gulp.watch(config.HTML, ['build-js']);
 });
 
-gulp.task('watch', function() {
-  // Javascript
-  gulp.watch([
-    'client/app/**/*.js',
-    '!client/app/**/*.min.js',
-    'client/plugins/**/*.js',
-    '!client/plugins/**/*.min.js',
-  ], ['build-js']);
-  // CSS
-  gulp.watch([
-    'client/assets/css/**/*.css',
-    '!client/app/css/**/*.min.css',
-    'client/plugins/**/*.css',
-    '!client/plugins/**/*.min.css',
-  ], ['build-css']);
-  // HTML
-  gulp.watch([
-    'client/app/**/*.html',
-    'client/plugins/**/*.html'
-  ], ['build-js']);
-});
+
+
+/**
+ * Log errors and allow the stream to continue.
+ */
+function onError(err) {
+  console.error(err);
+  this.emit('end');
+}
