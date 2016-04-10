@@ -34,6 +34,9 @@
           || vm.poll.data.choices.length === 0)
         newChoice();
         
+      // Support copying to clipboard
+      vm.poll.toPlainText = toPlainText;
+        
       pollPluginService.beforeSave($scope, vm.poll, function(poll) {
         if (angular.isArray(poll.data.choices)) {
           poll.data.choices = _.map(
@@ -85,6 +88,16 @@
       vm.poll.data.choices.splice(index, 1);
       relabelChoices();
       pollPluginService.updatePoll(vm.poll, true);
+    }
+    
+    function toPlainText() {
+      var text = vm.poll.data.question + '\n\n';
+      vm.poll.data.choices.forEach(function(choice) {
+        if (choice.blank)
+          return;
+        text += choice.label + ') ' + choice.text + '\n';
+      });
+      return text;
     }
     
   }

@@ -6,6 +6,7 @@
       'ngMaterial', 
       'ngMessages',
       'ngSanitize',
+      'angular-clipboard',
       'ngFileSaver',
       'ui.router',
       

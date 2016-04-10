@@ -11,7 +11,8 @@
     '$mdDialog',
     '$scope', 
     '$state', 
-    '$stateParams', 
+    '$stateParams',
+    'clipboard', 
     'inflector',
     'shell', 
     'myPollsService'
@@ -23,7 +24,8 @@
       $mdDialog,
       $scope, 
       $state, 
-      $stateParams, 
+      $stateParams,
+      clipboard, 
       inflector,
       shell, 
       myPollsService
@@ -35,8 +37,9 @@
     
     vm.activating = false;
     vm.addPoll = addPoll;
-    vm.deletePoll = deletePoll;
+    vm.canCopyToClipboard = canCopyToClipboard;
     vm.copyToClipboard = copyToClipboard;
+    vm.deletePoll = deletePoll;
     vm.group = null;
     vm.inflector = inflector;
     vm.isSaving = false;
@@ -70,6 +73,17 @@
       });
     }
     
+    function canCopyToClipboard(poll) {
+      return angular.isFunction(poll.toPlainText);
+    }
+    
+    function copyToClipboard(poll) {
+      if (!canCopyToClipboard(poll))
+        return;
+      var header = 'MARS Poll: ' + inflector.humanize(poll.type) + '\n\n';
+      clipboard.copyText(header + poll.toPlainText());
+    }
+    
     function deletePoll(index) {
       var poll = vm.polls[index];
       $mdDialog.show(
@@ -84,49 +98,6 @@
       });
     }
 
-    function copyToClipboard (index) {
-      // Adapted from: http://stackoverflow.com/questions/
-      // 400212/how-do-i-copy-to-the-clipboard-in-javascript
-      
-      var poll = vm.polls[index];
-      var choices = poll.data.choices;
-      
-      if (poll.type !== 'multiple-choice')
-        return
-
-      // Create a dummy textarea with question text inside
-      var textArea = document.createElement("textarea");
-      textArea.style.position = 'fixed';
-      textArea.style.top = 0;
-      textArea.style.left = 0;
-      textArea.style.width = '2em';
-      textArea.style.height = '2em';
-      textArea.style.padding = 0;
-      textArea.style.border = 'none';
-      textArea.style.outline = 'none';
-      textArea.style.boxShadow = 'none';
-      textArea.style.background = 'transparent';
-      textArea.value = poll.data.question + '\n\n';
-
-      for (var i = 0; i < choices.length - 1; i++) {
-        textArea.value += choices[i].label + ') ' + choices[i].text
-        if (i !== choices.length - 2)
-          textArea.value += '\n'
-      }
-
-      document.body.appendChild(textArea);
-
-      textArea.select();
-
-      try {
-        document.execCommand('copy');
-      } catch (err) {
-        console.log('Oops, unable to copy');
-      }
-
-      document.body.removeChild(textArea);
-    }
-
     function pollEditTemplate(poll) {
       return 'plugins/' + poll.type + '/' + poll.type + '.poll.edit.html';
     }
@@ -136,7 +107,7 @@
         return;
       var poll1 = vm.polls[fromIndex],
           poll2 = vm.polls[toIndex];
-      myPollsService.swapPolls(poll1, poll2)
+      myPollsService.swapPolls(poll1, poll2);
       vm.polls[fromIndex] = poll2;
       vm.polls[toIndex] = poll1;
       $anchorScroll('poll-' + toIndex);

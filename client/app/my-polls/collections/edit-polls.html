@@ -41,9 +41,10 @@
     </md-button>
     <md-button class="md-icon-button" 
                aria-label="Copy to clipboard"
-               ng-click="vm.copyToClipboard($index)">
+               ng-disabled="!vm.canCopyToClipboard(poll)"
+               ng-click="vm.copyToClipboard(poll)">
       <md-tooltip>
-        Copy to Clipboard
+        Copy to clipboard
       </md-tooltip>
       <md-icon class="material-icons">content_copy</md-icon>
     </md-button>

@@ -23,12 +23,17 @@
     activate();
     
     function activate() {
-      // Nothing to do so far...
+      // Support copying to clipboard
+      vm.poll.toPlainText = toPlainText;
     }
     
     function questionChanged(poll) {
       poll.name = poll.data.question;
       pollPluginService.updatePoll(poll);
+    }
+
+    function toPlainText() {
+      return vm.poll.data.question + '\n';
     }
 
   }

@@ -46,10 +46,22 @@ gulp.task('default', ['build']);
  *
  */
 gulp.task('build', [
+  'build-angular-clipboard',
   'build-css',
   'build-js',
   'build-socket.io'
 ]);
+
+/**
+ * Minify angular-clipboard.js
+ * 
+ */
+gulp.task('build-angular-clipboard', function() {
+  return gulp.src(['client/assets/bower_components/angular-clipboard/angular-clipboard.js' ])
+    .pipe(rename('client/assets/bower_components/angular-clipboard/angular-clipboard.min.js'))
+    .pipe(uglify().on('error', gutil.log))
+    .pipe(gulp.dest('.'));
+});
 
 /**
  * Concat and minify app and plugin css
