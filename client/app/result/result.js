@@ -7,6 +7,7 @@
     
   ResultController.$inject = [
     '$log', 
+    '$q',
     '$scope',
     '$state', 
     '$stateParams',
@@ -19,6 +20,7 @@
   
   function ResultController(
       $log, 
+      $q,
       $scope, 
       $state, 
       $stateParams,
@@ -32,10 +34,10 @@
     var vm = this;
     
     vm.close = close;
-    vm.createResult = createResult;
     vm.isOwner = false;
     vm.poll = null;
     vm.result = null;
+    vm.resetPoll = resetPoll;
     vm.resultViewTemplate = resultViewTemplate;
     vm.resume = resume;
     vm.showClose = false;
@@ -87,16 +89,25 @@
       $state.go(closeState, closeStateParams);
     }
     
-    function createResult() {
-      return resultService.createResult(vm.poll._id).then(viewResult);
-    }
-    
     function deactivate(result) {
       if (!result.active)
         return;
       resultService.deactivate(result._id).then(function() {
         result.active = false;
       });
+    }
+    
+    function discardResult() {
+      var confirm = $mdDialog.confirm()
+        .title('Discard result')
+        .htmlContent('No responses were received. This result will be discarded.')
+        .ok('Okay')
+        .cancel('Cancel');
+      return $mdDialog.show(confirm)
+        .then(function() {
+          vm.result.discarded = new Date();
+          return resultService.update(vm.result, 'discarded');
+        });
     }
     
     function onResultActivate(event, result) {
@@ -109,6 +120,17 @@
         vm.result.active = false;
     }
     
+    function resetPoll() {
+      var promise = (vm.result.responses.length === 0)
+        ? discardResult()
+        : saveResult();
+      promise
+        .then(function() {
+          return resultService.createResult(vm.poll._id);
+        })
+        .then(viewResult);
+    }
+    
     function resultViewTemplate(poll) {
       return 'plugins/' + result.type + '/' + result.type + '.result.edit.html';
     }
@@ -119,6 +141,22 @@
       resultService.resume(result._id).then(function(resumedResult) {
         result.activations = resumedResult.activations;
         result.active = true;
+      });
+    }
+    
+    function saveResult() {
+      if (vm.result.label)
+        return $q.resolve();
+      var prompt = $mdDialog.prompt()
+        .title('Save result')
+        .htmlContent('Enter a label for this result to help you find it in future.<br/>The date will be automatically added for you.')
+        .placeholder('Label eg. Week 1 Lecture 1')
+        .ariaLabel('Result label')
+        .ok('Save')
+        .cancel('Cancel');
+      return $mdDialog.show(prompt).then(function(label) {
+        vm.result.label = label;
+        return resultService.update(vm.result, 'label');
       });
     }
     

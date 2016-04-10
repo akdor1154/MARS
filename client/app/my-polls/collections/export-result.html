@@ -25,7 +25,7 @@
           <md-option ng-repeat="result in vm.results" 
                      ng-value="result">
             {{result.lastActivation.start | date:vm.resultDateFormat}} 
-            - {{result.responsesCount}} Responses
+            {{ result.label ? ' - ' + result.label : '' }}
           </md-option>
         </md-select>
       </md-input-container>

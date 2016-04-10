@@ -10,9 +10,12 @@
   function resultService($log, $rootScope, $q, marsService) {
     $log = $log.getInstance('resultService');
     
+    var results = {};
+    
     marsService.on('poll activate', _onResultActivate);
     marsService.on('result resume', _onResultActivate);
     marsService.on('result deactivate', _onResultDeactivate);
+    marsService.on('response', _onResponseReceived);
     
     return {
       createResult: createResult,
@@ -21,7 +24,8 @@
       onResultActivate: onResultActivate,
       onResultDeactivate: onResultDeactivate,
       resume: resume,
-      subscribe: subscribe
+      subscribe: subscribe,
+      update: update
     }
     
     function createResult(pollId) {
@@ -53,14 +57,28 @@
       return marsService.request('result resume', data);
     }
     
+    function update(result, keys) {
+      var resultCopy = marsService.clone(result, keys);
+      marsService.depopulate(resultCopy, ['poll', 'pollCollection']);
+      return marsService.request('result update', resultCopy);
+    }
+    
 /**
  * Subscribe to receive responses for a result.
  *
  */
     function subscribe(resultId) {
-      return marsService.request('result viewer', { _id: resultId });
+      return marsService.request('result viewer', { _id: resultId })
+        .then(function(result) {
+          results[result._id] = result;
+          return result;
+        });
     }
     
+    function _onResponseReceived(event, data) {
+      if (results[data._id])
+        results[data._id].responses.push(_.omit(data, '_id'));
+    }
     
     function _onResultActivate(event, result) {
       $rootScope.$broadcast('resultActivate', result);

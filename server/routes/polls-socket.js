@@ -524,6 +524,27 @@ module.exports = function(
     });
     
 /**
+ * Update a result
+ * 
+ */
+    socket.on('result update', function(data) {
+      log.trace('Socket: result update', data);
+      confirmHasFields(data, '_id')
+        .then(function() {
+          var ownerId = socket.request.user;
+          Result.ownerUpdateById(ownerId, data._id, data);
+        })
+        .then(function(result) {
+          log.info('Result updated', data._id);
+          log.debug(result);
+          socket.emit('result update', result);
+        })
+        .catch(function(err) {
+          respondWithError('result update', err);
+        });
+    });
+    
+/**
  * Register a result viewer
  *
  */

@@ -84,7 +84,11 @@ pollSchema.statics.getActivations = function(pollId) {
   var Result = mongoose.model('Result');
   if (_.isString(pollId))
     pollId = new mongoose.Types.ObjectId(pollId);
-  return Result.aggregate({ $match: { poll: pollId }})
+  return Result.aggregate()
+    .match({
+      poll: pollId,
+      discarded: null
+    })
     .project({
       activations: 1,
       label: 1,

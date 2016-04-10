@@ -13,7 +13,7 @@
       </md-button>
       <md-button aria-label="Reset poll"
                  class="md-icon-button" 
-                 ng-click="vm.createResult()">
+                 ng-click="vm.resetPoll()">
         <md-icon class="svg-icons">autorenew</md-icon>
         <md-tooltip>Reset poll</md-tooltip>
       </md-button>
@@ -29,7 +29,7 @@
           <md-menu-item ng-repeat="pastResult in vm.pastResults">
             <md-button ng-click="vm.viewResult(pastResult)">
               {{pastResult.start | date:'EEEE, dd MMMM yyyy, hh:mma'}}
-              - {{ pastResult.responsesCount }} Responses
+              {{ pastResult.label ? ' - ' + pastResult.label : '' }}
             </md-button>
           </md-menu-item>
         </md-menu-content>

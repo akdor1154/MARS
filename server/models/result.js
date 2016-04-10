@@ -11,6 +11,7 @@ var resultSchema = new Schema({
   token: String,
 	label: String,
   active: { type: Boolean, default: false, index: true },
+  discarded: Date,
 	activations: [{ 
     start: Date,
     end: Date,
@@ -23,7 +24,7 @@ var resultSchema = new Schema({
   }],
   group: { type: Schema.Types.ObjectId, ref: 'PollGroup', index: true },
   pollCollection: { type: Schema.Types.ObjectId, ref: 'PollCollection', index: true },
-	data: {}
+  data: {}
 });
 resultSchema.set('toObject', { retainKeyOrder: true });
 
@@ -96,6 +97,26 @@ resultSchema.statics.getLastResponseForUser = function(resultId, userId) {
     })
     .exec()
     .get(0);
+}
+
+resultSchema.statics.ownerUpdateById = function(ownerId, id, update, options) {
+  var Poll = mongoose.model('Poll');
+  return Result.findById(id)
+    .select('poll')
+    .exec()
+    .then(function(result) {
+      if (!result)
+        return Promise.reject(errors.notFound('Result', id));
+      return Poll.ownerFindById(ownerId, result.poll, '_id');
+    })
+    .then(function(poll) {
+      if (!poll)
+        return Promise.reject(errors.forbidden());
+      return Result.update(
+        { _id: id },
+        update
+      );
+    });
 }
 
 resultSchema.statics.resume = function(resultId, fromId, userId) {

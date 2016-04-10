@@ -31,3 +31,12 @@ md-whiteframe[md-ink-ripple] {
 	-ms-user-select: none;
 	user-select: none;
 }
+
+/**
+ * Missing in version 1.0.1 of angular-material
+ * Remove this once angular-material has been upgraded
+ */
+md-dialog md-dialog-content .md-prompt-input-container {
+  width: 100%;
+  box-sizing: border-box;
+}
