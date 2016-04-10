@@ -49,13 +49,7 @@
     activate();
     
     function activate() {
-      closeState = $stateParams.closeState
-        || $scope.previousState.name;
-      closeStateParams = $stateParams.closeStateParams
-        || $scope.previousStateParams;
-      $log.debug('closeState = ', closeState);
-      $log.debug('closeStateParams = ', closeStateParams);
-      
+      _storeCloseState();    
       auth.isAuthenticated().then(function(user) {
         var resultId = $stateParams.resultId;
         resultService.subscribe(resultId)
@@ -159,6 +153,15 @@
       if (vm.isOwner && vm.result.active)
         resultService.deactivate(vm.result._id);
     });
+    
+    
+    function _storeCloseState() {
+      // This will be the state that the user is taken to when the result is closed
+      closeState = $stateParams.closeState
+        || $scope.previousState.name;
+      closeStateParams = $stateParams.closeStateParams
+        || $scope.previousStateParams;
+    }
     
   }
   
