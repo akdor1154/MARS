@@ -7,6 +7,7 @@
       'ngMessages',
       'ngSanitize',
       'angular-clipboard',
+      'LocalStorageModule',
       'ngFileSaver',
       'ui.router',
       
@@ -17,6 +18,7 @@
       'app.plugins',
       'app.templates',
       'app.theme',
+      'app.viewSync',
       
       'app.auth',
       'app.poll',

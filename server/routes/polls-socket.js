@@ -42,6 +42,15 @@ module.exports = function(
       });
       
 /**
+ * Join a room for the user id
+ * 
+ * This is so that data can be shared amongst all sockets a user may have
+ * open.
+ */
+    if (socket.request.user)
+      socket.join(socket.request.user);
+      
+/**
  * Create a new collection
  *
  */
@@ -550,6 +559,24 @@ module.exports = function(
         })
         .catch(function(err) {
           respondWithError('user search', err);
+        });
+    });
+    
+/**
+ * Synchronize the view state between all sockets a user has open
+ * 
+ */
+    socket.on('user view sync', function(data) {
+      log.trace('Socket: user view sync', data);
+      if (!socket.request.user)
+        return respondWithError('user view sync', errors.forbidden());
+      confirmHasFields(data, 'state')
+        .then(function() {
+          socket.to(socket.request.user)
+            .emit('user view sync', data);
+        })
+        .catch(function(err) {
+          respondWithError('user view sync', err);
         });
     });
 		

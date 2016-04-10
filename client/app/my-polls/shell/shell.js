@@ -12,7 +12,9 @@
     '$mdSidenav',
     '$window',
     'auth',
+    'localStorageService',
     'shell',
+    'viewSyncService',
     'myPollsService'
   ];
     
@@ -23,7 +25,9 @@
       $mdSidenav,
       $window,
       auth,
+      localStorageService,
       shell,
+      viewSyncService,
       myPollsService
     ) {
     $log = $log.getInstance('ShellController');
@@ -36,11 +40,13 @@
     vm.collections = null;
     vm.goBack = goBack;
     vm.goToState = goToState;
+    vm.isViewSynchronized = false;
     vm.isState = isState;
     vm.logout = logout;
     vm.openLeftMenu = openLeftMenu;
     vm.openExternal = openExternal;
     vm.shell = shell;
+    vm.toggleViewSync = toggleViewSync;
     
     activate();
     
@@ -48,6 +54,23 @@
       auth.isAuthenticated().then(function(user) {
         if (user.group !== 'poller')
           return $state.go('auth.forbidden');
+                
+        viewSyncService.ignoreStates([
+          'myPolls.collections.viewCollection.editCollection',
+          'myPolls.collections.viewCollection.addGroup',
+          'myPolls.collections.viewCollection.editGroup',
+          'myPolls.collections.viewCollection.exportResult',
+          'myPolls.collections.editPolls',
+          'myPolls.collections.editPolls.addPoll',
+        ]);
+        var isViewSynchronized = 
+          localStorageService.get('myPolls.shell.isViewSynchronized');
+        vm.isViewSynchronized = isViewSynchronized !== null
+          ? isViewSynchronized 
+          : true;
+        vm.isViewSynchronized
+          ? viewSyncService.enable()
+          : viewSyncService.disable();
         
         vm.action = 'Loading';
         myPollsService.getCollections().then(function(collections) {
@@ -100,6 +123,17 @@
     
     function openExternal (url) {
       $window.open(url, '', 'width=640, height=480');
+    }
+    
+    function toggleViewSync() {
+      viewSyncService.isEnabled()
+        ? viewSyncService.disable()
+        : viewSyncService.enable();
+      vm.isViewSynchronized = viewSyncService.isEnabled();
+      localStorageService.set(
+        'myPolls.shell.isViewSynchronized', 
+        vm.isViewSynchronized
+      );
     }
   }
   

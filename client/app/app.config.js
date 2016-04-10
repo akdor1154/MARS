@@ -8,13 +8,15 @@
   config.$inject = [
     '$anchorScrollProvider',
     '$logProvider',
-    '$urlRouterProvider'
+    '$urlRouterProvider',
+    'localStorageServiceProvider'
   ];
   
   function config(
       $anchorScrollProvider,
       $logProvider,
-      $urlRouterProvider
+      $urlRouterProvider,
+      localStorageServiceProvider
     ) {
     
     // Set default route
@@ -25,6 +27,10 @@
     
     // Turn off debug logging
     $logProvider.debugEnabled(false);
+    
+    // Configure prefix for localStorage
+    localStorageServiceProvider
+      .setPrefix('mars');
   }
 
   
