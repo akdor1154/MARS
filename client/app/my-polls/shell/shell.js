@@ -82,7 +82,7 @@
         
       }, function(err) {
         $state.go('auth.login');
-      })
+      });
     }
     
     function addCollection() {

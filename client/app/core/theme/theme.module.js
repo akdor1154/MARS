@@ -17,7 +17,7 @@
       .accentPalette('pink')
       .backgroundPalette('grey', {
         'hue-1': '100'
-      })
+      });
 
     $mdThemingProvider
       .theme('secondary')
