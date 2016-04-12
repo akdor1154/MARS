@@ -46,6 +46,19 @@ var config = {
 gulp.task('default', ['build']);
 
 /**
+ * Append version number from package.json to urls for app.min.css
+ * and app.min.js .
+ * 
+ * This forces clients to reload these files with each new release.
+ * Fixes issue #57 
+ */
+gulp.task('append-version', function() {
+  gulp.src('client/index.html')
+    .pipe(change(appendVersion))
+    .pipe(gulp.dest('client/'));
+});
+
+/**
  * Run all build tasks
  *
  */
@@ -55,6 +68,7 @@ gulp.task('build', [
   'build-js',
   'build-socket.io',
   'replace-ligatures',
+  'append-version'
 ]);
 
 /**
@@ -96,6 +110,18 @@ gulp.task('build-js', ['build-template-cache'], function() {
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('client/app/'))
     .pipe(livereload());
+});
+
+/**
+ * Download material design icon definitions and use them to generate a
+ * map of ligatures to codepoints.
+ *  
+ */
+gulp.task('build-md-ligatures', function() {
+  return remoteSrc(config.MD_ICON_DEFS, { base: '' })
+    .pipe(rename('md-ligatures.json'))
+    .pipe(change(generateLigaturesMap))
+    .pipe(gulp.dest('build/'));
 });
 
 /**
@@ -155,6 +181,18 @@ gulp.task('watch', function() {
  * Map of material design icon ligatures to codepoints.
  */
 var mdLigatures = null;
+
+/**
+ * Append version number from package.json to urls for app.min.css
+ * and app.min.js .
+ * 
+ */
+function appendVersion(content) {
+  var pjson = require('./package.json');
+  return content
+    .replace('app.min.js', 'app.min.js?v=' + pjson.version)
+    .replace('app.min.css', 'app.min.css?v=' + pjson.version);
+}
 
 /**
  * Change the contents of a vinyl file
