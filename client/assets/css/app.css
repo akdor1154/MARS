@@ -32,6 +32,11 @@ md-whiteframe[md-ink-ripple] {
 	user-select: none;
 }
 
+md-toolbar .beta {
+  margin: 0px 0px 8px 5px; 
+  font-size: 0.5em;
+}
+
 /**
  * Missing in version 1.0.1 of angular-material
  * Remove this once angular-material has been upgraded

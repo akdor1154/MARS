@@ -3,10 +3,8 @@
   <md-toolbar class="md-whiteframe-1dp" 
               ng-class="{ 'bg-blue-grey': vm.isPreview }">
     <div class="md-toolbar-tools">
-      <h2>
-        <span>{{vm.poll ? vm.poll.pollCollection.name : 'Mars'}}</span>
-        <span ng-hide="vm.poll" style="font-size: 0.5em;">beta</span>
-      </h2>
+      {{vm.poll ? vm.poll.pollCollection.name : 'Mars'}}
+      <span ng-hide="vm.poll" class="beta">beta</span>
       <span flex></span>
       <md-button class="md-icon-button" 
                  aria-label="Join Feed" 
