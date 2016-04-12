@@ -190,8 +190,7 @@ var mdLigatures = null;
 function appendVersion(content) {
   var pjson = require('./package.json');
   return content
-    .replace('app.min.js', 'app.min.js?v=' + pjson.version)
-    .replace('app.min.css', 'app.min.css?v=' + pjson.version);
+    .replace(/app.min.(js|css)(\?v=\d+\.\d+\.\d+)?/gi, 'app.min.$1?v=' + pjson.version);
 }
 
 /**
