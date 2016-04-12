@@ -2,13 +2,16 @@ var gulp = require('gulp')
   , concat = require('gulp-concat')
   , cssnano = require('gulp-cssnano')
   , debug = require('gulp-debug')
+  , es = require('event-stream')
   , gutil = require('gulp-util')
   , htmlmin = require('gulp-htmlmin')
   , ignore = require('gulp-ignore')
   , livereload = require('gulp-livereload')
+  , remoteSrc = require('gulp-remote-src')
   , plumber = require('gulp-plumber')
   , rename = require('gulp-rename')
   , sourcemaps = require('gulp-sourcemaps')
+  , streamify = require('gulp-streamify')
   , templateCache = require('gulp-angular-templatecache')
   , uglify = require('gulp-uglify');
   
@@ -30,7 +33,8 @@ var config = {
   HTML: [
     'client/app/**/*.html',
     'client/plugins/**/*.html'
-  ]
+  ],
+  MD_ICON_DEFS: 'https://design.google.com/icons/data/grid.json'
 };
 
   
@@ -49,7 +53,8 @@ gulp.task('build', [
   'build-angular-clipboard',
   'build-css',
   'build-js',
-  'build-socket.io'
+  'build-socket.io',
+  'replace-ligatures',
 ]);
 
 /**
@@ -123,6 +128,19 @@ gulp.task('build-template-cache', function() {
 });
 
 /**
+ * Replace material design icon font ligatures with corresponding codepoints
+ * 
+ * Fixes issue #59
+ * @see https://github.com/google/material-design-icons/issues/230 
+ */
+gulp.task('replace-ligatures', ['build-md-ligatures', 'build-js'], function() {
+  mdLigatures = require('./build/md-ligatures.json');
+  return gulp.src('client/app/app.min.js')
+    .pipe(change(replaceMdLigatures))
+    .pipe(gulp.dest('client/app/'));
+});
+
+/**
  * Watch for changes to files, run any necessary build actions then livereload.
  */
 gulp.task('watch', function() {
@@ -133,6 +151,42 @@ gulp.task('watch', function() {
 });
 
 
+/**
+ * Map of material design icon ligatures to codepoints.
+ */
+var mdLigatures = null;
+
+/**
+ * Change the contents of a vinyl file
+ * 
+ * The gulp-change module didn't like the File objects from gulp-remote-src.
+ */
+function change(callback) {
+  return streamify(es.map(function(file, done) {
+    var content = file.contents.toString();
+    try {
+      content = callback(content);
+      file.contents = new Buffer(content);
+      done(null, file);
+    }
+    catch(err) {
+      return done(err);
+    }
+  }));
+}
+
+/**
+ * Generate a ligatures map json file from an icon definition file.
+ * 
+ */
+function generateLigaturesMap(content) {
+  var iconDefs = JSON.parse(content)
+    , ligatures = {};
+  iconDefs.icons.forEach(function(icon) {
+    ligatures[icon.ligature] = icon.codepoint;
+  });
+  return JSON.stringify(ligatures);
+}
 
 /**
  * Log errors and allow the stream to continue.
@@ -140,4 +194,25 @@ gulp.task('watch', function() {
 function onError(err) {
   console.error(err);
   this.emit('end');
+}
+
+/**
+ * Replace all ligatures wrapped in <md-icon> tags with codepoints.
+ */
+function replaceMdLigatures(content) {
+  return content.replace(
+    /<md-icon(.*?)>(.+?)<\/md-icon>/gi, 
+    replaceLigatureWithCodepoint);
+}
+
+/**
+ * Replace a ligature wrapped in <md-icon> tags with it's codepoint.
+ * 
+ */
+function replaceLigatureWithCodepoint(match, attributes, ligature, offset, string) {
+  ligature = ligature.trim();
+  var codepoint = mdLigatures[ligature] 
+    ? '&#x' + mdLigatures[ligature]
+    : ligature;
+  return '<md-icon' + attributes + '>' + codepoint + '</md-icon>'
 }
