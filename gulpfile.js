@@ -1,6 +1,6 @@
 var gulp = require('gulp')
-  , cssnano = require('gulp-cssnano')
   , concat = require('gulp-concat')
+  , cssnano = require('gulp-cssnano')
   , debug = require('gulp-debug')
   , gutil = require('gulp-util')
   , htmlmin = require('gulp-htmlmin')
