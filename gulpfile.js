@@ -106,6 +106,7 @@ gulp.task('build-js', ['build-template-cache'], function() {
     .pipe(plumber(onError))
     .pipe(sourcemaps.init())
       .pipe(concat('app.min.js'))
+      .pipe(change(replaceTokenVersion))
       .pipe(uglify().on('error', gutil.log))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('client/app/'))
@@ -252,4 +253,13 @@ function replaceLigatureWithCodepoint(match, attributes, ligature, offset, strin
     ? '&#x' + mdLigatures[ligature]
     : ligature;
   return '<md-icon' + attributes + '>' + codepoint + '</md-icon>'
+}
+
+/**
+ * Replace the token string $$VERSION$$ with the version from package.json
+ * 
+ */
+function replaceTokenVersion(content) {
+  var psjon = require('./package.json');
+  return content.replace('$$VERSION$$', psjon.version);
 }
