@@ -7,14 +7,9 @@ module.exports = function() {
     replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } }
   };
   
-  var username = process.env.MONGODB_USERNAME;
-  var password = process.env.MONGODB_PASSWORD;
-  var host = process.env.MONGODB_HOST;
-  var db = process.env.MONGODB_DB;
-   
-  var mongodbUri = 'mongodb://username:password@host/db';
-   
-  mongoose.connect(mongodbUri, options);
+  process.env.MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/mars'
+
+  mongoose.connect(process.env.MONGODB_URI, options);
   mongoose.Promise = require('bluebird');
   
   return mongoose;
