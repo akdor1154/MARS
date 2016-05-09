@@ -6,18 +6,36 @@ module.exports = function(passport, User) {
     function(username, password, done) {
       User.findOne({ username: username })
         .then(function(user) {
-          if (!user)
-            return done(null, false);
-          return [user, user.isPasswordValid(password)];
+          if (!user) {
+            //Uncomment to create new local users for testing 
+            var newUser = new User()
+            newUser.username = username
+            newUser.password = password
+            group = 'poller'
+            name = {first: 'Staff', last: '1'}
+            newUser.hashPassword()
+            .then( function () {
+              console.log('nq'+newUser)
+              newUser.save(function(err) {
+                if(err) {
+                  console.log(err)
+                } else {
+                  console.log('user: ' + username + " saved.")
+                }
+              })}
+            )
+            return done(null, false)
+          }
+
+          if (!user.isPasswordValid(password)) {
+            return done(null, false)
+          }
+          
+          return done(null, user)
         })
-        .spread(function(user, passwordValid) {
-          if (!passwordValid)
-            return done(null, false);
-          return done(null, user);
-        });
     }
   ));
-  
+    
   passport.serializeUser(function(user, done) {
     done(null, user._id);
   });
