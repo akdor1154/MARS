@@ -12,6 +12,8 @@ module.exports = function() {
   mongoose.connect(process.env.MONGODB_URI, options);
   mongoose.Promise = require('bluebird');
   
+  console.log('connected as ' + process.env.MONGODB_URI)
+  
   return mongoose;
 
 }
