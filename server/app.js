@@ -32,7 +32,7 @@ app.use(require('morgan')('dev', { stream: log.stream }));
  * Database Config
  */
 var db = require('./config/database')();
-console.log('db ', db)
+
 /**
  * Models
  */
@@ -41,6 +41,7 @@ var Poll = require('./models/poll'),
     PollGroup = require('./models/poll-group'),
     Result = require('./models/result'),
     User = require('./models/user');
+console.log(db)
 
 /**
  * Parsers
