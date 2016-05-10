@@ -14,7 +14,11 @@ module.exports = function() {
   mongoose.set('debug', true)
   
   console.log('connected as ' + process.env.MONGODB_URI)
-  
+    
+  mongoose.connection.on('error', function(err) {
+      console.error('MongoDB error: %s', err);
+  });
+
   return mongoose;
 
 }
