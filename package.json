@@ -19,6 +19,10 @@
     "start": "node ./bin/www",
     "postinstall": "bower install && gulp build"
   },
+  "engines": {
+    "node": "4.4.3",
+    "npm": "2.15.1"
+  },
   "dependencies": {
     "bcrypt": "^0.8.5",
     "bluebird": "^3.1.1",
@@ -64,6 +68,5 @@
     "gulp-util": "^3.0.7"
   },
   "devDependencies": {
-    "event-stream": "^3.3.2"
   }
 }
