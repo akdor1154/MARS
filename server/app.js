@@ -32,7 +32,7 @@ app.use(require('morgan')('dev', { stream: log.stream }));
  * Database Config
  */
 var db = require('./config/database')();
-
+console.log('db ', db)
 /**
  * Models
  */
