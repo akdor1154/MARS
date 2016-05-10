@@ -9,22 +9,22 @@ module.exports = function(passport, User) {
         .then(function(user) {
           if (!user) {
             //Uncomment to create new local users for testing 
-            // var newUser = new User()
-            // newUser.username = username
-            // newUser.password = password
-            // group = 'poller'
-            // name = {first: 'Staff', last: '1'}
-            // newUser.hashPassword()
-            // .then( function () {
-            //   console.log('nq'+newUser)
-            //   newUser.save(function(err) {
-            //     if(err) {
-            //       console.log(err)
-            //     } else {
-            //       console.log('user: ' + username + " saved.")
-            //     }
-            //   })}
-            // )
+            var newUser = new User()
+            newUser.username = username
+            newUser.password = password
+            group = 'poller'
+            name = {first: 'Percy', last: 'Presenton'}
+            newUser.hashPassword()
+            .then( function () {
+              console.log('nq'+newUser)
+              newUser.save(function(err) {
+                if(err) {
+                  console.log(err)
+                } else {
+                  console.log('user: ' + username + " saved.")
+                }
+              })}
+            )
             return done(null, false)
           }
 
