@@ -12,8 +12,8 @@ module.exports = function(passport, User) {
             var newUser = new User()
             newUser.username = username
             newUser.password = password
-            group = 'poller'
-            name = {first: 'Percy', last: 'Presenton'}
+            newUser.group = 'poller'
+            newUser.name = {first: 'Percy', last: 'Presenton'}
             newUser.hashPassword()
             .then( function () {
               console.log('nq'+newUser)
