@@ -4,9 +4,9 @@ module.exports = function(passport, User) {
 
   passport.use('local', new LocalStrategy(
     function(username, password, done) {
-      console.log('Gonna try find a user!')
       User.findOne({ username: username })
         .then(function(user) {
+          console.log('reply for DB')
           if (!user) {
             //Uncomment to create new local users for testing 
             // var newUser = new User()
