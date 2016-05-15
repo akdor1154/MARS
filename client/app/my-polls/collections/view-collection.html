@@ -7,7 +7,8 @@
   <div>Try clicking the plus icon to add a group</div>
 </div>
 
-<div ng-repeat="group in vm.filteredGroups" 
+<div class="group"
+     ng-repeat="group in vm.filteredGroups" 
      mars-scroll-to="group-{{$index}}"
      mars-scroll-trigger="group._scrollTo">
   <a id="group-{{$index}}"></a>
