@@ -12,6 +12,9 @@
     
     pluginsProvider.register(PLUGIN.POLL_TYPE, 'multiple-choice', true);
     pluginsProvider.register(PLUGIN.RESULT_TYPE, 'multiple-choice', true);
+    pluginsProvider.register(PLUGIN.LEADERBOARD, 'multiple-choice', { 
+      factory: 'multipleChoiceLeaderboard'
+    });
     pluginsProvider.register(PLUGIN.RESULT_EXPORTERS, 'multiple-choice', [
       {
         name: 'All Responses',

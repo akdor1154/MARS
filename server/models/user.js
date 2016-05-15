@@ -15,7 +15,8 @@ var userSchema = new Schema({
     first: String,
     last: String,
     initials: String,
-    nickname: String
+    anonymous: Boolean,
+    display: String
   },
   department: String,
   division: String,

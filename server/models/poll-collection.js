@@ -13,8 +13,10 @@ var pollCollectionSchema = new Schema({
   token: { type: String, index: true },
   owners: [{ type: Schema.Types.ObjectId, ref: 'User', index: true }],
   groups: [{ type: Schema.Types.ObjectId, ref: 'PollGroup' }],
+  leaderboard: {}
 }, {collection: 'pollCollections'});
-pollCollectionSchema.set('toObject', { retainKeyOrder: true });
+pollCollectionSchema.set('toJSON', { minimize: false, retainKeyOrder: true });
+pollCollectionSchema.set('toObject', { minimize: false, retainKeyOrder: true });
 
 
 var updateOmittedFields = ['_id'];

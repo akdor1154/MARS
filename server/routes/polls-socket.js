@@ -185,7 +185,7 @@ module.exports = function(
  *
  */
     socket.on('collection update', function(data) {
-      log.trace('Socket: collection update', data);
+      log.trace('Socket: collection update'/*, data*/);
       confirmHasFields(data, '_id')
         .then(function() {
           var ownerId = socket.request.user;
@@ -195,7 +195,7 @@ module.exports = function(
         })
         .then(function(collection) {
           log.info('PollCollection updated', data._id);
-          log.debug(collection);
+          //log.debug(collection);
           socket.emit('collection update', collection);
         })
         .catch(function(err) {
@@ -664,6 +664,27 @@ module.exports = function(
         })
         .catch(function(err) {
           respondWithError('user subscriptions', err);
+        });
+    });
+    
+/**
+ * Update the current user
+ *
+ */
+    socket.on('user update', function(data) {
+      log.trace('Socket: user update', data);
+      if (!socket.request.user || socket.request.user != data._id)
+        return respondWithError('user update', errors.forbidden());
+      log.debug('fields = ', _.pick(data, 'name'));
+      User.update(
+        { _id: socket.request.user },
+        _.pick(data, 'name')
+      )
+        .then(function() {
+          socket.emit('user update');
+        })
+        .catch(function(err) {
+          respondWithError('user update', err);
         });
     });
     

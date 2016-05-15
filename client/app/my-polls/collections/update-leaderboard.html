@@ -1,0 +1,43 @@
+<md-dialog aria-label="Update leaderboard" 
+           class="update-leaderboard" 
+           ng-cloak>
+  <form name="updateLeaderboardForm">
+    <md-dialog-content style="">
+      <div class="md-dialog-content">
+        <h2>Update Leaderboard</h2>
+        <div layout="row" layout-xs="column" layout-align-xs="end end">
+          <p flex>Select the polls to include in the leaderboard:</p>
+          <p class="select-all">
+            <md-checkbox class="md-secondary"
+                         flex="none"
+                         ng-change="vm.toggleSelectAll()"
+                         ng-model="vm.selectAll">
+              {{ vm.selectAll ? 'Deselect All' : 'Select All' }}
+            </md-checkbox>
+          </p>
+        </div>
+        <section ng-repeat="group in vm.collection.groups">
+          <h3 class="group-header bg-{{ group.color }}">{{ group.name }}</h3>
+          <md-list>
+            <md-list-item ng-repeat="poll in group.polls">
+              <p>{{ poll.name }}</p>
+              <md-checkbox class="md-secondary" ng-model="vm.selectedPolls[poll._id]"></md-checkbox>
+            </md-list-item>              
+          </md-list>
+        </section>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+         Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit" 
+                   ng-click="vm.update()">
+          Update
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

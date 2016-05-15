@@ -132,7 +132,13 @@
     }
     
     function isUpcoming(group) {
-      return group.upcoming != null && group.upcoming <= new Date();
+      return group.upcoming !== null && group.upcoming <= new Date();
+    }
+    
+    function leaderboard() {
+      $state.go('myPolls.collections.leaderboard', { 
+        collectionId: vm.collection._id 
+      });
     }
     
     function reorderGroup(fromIndex, toIndex) {
@@ -177,6 +183,11 @@
       shell.setTitle($scope, collection.name);
       shell.setSearch($scope, _searchCallback);
       shell.setMenu($scope, [
+        { 
+          label: 'Leaderboard', 
+          callback: leaderboard, 
+          icon: 'format_list_numbered'
+        },
         { 
           label: 'Edit Collection', 
           callback: editCollection, 

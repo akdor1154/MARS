@@ -121,6 +121,11 @@
             }
           ]
         })
+        .state('myPolls.collections.leaderboard', {
+          url: '/:collectionId/leaderboard',
+          templateUrl: 'app/my-polls/collections/leaderboard.html',
+          controller: 'LeaderboardController as vm'
+        })
         .state('myPolls.trash', {
           url: '/trash',
           templateUrl: 'app/my-polls/trash/trash.html',

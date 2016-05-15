@@ -32,7 +32,8 @@
       onActivePollsChanged: onActivePollsChanged,
       prevActivePoll: prevActivePoll,
       subscribe: subscribe,
-      unsubscribe: unsubscribe
+      unsubscribe: unsubscribe,
+      updateUser: updateUser
     });
     
 /**
@@ -156,6 +157,17 @@
  */
     function unsubscribe(subscription) {
       return marsService.request('collection unsubscribe', subscription);
+    }
+    
+    
+  /**
+   * Update user details
+   */
+    function updateUser(user) {
+      return marsService.request('user update', user)
+        .then(function() {
+          auth.user();
+        });
     }
     
 /**

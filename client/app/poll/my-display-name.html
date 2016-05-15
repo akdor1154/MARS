@@ -1,0 +1,36 @@
+<md-dialog aria-label="Set display name">
+  <form name="myDisplayNameForm">
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+      
+        <h2 class="md-title">My Display Name</h2>
+        <div layout="column">
+          <p>Choose how your name will be displayed on leaderboards.</p>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Display name</label>
+            <input ng-model="vm.user.name.display">
+          </md-input-container>
+          <md-checkbox ng-model="vm.user.name.anonymous" aria-label="Anonymous">
+            I wish to remain anonymous.
+          </md-checkbox>
+        </div>
+      </div>
+    </md-dialog-content>
+    
+    <md-dialog-actions>
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+         Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit"
+                   ng-click="vm.save()" 
+                   ng-disabled="myDisplayNameForm.$invalid">
+          Save
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+
+  </form>
+</md-dialog>

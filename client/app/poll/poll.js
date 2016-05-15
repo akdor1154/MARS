@@ -39,6 +39,7 @@
     vm.isPreview = false;
     vm.multiplePollsActive = false;
     vm.nextPoll = nextPoll;
+    vm.showMyDisplayNameDialog = showMyDisplayNameDialog;
     vm.showMyFeedsDialog = showMyFeedsDialog;
     vm.showSubscribeDialog = showSubscribeDialog;
     
@@ -68,6 +69,13 @@
     function nextPoll() {
       var active = pollService.nextActivePoll();
       _viewPoll(active);
+    }
+    
+    function showMyDisplayNameDialog() {
+      $mdDialog.show({
+        templateUrl: 'app/poll/my-display-name.html',
+        controller: 'MyDisplayNameController as vm'
+      });
     }
     
     function showMyFeedsDialog() {

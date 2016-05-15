@@ -1,0 +1,28 @@
+<md-card class="leaderboard">  
+  <md-card-content>
+    <md-table-container>
+      <table md-table md-progress="vm.updateLeaderboardPromise">
+        <thead md-head>
+          <tr md-row>
+            <th md-column><span>Name</span></th>
+            <th md-column md-numeric><span>Score</span></th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row ng-repeat="row in vm.leaderboard | orderBy: ['-score', 'user']">
+            <td md-cell>{{ row.user }}</td>
+            <td md-cell>{{ row.score }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-card-content>
+  
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button class="md-primary"
+               ng-click="vm.showUpdateLeaderboardDialog()">
+      Update
+    </md-button>
+  </div>
+  
+</md-card>
