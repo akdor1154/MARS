@@ -22,24 +22,47 @@
       csvWriter) {
     $log = $log.getInstance('multipleChoiceResultExportFinalResponsesCsv');
     
-    return function(result) {
+    return {
+      canExportResult: canExportResult,
+      exportResults: exportResults
+    };
+    
+    function canExportResult(result) {
+      return result.type === 'multiple-choice';
+    }
+    
+    function exportResults(results) {
       var csv = csvWriter();
-      
-      // Poll question
+      var resultsByPoll = groupResultsByPoll(results);
+      _.each(resultsByPoll, function(pollResults, pollId) {
+        var poll = _.first(pollResults).poll;
+        var responses = _.flatten(_.pluck(pollResults, 'responses'));
+        addHeaderForPoll(csv, poll);
+        addResponsesForPoll(csv, responses);
+        csv.newRow();
+      });
+      return $q.resolve(csv.blob());
+    }
+    
+    function addHeaderForPoll(csv, poll) {
       csv
-        .addRow([result.poll.data.question])
+        .addRow([poll.data.question])
         .newRow();
         
-      // Poll choices
-      result.poll.data.choices.forEach(function(choice) {
-        csv.addRow([choice.label, choice.text]);
+      poll.data.choices.forEach(function(choice) {
+        csv.addRow([
+          choice.label, 
+          choice.text, 
+          choice.correct ? '(Correct)' : ''
+        ]);
       });
       csv.newRow();
-      
-      // User responses
+    }
+    
+    function addResponsesForPoll(csv, responses) {
       csv.addRow(['Username', 'Timestamp', 'Response', 'Number of Tries']);
       _.each(
-        groupResponsesByUser(result.responses), 
+        groupResponsesByUser(responses), 
         function(responses, username) {
           var response = _.last(responses);
           csv.addRow([
@@ -50,13 +73,17 @@
           ]);
         }
       );
-      
-      return $q.resolve(csv.blob());
     }
     
     function groupResponsesByUser(responses) {
       return _.groupBy(responses, function(response) {
         return response.user.username;
+      });
+    }
+    
+    function groupResultsByPoll(results) {
+      return _.groupBy(results, function(result) {
+        return result.poll._id;
       });
     }
   }

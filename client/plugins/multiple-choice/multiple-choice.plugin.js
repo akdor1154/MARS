@@ -23,6 +23,11 @@
         extension: '.csv',
         factory: 'multipleChoiceResultExportFinalResponsesCsv'
       },
+      {
+        name: 'Answer Breakdown',
+        extension: '.csv',
+        factory: 'multipleChoiceResultExportAnswerBreakdown'
+      },
     ]);
     
   }

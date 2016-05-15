@@ -80,6 +80,17 @@ span.title-number {
 	padding-right: 1em;
 }
 
+.group .md-list-item-inner {
+	width: 100%;
+	/*padding-right: 56px;*/
+	box-sizing: border-box;
+}
+.group .md-list-item-inner p {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .edit-collection .icon-autocomplete md-icon {
 	margin-top: 24px;
 	padding-right: 32px;
@@ -109,4 +120,53 @@ span.title-number {
 }
 .getting-started h3 {
 	margin-top: 2em;
+}
+
+.leaderboard table.md-table td.md-cell {
+	font-size: inherit;
+}
+
+.export-results h3 {
+	margin-top: 2em;
+}
+
+.export-results .select-all {
+	margin-top: 1.33em;
+	margin-bottom: 0;
+}
+.export-results .select-all md-checkbox,
+.update-leaderboard .select-all md-checkbox {
+	margin-left: 40px;
+	margin-right: 20px;
+}
+.export-results .select-all md-checkbox .md-container,
+.update-leaderboard .select-all md-checkbox .md-container {
+	left: auto;
+	right: 0;
+}
+.export-results .select-all md-checkbox .md-label,
+.update-leaderboard .select-all md-checkbox .md-label {
+	margin-left: 0;
+	margin-right: 30px;
+}
+
+.update-leaderboard section h3 {
+	margin: 0;
+	padding: 8px;
+	color: white;
+	font-size: 20px;
+	font-weight: normal;
+}
+
+.export-results .md-list-item-inner,
+.update-leaderboard .md-list-item-inner {
+	width: 100%;
+	padding-right: 56px;
+	box-sizing: border-box;
+}
+.export-results .md-list-item-inner p,
+.update-leaderboard .md-list-item-inner p {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

@@ -32,6 +32,8 @@
       getResult: getResult,
       getResults: getResults,
       groupIndex: groupIndex,
+      listResults: listResults,
+      listSubscribers: listSubscribers,
       pollIndex: pollIndex,
       restoreCollection: restoreCollection,
       restoreGroup: restoreGroup,
@@ -43,7 +45,7 @@
       updateCollection: updateCollection,
       updateGroup: updateGroup,
       updatePoll: updatePoll
-    }
+    };
     
 /**
  * Activate a poll
@@ -62,7 +64,7 @@
  */
     function cascadeOwners(collection) {
       if (!angular.isArray(collection.groups))
-        return
+        return;
       collection.groups.forEach(function(group) {
         group.owners = collection.owners;
         if (!angular.isArray(group.polls))
@@ -297,11 +299,11 @@
       
     
 /**
- * Get a list of activations for the poll with the specified ID
+ * Get all results for the poll with the specified ID
  *
  */
     function getResults(pollId) {
-      return marsService.request('poll list results', { _id: pollId });
+      return marsService.request('poll results', { _id: pollId });
     }
     
 /**
@@ -312,6 +314,25 @@
       return _.findIndex(group.collection.groups, function(g) {
         return group._id === g._id;
       });
+    }
+    
+/**
+ * Get a list of activations for the poll with the specified ID
+ *
+ */
+    function listResults(pollId) {
+      return marsService.request('poll list results', { _id: pollId });
+    }
+    
+/**
+ * Get a list of subscribers for the collection with the specified ID
+ *
+ */
+    function listSubscribers(collectionId) {
+      return marsService.request(
+        'collection list subscribers', 
+        { _id: collectionId }
+      );
     }
     
 /**

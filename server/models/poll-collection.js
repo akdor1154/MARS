@@ -86,6 +86,19 @@ pollCollectionSchema.statics.cascadeOwners = function(id, owners) {
   ]).return();
 }
 
+pollCollectionSchema.statics.listSubscribers = function(ownerId, collectionId) {
+  var PollCollection = this,
+      User = mongoose.model('User');
+  if (_.isString(collectionId))
+    collectionId = new mongoose.Types.ObjectId(collectionId);
+  return PollCollection.ownerFindById(ownerId, collectionId, '_id')
+    .then(function(pollCollection) {
+      return User.find({ subscriptions: collectionId })
+        .select('username name')
+        .exec();
+    });
+};
+
 pollCollectionSchema.statics.ownerFindById = function(ownerId, id, projection, options) {
   if (_.isString(projection))
     projection += ' owners';

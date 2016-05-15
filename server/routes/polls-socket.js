@@ -111,6 +111,21 @@ module.exports = function(
     });
     
 /**
+ * Get a list of users who are subscribed to a collection
+ *
+ */
+    socket.on('collection list subscribers', function(data) {
+      log.trace('Socket: collection list subscribers', data);
+      PollCollection.listSubscribers(socket.request.user, data._id)
+        .then(function(subscribers) {
+          socket.emit('collection list subscribers', subscribers);
+        })
+        .catch(function(err) {
+          respondWithError('collection list subscribers', err);
+        });
+    });  
+    
+/**
  * Subscribe the logged in user to a collection
  *
  */
@@ -396,7 +411,7 @@ module.exports = function(
  */
     socket.on('poll list results', function(data) {
       log.trace('Socket: poll list results');
-      Poll.getResults(data._id)
+      Poll.listResults(data._id)
         .then(function(results) {
           socket.emit('poll list results', results);
         })
@@ -421,7 +436,22 @@ module.exports = function(
           respondWithError('poll last result', err);
         });
     });
-
+    
+/**
+ * Get all results for a poll
+ *
+ */
+    socket.on('poll results', function(data) {
+      log.trace('Socket: poll results', data);
+      Poll.getResults(data._id)
+        .then(function(results) {
+          log.debug('results = ', results.length);
+          socket.emit('poll results', results);
+        })
+        .catch(function(err) {
+          respondWithError('poll results', err);
+        });
+    });  
         
 /**
  * Update a poll

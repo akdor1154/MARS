@@ -1,10 +1,31 @@
-var mongoose = require('mongoose'),
-    Promise = require('bluebird'),
-    log = require('./log');
+var mongoose = require('mongoose');
+var Promise = require('bluebird');
+var _ = require('underscore');
+var log = require('./log');
 
-module.exports = {};
+module.exports = {
+  id: id,
+  saveMany: saveMany
+};
 
-module.exports.saveMany = function(docs, promise, index) {
+
+function id(docOrId) {
+  if (_.isObject(docOrId) && _.has(docOrId, '_id')) {
+    docOrId = docOrId._id;
+  }
+  if (docOrId instanceof mongoose.Document) {
+    docOrId = docOrId.get('_id');
+  }
+  if (docOrId instanceof mongoose.Types.ObjectId) {
+    return docOrId;
+  }
+  if (_.isString(docOrId)) {
+    return new mongoose.Types.ObjectId(docOrId);
+  }
+  throw new Error('Could not get ID from: ' + docOrId.toString());
+}
+
+function saveMany(docs, promise, index) {
   promise = promise || new Promise();
   index = index || 0;
   var doc = docs[index];

@@ -3,7 +3,8 @@ var mongoose = require('mongoose')
   , Promise = require('bluebird')
   , _ = require('underscore')
   , errors = require('../utils/errors')
-  , log = require('../utils/log');
+  , log = require('../utils/log')
+  , mongooseUtils = require('../utils/mongoose-utils');
 
 var pollSchema = new Schema({
 	name: String,
@@ -144,8 +145,18 @@ pollSchema.statics.getLastResult = function(pollId) {
 
 pollSchema.statics.getResults = function(pollId) {
   var Result = mongoose.model('Result');
-  if (_.isString(pollId))
-    pollId = new mongoose.Types.ObjectId(pollId);
+  pollId = _.isArray(pollId)
+    ? { $in: _.map(pollId, mongooseUtils.id) }
+    : mongooseUtils.id(pollId);
+  return Result.find({ poll: pollId })
+    .exec();
+};
+
+pollSchema.statics.listResults = function(pollId) {
+  var Result = mongoose.model('Result');
+  pollId = _.isArray(pollId)
+    ? { $in: _.map(pollId, mongooseUtils.id) }
+    : mongooseUtils.id(pollId);
   return Result.aggregate({ $match: { poll: pollId } })
     .project({ 
       activations: 1, 
