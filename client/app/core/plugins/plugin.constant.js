@@ -6,6 +6,7 @@
     .constant('PLUGIN', {
       'POLL_TYPE': 'POLL_TYPE',
       'RESULT_TYPE': 'RESULT_TYPE',
+      'LEADERBOARD': 'LEADERBOARD',
       'RESULT_EXPORTERS': 'RESULT_EXPORTERS'
     })
     .constant('PLUGIN_ACTIONS', {
