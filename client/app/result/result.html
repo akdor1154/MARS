@@ -6,13 +6,15 @@
       <span flex></span>
       <md-button aria-label="Lock result"
                  class="md-icon-button" 
-                 ng-click="vm.toggleActive()">
+                 ng-click="vm.toggleActive()"
+                 ng-show="vm.isOwner">
         <md-icon class="svg-icons">{{vm.result.active ? 'pause_circle_outline' : 'play_circle_outline'}}</md-icon>
         <md-tooltip>{{vm.result.active ? 'Pause poll' : 'Start poll'}}</md-tooltip>
       </md-button>
       <md-button aria-label="Reset poll"
                  class="md-icon-button" 
-                 ng-click="vm.resetPoll()">
+                 ng-click="vm.resetPoll()"
+                 ng-show="vm.isOwner">
         <md-icon class="svg-icons">autorenew</md-icon>
         <md-tooltip>Reset poll</md-tooltip>
       </md-button>

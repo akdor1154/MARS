@@ -9,6 +9,8 @@
   
   function appRun($log, $rootScope, $state) {
     
+    $log.info('MARS $$VERSION$$');
+    
     $rootScope.goToPreviousState = goToPreviousState;
     
     function goToPreviousState(defaultState, defaultParams) {

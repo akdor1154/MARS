@@ -67,19 +67,6 @@
       }
       return arg;
     }
-
-    function _log(type, instanceName) {
-      var console = $window.console || {},
-          logFn = console[type] || console._log || noop;
-      
-      return function() {
-        var args = [];
-        angular.forEach(arguments, function(arg, index) {
-          args.push(_formatArg(arg, instanceName, index === 0));
-        });
-        return logFn.apply(console, args);
-      };
-    }
     
     function _pad(str, length) {
       return ('000' + str).slice(-length)

@@ -55,7 +55,7 @@
           state: toState.name,
           stateParams: toParams
         };
-        $log.info('Sending view synchronization: ', data);
+        $log.debug('Sending view synchronization: ', data);
         marsService.request('user view sync', data);
       }
     }
@@ -63,7 +63,7 @@
     function _onUserViewSync(event, data) {
       if (!enabled)
         return;
-      $log.info('Received view synchronization: ', data);
+      $log.debug('Received view synchronization: ', data);
       syncInProgress = data;
       $state.go(data.state, data.stateParams);
     }

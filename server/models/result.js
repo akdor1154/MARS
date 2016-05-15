@@ -161,6 +161,8 @@ resultSchema.statics.saveResponse = function(resultId, response) {
 
 resultSchema.methods.activate = function(userId) {
   var result = this;
+  if (result.poll && !result.poll.hasOwner(userId))
+    return Promise.reject(errors.forbidden());
   if (result.active)
     return Promise.resolve(result);
   result.activations.push({ start: new Date(), end: null, user: userId });
