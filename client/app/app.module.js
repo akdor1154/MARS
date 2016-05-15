@@ -9,6 +9,7 @@
       'angular-clipboard',
       'LocalStorageModule',
       'ngFileSaver',
+      'md.data.table',
       'ui.router',
       
       'app.data',
