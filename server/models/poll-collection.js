@@ -24,7 +24,7 @@ var updateOmittedFields = ['_id'];
 
 pollCollectionSchema.pre('update', function(next) {
   var query = this.getQuery()
-      update = this.getUpdate();
+    , update = this.getUpdate();
   if (_.has(update, '$set') && _.has(update['$set'], 'owners')) {
     _validOwners(update['$set'].owners)
       .then(function(owners) {
