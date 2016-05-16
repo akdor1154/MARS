@@ -57,7 +57,9 @@
         csv.addRow([
           choice.label, 
           choice.text, 
-          (responsesByChoice[choice.label].length / totalResponses).toString(),
+          responsesByChoice[choice.label]
+            ? (responsesByChoice[choice.label].length / totalResponses).toString()
+            : 0,
           choice.correct ? '(Correct)' : ''
         ]);
       });
