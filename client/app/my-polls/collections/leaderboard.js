@@ -49,7 +49,7 @@
     
     function getUserName(userId) {
       var user = vm.subscribers[userId];
-      return user /*&& !user.name.anonymous*/
+      return user && !user.name.anonymous
         ? user.name.display
           ? user.name.display
           : user.name.first + ' ' + user.name.last
