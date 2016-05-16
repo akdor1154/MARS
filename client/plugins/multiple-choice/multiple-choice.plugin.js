@@ -31,6 +31,11 @@
         extension: '.csv',
         factory: 'multipleChoiceResultExportAnswerBreakdown'
       },
+      {
+        name: 'Marking',
+        extension: '.csv',
+        factory: 'multipleChoiceResultExportMarkingCsv'
+      },
     ]);
     
   }
