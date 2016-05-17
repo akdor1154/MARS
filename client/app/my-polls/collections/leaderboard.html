@@ -1,3 +1,26 @@
+
+<div class="tools" layout="row" layout-align="start center">
+  <span flex></span>
+  <md-button class="md-icon-button" 
+              aria-label="Update leaderboard"
+              ng-click="vm.updateLeaderboard()"
+              ng-disabled="false">
+    <md-tooltip>
+      Update
+    </md-tooltip>
+    <md-icon class="material-icons">refresh</md-icon>
+  </md-button>
+  <md-button class="md-icon-button" 
+              aria-label="Select polls for leaderboard"
+              ng-click="vm.showSelectPollsDialog()"
+              ng-disabled="false">
+    <md-tooltip>
+      Select polls for leaderboard
+    </md-tooltip>
+    <md-icon class="material-icons">poll</md-icon>
+  </md-button>
+</div>
+
 <md-card class="leaderboard">  
   <md-card-content>
     <md-table-container>
@@ -17,12 +40,5 @@
       </table>
     </md-table-container>
   </md-card-content>
-  
-  <div class="md-actions" layout="row" layout-align="end center">
-    <md-button class="md-primary"
-               ng-click="vm.showUpdateLeaderboardDialog()">
-      Update
-    </md-button>
-  </div>
   
 </md-card>
