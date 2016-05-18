@@ -22,3 +22,6 @@ npm-debug.log
 
 # Get rid of Sublime settings
 *.sublime-workspace
+
+# Get rid of vscode settings
+.vscode
