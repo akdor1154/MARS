@@ -10,9 +10,9 @@
           <p class="select-all">
             <md-checkbox class="md-secondary"
                          flex="none"
-                         ng-change="vm.toggleSelectAll()"
-                         ng-model="vm.selectAll">
-              {{ vm.selectAll ? 'Deselect All' : 'Select All' }}
+                         ng-click="vm.toggleSelectAll()"
+                         ng-checked="vm.areAllSelected()">
+              {{ vm.areAllSelected() ? 'Deselect All' : 'Select All' }}
             </md-checkbox>
           </p>
         </div>

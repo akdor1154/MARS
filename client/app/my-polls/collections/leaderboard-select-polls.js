@@ -21,6 +21,7 @@
     /* jshint validthis: true */
     var vm = this;
     
+    vm.areAllSelected = areAllSelected;
     vm.cancel = cancel;
     vm.collection = collection; 
     vm.toggleSelectAll = toggleSelectAll;
@@ -36,8 +37,21 @@
       });
     }
     
+    function areAllSelected() {
+      return !_.some(getAllPolls(), function(poll) {
+        return !vm.selectedPolls[poll._id];
+      });
+    }
+    
     function cancel() {
       $mdDialog.cancel();
+    }
+    
+    function getAllPolls() {
+      return _.flatten(
+        _.pluck(vm.collection.groups, 'polls'),
+        true
+      );
     }
     
     function update() {
@@ -47,29 +61,14 @@
           vm.collection.leaderboard[pollId] = {};
       });
       $mdDialog.hide();
-      // vm.action = "Updating";
-      // var selectedPolls = getSelectedPollIds(vm.selectedPolls);
-      // prepareLeadboard(selectedPolls);
-      // myPollsService.getResults(selectedPolls)
-      //   .then(groupResponsesByPoll)
-      //   .then(calculateScoresByPoll)
-      //   .then(function(leaderboard) {
-      //     _.extend(vm.collection.leaderboard, leaderboard);
-      //     return myPollsService.updateCollection(vm.collection, 'leaderboard');
-      //   })
-      //   .then(function() {
-      //     $mdDialog.hide();
-      //   })
-      //   .catch(function(err) {
-      //     $log.error('Updating failed: ', err);
-      //   });
     }
     
     function toggleSelectAll() {
+      var selectAll = !areAllSelected();
       _.each(
-        [].concat.apply([], _.pluck(vm.collection.groups, 'polls')),
+        getAllPolls(),
         function(poll) {
-          vm.selectedPolls[poll._id] = vm.selectAll;
+          vm.selectedPolls[poll._id] = selectAll;
         }
       );
     }
