@@ -79,17 +79,17 @@
             }
           ]
         })
-        .state('myPolls.collections.viewCollection.exportResult', {
-          params: { group: { type: Object }},
+        .state('myPolls.collections.viewCollection.exportResults', {
+          params: { groups: { type: Object }},
           onEnter: [
             '$rootScope',
             '$stateParams',
             '$mdDialog',
             function($rootScope, $stateParams, $mdDialog) {
               $mdDialog.show({
-                templateUrl: 'app/my-polls/collections/export-result.html',
-                controller: 'ExportResultController as vm',
-                locals: { group: $stateParams.group }
+                templateUrl: 'app/my-polls/collections/export-results.html',
+                controller: 'ExportResultsController as vm',
+                locals: { groups: $stateParams.groups }
               }).finally(function() {
                 $rootScope.goToPreviousState();
               });

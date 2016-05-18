@@ -172,7 +172,7 @@
       var pollIds = _.keys(vm.collection.leaderboard);
       var leaderboard = vm.collection.leaderboard; 
       vm.leaderboard = null;
-      vm.updateLeaderboardPromise = myPollsService.getResults(pollIds)
+      vm.updateLeaderboardPromise = myPollsService.getPollResults(pollIds)
         .then(groupResponsesByPoll)
         .then(calculateScoresByPoll)
         .then(function(scoresByPoll) {

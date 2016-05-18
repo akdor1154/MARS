@@ -126,9 +126,9 @@ span.title-number {
 	font-size: inherit;
 }
 
-.export-results h3 {
+/*.export-results h3 {
 	margin-top: 2em;
-}
+}*/
 
 .export-results .select-all {
 	margin-top: 1.33em;
@@ -150,7 +150,8 @@ span.title-number {
 	margin-right: 30px;
 }
 
-.update-leaderboard section h3 {
+.export-results section > h3,
+.update-leaderboard section > h3 {
 	margin: 0;
 	padding: 8px;
 	color: white;

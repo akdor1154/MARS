@@ -60,7 +60,7 @@
           'myPolls.collections.viewCollection.editCollection',
           'myPolls.collections.viewCollection.addGroup',
           'myPolls.collections.viewCollection.editGroup',
-          'myPolls.collections.viewCollection.exportResult',
+          'myPolls.collections.viewCollection.exportResults',
           'myPolls.collections.editPolls',
           'myPolls.collections.editPolls.addPoll',
         ]);

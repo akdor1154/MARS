@@ -3,7 +3,8 @@ var mongoose = require('mongoose')
   , Promise = require('bluebird')
   , _ = require('underscore')
   , errors = require('../utils/errors')
-  , log = require('../utils/log');
+  , log = require('../utils/log')
+  , mongooseUtils = require('../utils/mongoose-utils');
 
 var resultSchema = new Schema({
 	poll: { type: Schema.Types.ObjectId, ref: 'Poll', index: true },
@@ -97,6 +98,22 @@ resultSchema.statics.getLastResponseForUser = function(resultId, userId) {
     })
     .exec()
     .get(0);
+}
+
+resultSchema.statics.ownerFindManyById = function(ownerId, ids) {
+  ids = _.isArray(ids)
+    ? { $in: _.map(ids, mongooseUtils.id) }
+    : mongooseUtils.id(ids);
+  return Result.find({ _id: ids })
+    .populate('poll')
+    .exec()
+    .then(function(results) {
+      return _.filter(results, function(result) {
+        return _.some(result.poll.owners, function(owner) {
+          return owner.equals(ownerId);
+        });
+      });
+    });
 }
 
 resultSchema.statics.ownerUpdateById = function(ownerId, id, update, options) {

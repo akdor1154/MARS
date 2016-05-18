@@ -72,6 +72,10 @@
       });
     }
     
+    function collectionExportResults() {
+      exportResults(vm.collection.groups);
+    }
+    
     function deleteCollection() {
       var collection = vm.collection;
       $mdDialog.show(
@@ -125,9 +129,11 @@
       });
     }
     
-    function exportResults(group) {
-      $state.go('myPolls.collections.viewCollection.exportResult', {
-        group: group
+    function exportResults(groups) {
+      if (!angular.isArray(groups))
+        groups = [groups];
+      $state.go('myPolls.collections.viewCollection.exportResults', {
+        groups: groups
       });
     }
     
@@ -187,6 +193,11 @@
           label: 'Leaderboard', 
           callback: leaderboard, 
           icon: 'format_list_numbered'
+        },
+        { 
+          label: 'Export Results', 
+          callback: collectionExportResults, 
+          icon: 'file_download'
         },
         { 
           label: 'Edit Collection', 
