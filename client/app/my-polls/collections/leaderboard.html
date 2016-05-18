@@ -2,6 +2,14 @@
 <div class="tools" layout="row" layout-align="start center">
   <span flex></span>
   <md-button class="md-icon-button" 
+              aria-label="{{ vm.forceShowNames ? 'Show display names' : 'Reveal full names' }}"
+              ng-click="vm.forceShowNames = !vm.forceShowNames">
+    <md-tooltip>
+      {{ vm.forceShowNames ? 'Using: Full names' : 'Using: Display names' }}
+    </md-tooltip>
+    <md-icon class="material-icons">{{ vm.forceShowNames ? 'person' : 'person_outline' }}</md-icon>
+  </md-button>
+  <md-button class="md-icon-button" 
               aria-label="Update leaderboard"
               ng-click="vm.updateLeaderboard()"
               ng-disabled="false">
@@ -33,7 +41,7 @@
         </thead>
         <tbody md-body>
           <tr md-row ng-repeat="row in vm.leaderboard | orderBy: ['-score', 'user']">
-            <td md-cell>{{ row.user }}</td>
+            <td md-cell>{{ vm.getUserName(row.user) }}</td>
             <td md-cell>{{ row.score }}</td>
           </tr>
         </tbody>

@@ -36,6 +36,7 @@
     var vm = this;
     
     vm.collection = null;
+    vm.forceShowNames = false;
     vm.getUserName = getUserName;
     vm.leaderboard = null; 
     vm.showSelectPollsDialog = showSelectPollsDialog;
@@ -92,11 +93,13 @@
     
     function getUserName(userId) {
       var user = vm.subscribers[userId];
-      return user && !user.name.anonymous
-        ? user.name.display
-          ? user.name.display
-          : user.name.first + ' ' + user.name.last
-        : 'Anonymous';
+      return user 
+        ? vm.forceShowNames
+          ? user.name.first + ' ' + user.name.last
+          : user.name.anonymous
+            ? 'Anonymous'
+            : user.name.display || (user.name.first + ' ' + user.name.last)
+        : 'Unknown responder';
     }
     
     function groupResponsesByPoll(results) {
@@ -159,7 +162,7 @@
       _.each(scoresByPoll, function(scores) {
         _.each(scores, function(score, userId) {
           scoresByUser[userId] = scoresByUser[userId] || {
-            user: getUserName(userId),
+            user: userId,
             score: 0
           };
           scoresByUser[userId].score += score;
