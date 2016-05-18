@@ -35,18 +35,20 @@
       var csv = csvWriter();
       var resultsByPoll = groupResultsByPoll(results);
       _.each(resultsByPoll, function(pollResults, pollId) {
+        var group = _.first(pollResults).group;
         var poll = _.first(pollResults).poll;
         var responses = _.flatten(_.pluck(pollResults, 'responses'));
-        addHeaderForPoll(csv, poll);
+        addHeaderForPoll(csv, group, poll);
         addResponsesForPoll(csv, responses);
         csv.newRow();
       });
       return $q.resolve(csv.blob());
     }
     
-    function addHeaderForPoll(csv, poll) {
+    function addHeaderForPoll(csv, group, poll) {
       csv
-        .addRow([poll.data.question])
+        .addRow(['Group:', group.name])
+        .addRow(['Poll Text:', poll.data.question])
         .newRow();
         
       poll.data.choices.forEach(function(choice) {
