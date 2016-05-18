@@ -38,6 +38,7 @@
     vm.collection = null;
     vm.forceShowNames = false;
     vm.getUserName = getUserName;
+    vm.isLeaderboardUpdating = false;
     vm.leaderboard = null; 
     vm.showSelectPollsDialog = showSelectPollsDialog;
     vm.subscribers = [];
@@ -52,7 +53,9 @@
           .then(setCollection)
           .then(updateSubscribers)
           .then(function() {
+            vm.isLeaderboardUpdating = true;
             renderLeaderboard(vm.collection.leaderboard);
+            vm.isLeaderboardUpdating = false;
           });
       $anchorScroll('top');
     }
@@ -174,6 +177,7 @@
     function updateLeaderboard() {
       var pollIds = _.keys(vm.collection.leaderboard);
       var leaderboard = vm.collection.leaderboard; 
+      vm.isLeaderboardUpdating = true;
       vm.leaderboard = null;
       vm.updateLeaderboardPromise = myPollsService.getPollResults(pollIds)
         .then(groupResponsesByPoll)
@@ -181,6 +185,9 @@
         .then(function(scoresByPoll) {
           renderLeaderboard(scoresByPoll);
           return storeLeaderboard(scoresByPoll);
+        })
+        .then(function() {
+          vm.isLeaderboardUpdating = false;
         });
       return vm.updateLeaderboardPromise;
     }

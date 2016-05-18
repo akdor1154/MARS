@@ -12,7 +12,7 @@
   <md-button class="md-icon-button" 
               aria-label="Update leaderboard"
               ng-click="vm.updateLeaderboard()"
-              ng-disabled="false">
+              ng-disabled="vm.isLeaderboardUpdating">
     <md-tooltip>
       Update
     </md-tooltip>
@@ -21,7 +21,7 @@
   <md-button class="md-icon-button" 
               aria-label="Select polls for leaderboard"
               ng-click="vm.showSelectPollsDialog()"
-              ng-disabled="false">
+              ng-disabled="vm.isLeaderboardUpdating">
     <md-tooltip>
       Select polls for leaderboard
     </md-tooltip>
