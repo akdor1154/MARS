@@ -99,9 +99,9 @@
       return user 
         ? vm.forceShowNames
           ? user.name.first + ' ' + user.name.last
-          : user.name.anonymous
-            ? 'Anonymous'
-            : user.name.display || (user.name.first + ' ' + user.name.last)
+          : (user.name.anonymous === false)
+            ? user.name.display || ((user.name.first || '') + ' ' + (user.name.last || '')) 
+            : 'Anonymous'
         : 'Unknown responder';
     }
     
