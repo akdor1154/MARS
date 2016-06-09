@@ -20,8 +20,8 @@ npm-debug.log
 # Mac Specific Files
 .DS_Store
 
-# Get rid of Sublime settings
+# Sublime settings
 *.sublime-workspace
 
-# Get rid of vscode settings
+# vscode settings
 .vscode
