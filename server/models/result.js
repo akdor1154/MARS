@@ -107,7 +107,7 @@ resultSchema.statics.ownerFindManyById = function(ownerId, ids) {
   return Result.find({ _id: ids })
     .populate('poll')
     .populate('group', 'name')
-    .populate('responses.user')
+    .populate('responses.user', 'username name')
     .exec()
     .then(function(results) {
       return _.filter(results, function(result) {
