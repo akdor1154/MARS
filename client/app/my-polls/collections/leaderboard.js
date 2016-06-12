@@ -36,7 +36,9 @@
     var vm = this;
     
     vm.collection = null;
+    vm.forceShowNames = false;
     vm.getUserName = getUserName;
+    vm.isLeaderboardUpdating = false;
     vm.leaderboard = null; 
     vm.showSelectPollsDialog = showSelectPollsDialog;
     vm.subscribers = [];
@@ -51,7 +53,9 @@
           .then(setCollection)
           .then(updateSubscribers)
           .then(function() {
+            vm.isLeaderboardUpdating = true;
             renderLeaderboard(vm.collection.leaderboard);
+            vm.isLeaderboardUpdating = false;
           });
       $anchorScroll('top');
     }
@@ -92,11 +96,13 @@
     
     function getUserName(userId) {
       var user = vm.subscribers[userId];
-      return user && !user.name.anonymous
-        ? user.name.display
-          ? user.name.display
-          : user.name.first + ' ' + user.name.last
-        : 'Anonymous';
+      return user 
+        ? vm.forceShowNames
+          ? user.name.first + ' ' + user.name.last
+          : (user.name.anonymous === false)
+            ? user.name.display || ((user.name.first || '') + ' ' + (user.name.last || '')) 
+            : 'Anonymous'
+        : 'Unknown responder';
     }
     
     function groupResponsesByPoll(results) {
@@ -159,7 +165,7 @@
       _.each(scoresByPoll, function(scores) {
         _.each(scores, function(score, userId) {
           scoresByUser[userId] = scoresByUser[userId] || {
-            user: getUserName(userId),
+            user: userId,
             score: 0
           };
           scoresByUser[userId].score += score;
@@ -171,13 +177,17 @@
     function updateLeaderboard() {
       var pollIds = _.keys(vm.collection.leaderboard);
       var leaderboard = vm.collection.leaderboard; 
+      vm.isLeaderboardUpdating = true;
       vm.leaderboard = null;
-      vm.updateLeaderboardPromise = myPollsService.getResults(pollIds)
+      vm.updateLeaderboardPromise = myPollsService.getPollResults(pollIds)
         .then(groupResponsesByPoll)
         .then(calculateScoresByPoll)
         .then(function(scoresByPoll) {
           renderLeaderboard(scoresByPoll);
           return storeLeaderboard(scoresByPoll);
+        })
+        .then(function() {
+          vm.isLeaderboardUpdating = false;
         });
       return vm.updateLeaderboardPromise;
     }

@@ -1,0 +1,82 @@
+<md-dialog aria-label="Create poll"  
+           class="export-results"
+           ng-cloak>
+  <form name="exportResultForm">
+  <md-dialog-content style="min-width: 480px;">
+    <div class="md-dialog-content">
+      <h2>Export Results</h2>
+      <p>Select the result export format then pick the results you would like to export.</p>
+      <md-input-container class="md-block">
+        <label>Export Format</label>
+        <md-select required
+                   ng-change="vm.selectedExporterChanged()"
+                   ng-disabled="!vm.exporters || vm.exporters.length === 0"
+                   ng-model="vm.selectedExporter" >
+          <md-optgroup label="{{vm.inflector.humanize(exporter.name)}}"
+                       ng-repeat="exporter in vm.exporters">
+            <md-option ng-repeat="option in exporter.options" 
+                       ng-value="option">
+              {{option.name}} ({{option.extension}})
+            </md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+      <div layout="row" layout-xs="column" layout-align-xs="end end">
+        <h3 flex>Results</h3>
+        <p class="select-all">
+          <md-checkbox class="md-secondary"
+                       flex="none"
+                       ng-checked="vm.areAllSelected()"
+                       ng-click="vm.toggleSelectAll()"
+                       ng-disabled="vm.isSelectAllDisabled()">
+            {{ vm.areAllSelected() ? 'Deselect All' : 'Select All' }}
+          </md-checkbox>
+        </p>
+      </div>
+      <section ng-repeat="group in vm.groups">
+        <h3 class="group-header bg-{{ group.color }}">
+          {{ group.collection.name }} - {{ group.name }}
+        </h3>
+        <section ng-repeat="poll in group.polls">
+          <div layout="row" layout-xs="column" layout-align-xs="end end">
+            <h4 flex>{{poll.name}}</h4>
+            <p class="select-all">
+              <md-checkbox class="md-secondary"
+                           flex="none"
+                           ng-checked="vm.areAllSelectedForPoll(poll._id)"
+                           ng-click="vm.toggleSelectAllForPoll(poll._id)"
+                           ng-disabled="vm.isSelectAllDisabledForPoll(poll._id)">
+                {{ vm.areAllSelectedForPoll(poll._id) ? 'Deselect All' : 'Select All' }}
+              </md-checkbox>
+            </p>
+          </div>
+          <md-list>  
+            <md-list-item ng-repeat="result in vm.results[poll._id]">
+              <p>
+                {{result.lastActivation.start | date:vm.resultDateFormat}} 
+                {{ result.label ? ' - ' + result.label : '' }}
+              </p>
+              <md-checkbox class="md-secondary" 
+                          ng-disabled="result.disabled"
+                          ng-model="vm.selectedResults[result._id]"></md-checkbox>
+            </md-list-item>  
+          </md-list>
+        </section>
+      </section>
+    </div>
+  </md-dialog-content>
+    <md-dialog-actions>
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+          Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit" 
+                   ng-click="vm.doExport()"
+                   ng-disabled="exportResultForm.$invalid">
+          Export
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

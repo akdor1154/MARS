@@ -35,22 +35,24 @@
       var csv = csvWriter();
       var resultsByPoll = groupResultsByPoll(results);
       _.each(resultsByPoll, function(pollResults, pollId) {
+        var group = _.first(pollResults).group;
         var poll = _.first(pollResults).poll;
         var responses = _.flatten(_.pluck(pollResults, 'responses'));
-        addRowsForPoll(csv, poll, responses);
+        addRowsForPoll(csv, group, poll, responses);
         csv.newRow();
       });
       return $q.resolve(csv.blob());
     }
     
-    function addRowsForPoll(csv, poll, responses) {
+    function addRowsForPoll(csv, group, poll, responses) {
       var finalResponses = getFinalResponses(responses);
       var responsesByChoice = groupResponsesByChoice(finalResponses);
       var totalResponses = finalResponses.length;
         
       csv
-        .addRow([poll.data.question])
-        .addRow(['Total responses: ', totalResponses])
+        .addRow(['Group:', group.name])
+        .addRow(['Poll Text:', poll.data.question])
+        .addRow(['Total Responses: ', totalResponses])
         .newRow();
         
       poll.data.choices.forEach(function(choice) {

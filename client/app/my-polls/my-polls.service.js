@@ -29,6 +29,7 @@
       getGroup: getGroup,
       getGroups: getGroups,
       getLastResult: getLastResult,
+      getPollResults: getPollResults,
       getResult: getResult,
       getResults: getResults,
       groupIndex: groupIndex,
@@ -290,20 +291,27 @@
     }
     
 /**
+ * Get a collection of results that belon to the polls with the specified IDs
+ *
+ */
+    function getPollResults(pollIds) {
+      return marsService.request('poll results', { _id: pollIds });
+    }
+    
+/**
  * Get a result with the specified ID
  *
  */
     function getResult(resultId) {
       return marsService.request('result', { _id: resultId });
     }
-      
     
 /**
- * Get all results for the poll with the specified ID
+ * Get a collection of results that match the array of IDs
  *
  */
-    function getResults(pollId) {
-      return marsService.request('poll results', { _id: pollId });
+    function getResults(resultIds) {
+      return marsService.request('results', { _id: resultIds });
     }
     
 /**

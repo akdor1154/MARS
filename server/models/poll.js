@@ -143,24 +143,24 @@ pollSchema.statics.getLastResult = function(pollId) {
     });
 }
 
-pollSchema.statics.getResults = function(pollId) {
-  var Result = mongoose.model('Result');
-  pollId = _.isArray(pollId)
-    ? { $in: _.map(pollId, mongooseUtils.id) }
-    : mongooseUtils.id(pollId);
-  return Result.find({ poll: pollId })
-    .exec();
-};
-
 pollSchema.statics.listResults = function(pollId) {
   var Result = mongoose.model('Result');
   pollId = _.isArray(pollId)
     ? { $in: _.map(pollId, mongooseUtils.id) }
     : mongooseUtils.id(pollId);
+  // return Result.find({ poll: pollId })
+  //   .select({
+  //     activations: 1,
+  //     label: 1,
+  //     poll: 1,
+  //     type: 1
+  //   })
+  //   .exec();
   return Result.aggregate({ $match: { poll: pollId } })
     .project({ 
       activations: 1, 
       label: 1,
+      poll: 1,
       responsesCount: { $size: '$responses' },
       type: 1
     })
@@ -209,6 +209,22 @@ pollSchema.static.ownerFindByIdAndUpdate = function(ownerId, id, update, options
       return poll;
     });
 }
+
+pollSchema.statics.ownerGetResults = function(ownerId, pollId) {
+  var Result = mongoose.model('Result');
+  pollId = _.isArray(pollId)
+    ? { $in: _.map(pollId, mongooseUtils.id) }
+    : mongooseUtils.id(pollId);
+  return Poll.find({ _id: pollId, owners: ownerId })
+    .exec()
+    .then(function(polls) {
+      if (!polls || polls.length === 0)
+        return errors.forbidden();
+      var pollIds = _.pluck(polls, '_id');
+      return Result.find({ poll: { $in: pollIds } })
+        .exec();
+    });
+};
 
 pollSchema.statics.ownerRemoveById = function(ownerId, id) {
   return Poll.ownerFindById(ownerId, id, 'group')

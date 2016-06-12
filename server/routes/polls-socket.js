@@ -443,7 +443,7 @@ module.exports = function(
  */
     socket.on('poll results', function(data) {
       log.trace('Socket: poll results', data);
-      Poll.getResults(data._id)
+      Poll.ownerGetResults(socket.request.user, data._id)
         .then(function(results) {
           log.debug('results = ', results.length);
           socket.emit('poll results', results);
@@ -625,6 +625,27 @@ module.exports = function(
         })
         .catch(function(err) {
           respondWithError('result viewer', err);
+        });
+    });
+    
+/**
+ * Get a collection of results
+ * 
+ */
+    socket.on('results', function(data) {
+      log.trace('Socket: results', data);
+      confirmHasFields(data, '_id')
+        .then(function() { 
+          return Result.ownerFindManyById(socket.request.user, data._id);
+        })
+        .then(function(results) {
+          if (!results || results.length === 0)
+            throw new errors.notFound('Results');
+          log.debug('Found', results.length, 'results');
+          socket.emit('results', results);
+        })
+        .catch(function(err) {
+          respondWithError('results', err);
         });
     });
     
