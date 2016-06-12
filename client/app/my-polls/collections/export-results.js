@@ -93,17 +93,10 @@
       var exporter = vm.selectedExporter;
       var resultIds = getSelectedResultIds();
       var subscribersById = [];
-      return loadSubscribers()
-        .then(function(subscribers) {
-          subscribersById = subscribers;
-        })
-        .then(function() {
-          vm.action = 'Loading responses';
-          return myPollsService.getResults(resultIds);
-        })
+      vm.action = 'Loading responses';
+      return myPollsService.getResults(resultIds)
         .then(function(results) {
           vm.action = 'Preparing';
-          mapSubscribersToResponses(subscribersById, results);
           return exporter.exportResults(results);
         })
         .then(function(exportedResults) {
@@ -206,16 +199,6 @@
         $log.error('Failed to load results: ', err);
         $mdDialog.hide();
       });
-    }
-    
-    function loadSubscribers() {
-      vm.action = "Loading subscribers";
-      var collection = _.first(vm.groups).collection;
-      return myPollsService.listSubscribers(collection._id)
-        .then(function(subscribers) {
-          vm.action = null;
-          return _.indexBy(subscribers, '_id');
-        });
     }
     
     function mapSubscribersToResponses(subscribersById, results) {
