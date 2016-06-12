@@ -201,15 +201,6 @@
       });
     }
     
-    function mapSubscribersToResponses(subscribersById, results) {
-      _.each(results, function(result) {
-        _.each(result.responses, function(response) {
-          if (_.isString(response.user))
-            response.user = subscribersById[response.user];
-        });
-      });
-    }
-    
     function selectedExporterChanged() {
       var pluginExporter = $injector.get(vm.selectedExporter.factory);
       _.extend(vm.selectedExporter, pluginExporter);
