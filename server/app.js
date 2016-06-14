@@ -87,7 +87,6 @@ io.use(passportSocketIo.authorize({
  * View Engine
  */
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
  
 /**
  * Routes 
