@@ -87,7 +87,8 @@ io.use(passportSocketIo.authorize({
  * View Engine
  */
 app.set('views', path.join(__dirname, 'views'));
- 
+app.set('view engine', 'pug');
+
 /**
  * Routes 
  */
@@ -103,7 +104,7 @@ var pollsSocket = require('./routes/polls-socket')(
       authConfig,
       User
     ));  
-    
+
 /** 
  * Express boilerplate
  *
