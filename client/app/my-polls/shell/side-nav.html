@@ -9,49 +9,59 @@
 <md-content>
   <md-list>
 
-    <md-list-item ng-click="vm.goToState('myPolls.upcoming')"
-                  ng-class="{ 'bg-selected': vm.isState('myPolls.upcoming') }">
-        <md-icon class="material-icons"> insert_chart </md-icon>
-        <p>Upcoming Polls</p>
+    <md-list-item ng-click="vm.goToState('myPolls.upcoming')">
+      <md-icon class="material-icons"
+               ng-class="{ 'md-list-blue-selected': vm.isState('myPolls.upcoming') }"> insert_chart </md-icon>
+      <p ng-class="{ 'md-list-blue-selected': vm.isState('myPolls.upcoming') }">
+        Upcoming Polls
+      </p>
     </md-list-item>
 
     <md-divider></md-divider>
     <md-subheader>Collections</md-subheader>
 	
     <md-list-item ng-repeat="collection in vm.collections | filter: { deleted: '!' }" 
-                  ng-click="vm.goToState('myPolls.collections.viewCollection', { collectionId: collection._id })"
-                  ng-class="{ 'bg-selected': vm.isState('myPolls.collection', { collectionId: collection._id }) }">
-      <md-icon class="material-icons">keyboard_arrow_right</md-icon>
-      <p>{{ collection.name }}</p>
+                  ng-click="vm.goToState('myPolls.collections.viewCollection', { collectionId: collection._id })">
+      <md-icon class="material-icons"
+               ng-class="{ 'md-list-blue-selected': vm.isState('myPolls.collection', { collectionId: collection._id }) }">
+        keyboard_arrow_right
+      </md-icon>
+      <p ng-class="{ 'md-list-blue-selected': vm.isState('myPolls.collection', { collectionId: collection._id }) }">
+        {{ collection.name }}
+      </p>
     </md-list-item>
 	
     <md-list-item ng-click="vm.addCollection()">
-        <md-icon class="material-icons"> add </md-icon>
-        <p>Add New</p>
+      <md-icon class="material-icons"> add </md-icon>
+      <p>Add New</p>
     </md-list-item>
   
     <md-divider></md-divider>
     <md-subheader>Management</md-subheader>
 	
-    <md-list-item ng-click="vm.goToState('myPolls.trash')"
-                  ng-class="{ 'bg-selected': vm.isState('myPolls.trash') }">
-        <md-icon class="material-icons"> delete </md-icon>
-        <p>Trash</p>
+    <md-list-item ng-click="vm.goToState('myPolls.trash')">
+      <md-icon class="material-icons"
+               ng-class="{ 'md-list-blue-selected': vm.isState('myPolls.trash') }">
+        delete
+      </md-icon>
+      <p ng-class="{ 'md-list-blue-selected': vm.isState('myPolls.trash') }">
+        Trash
+      </p>
     </md-list-item>
 
     <md-list-item ng-click="goToState('myPolls.settings')">
-        <md-icon class="material-icons"> settings </md-icon>
-        <p>Settings</p>
+      <md-icon class="material-icons"> settings </md-icon>
+      <p>Settings</p>
     </md-list-item>
 
     <md-list-item ng-click="vm.openExternal('https://drive.google.com/a/monash.edu/file/d/0B3jrsLjSGHrINktCaDlxV29WUnc/view?usp=sharing')">
-        <md-icon class="material-icons"> help </md-icon>
-        <p>User Guide</p>
+      <md-icon class="material-icons"> help </md-icon>
+      <p>User Guide</p>
     </md-list-item>
 
     <md-list-item ng-click="vm.openExternal('https://docs.google.com/a/monash.edu/forms/d/1Qg91GKcnJxiflAIHqekrHzyBRGmmHwktGRw1mYYFvWQ/viewform')">
-        <md-icon class="material-icons"> bug_report </md-icon>
-        <p>Help us improve!</p>
+      <md-icon class="material-icons"> bug_report </md-icon>
+      <p>Help us improve!</p>
     </md-list-item>
 
   </md-list>
