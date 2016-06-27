@@ -41,13 +41,11 @@
     vm.goBack = goBack;
     vm.goToPreview = goToPreview;
     vm.goToState = goToState;
-    vm.isViewSynchronized = false;
     vm.isState = isState;
     vm.logout = logout;
     vm.openLeftMenu = openLeftMenu;
     vm.openExternal = openExternal;
     vm.shell = shell;
-    vm.toggleViewSync = toggleViewSync;
     
     activate();
     
@@ -65,11 +63,11 @@
           'myPolls.collections.editPolls.addPoll',
         ]);
         var isViewSynchronized = 
-          localStorageService.get('myPolls.shell.isViewSynchronized');
-        vm.isViewSynchronized = isViewSynchronized !== null
+          localStorageService.get('myPolls.settings.isViewSynchronized');
+        isViewSynchronized = isViewSynchronized !== null
           ? isViewSynchronized 
           : true;
-        vm.isViewSynchronized
+        isViewSynchronized
           ? viewSyncService.enable()
           : viewSyncService.disable();
         
@@ -130,17 +128,7 @@
     function openExternal (url) {
       $window.open(url, '', 'width=640, height=480');
     }
-    
-    function toggleViewSync() {
-      viewSyncService.isEnabled()
-        ? viewSyncService.disable()
-        : viewSyncService.enable();
-      vm.isViewSynchronized = viewSyncService.isEnabled();
-      localStorageService.set(
-        'myPolls.shell.isViewSynchronized', 
-        vm.isViewSynchronized
-      );
-    }
+
   }
   
 })();
