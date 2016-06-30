@@ -102,7 +102,8 @@
     
     function goToPreview() {
       viewSyncService.disable();
-      goToState('poll', { preview: true });
+      var url = $state.href('poll');
+      $window.open(url, '_blank', 'height=600, width=400');
     }
     
     function goToState(state, params) {
