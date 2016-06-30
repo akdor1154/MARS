@@ -10,7 +10,7 @@
                   class="md-whiteframe-2dp mc-choice text-select-disabled" 
                   md-ink-ripple="#2196F3" 
                   ng-repeat="choice in poll.data.choices" 
-                  ng-class="{'bg-selected': choice == vm.selectedChoice}" 
+                  ng-class="{'selected-item': choice == vm.selectedChoice}" 
                   ng-click="vm.submitResponse(choice)">
     <h2>{{ choice.label }}</h2>
     <span flex>{{ choice.text }}</span>

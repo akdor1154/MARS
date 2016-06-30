@@ -46,6 +46,6 @@ md-dialog md-dialog-content .md-prompt-input-container {
   box-sizing: border-box;
 }
 
-.md-list-blue-selected {
-	color: #1565c0;
+.selected-item {
+	color: #2196f3;
 }
