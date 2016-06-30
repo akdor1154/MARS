@@ -8,9 +8,16 @@
   PollSubscribeController.$inject = [
     '$log', 
     '$mdDialog', 
+    '$mdToast',
     'pollService'];
     
-  function PollSubscribeController($log, $mdDialog, pollService) {
+  function PollSubscribeController(
+    $log,
+    $mdDialog,
+    $mdToast,
+    pollService
+  ) {
+    
     $log = $log.getInstance('PollSubscribeController');
     
     /* jshint validthis: true */
@@ -32,6 +39,10 @@
         .then(function() {
           vm.action = null;
           $mdDialog.hide();
+          $mdToast.show(
+            $mdToast.simple()
+            .textContent('Subscribed!')
+          );
         })
         .catch(function(err) {
           if(err.code)
