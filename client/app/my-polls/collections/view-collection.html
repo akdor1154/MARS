@@ -18,30 +18,11 @@
       <div class="md-toolbar-tools">
         <h2 class="md-title" 
             md-highlight-flags="i"
-            md-highlight-text="vm.shell.search.phrase">
-          {{ group.collection.name }} - {{ group.name }}
+            md-highlight-text="vm.shell.search.phrase"
+            ng-click="vm.editGroup(group)">
+          {{ group.name }}
         </h2>
         <span flex></span>
-        <md-button aria-label="Reorder: move up"
-                   class="md-icon-button" 
-                   ng-disabled="$first"
-                   ng-hide="vm.shell.search.show"
-                   ng-click="vm.reorderGroup($index, $index - 1)">
-          <md-tooltip>
-            Move up
-          </md-tooltip>
-          <md-icon md-menu-origin class="material-icons">arrow_upward</md-icon>
-        </md-button>
-        <md-button aria-label="Reorder: move down"
-                   class="md-icon-button" 
-                   ng-disabled="$last"
-                   ng-hide="vm.shell.search.show"
-                   ng-click="vm.reorderGroup($index, $index + 1)">
-          <md-tooltip>
-            Move down
-          </md-tooltip>
-          <md-icon md-menu-origin class="material-icons">arrow_downward</md-icon>
-        </md-button>
         <md-button aria-label="{{ vm.isUpcoming(group) ? 'Mark as done' : 'Mark as upcoming' }}"
                    class="md-icon-button" 
                    ng-click="vm.toggleUpcoming(group)">
@@ -50,42 +31,6 @@
           </md-tooltip>
           <md-icon md-menu-origin class="material-icons"> {{ vm.isUpcoming(group) ? 'done' : 'autorenew' }} </md-icon>
         </md-button>
-        <md-menu md-position-mode="target-right target">
-          <!-- Trigger element is a md-button with an icon -->
-          <md-button aria-label="Open collection menu"
-                     class="md-icon-button" 
-                     ng-click="$mdOpenMenu()">
-            <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item>
-              <md-button ng-click="">
-                <md-icon md-menu-align-target class="material-icons">timeline</md-icon>
-                Analytics (TODO)
-              </md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button ng-click="vm.exportResults(group)">
-                <md-icon md-menu-align-target class="material-icons">file_download</md-icon>
-                Export Results
-              </md-button>
-            </md-menu-item>
-            <!-- <md-menu-item><md-button ng-click="">Copy (TODO)</md-button></md-menu-item> -->
-            <md-divider />
-            <md-menu-item>
-              <md-button ng-click="vm.editGroup(group)">
-                <md-icon md-menu-align-target class="material-icons">edit</md-icon>
-                Edit Group
-              </md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button ng-click="vm.deleteGroup(group)">
-                <md-icon md-menu-align-target class="material-icons">delete</md-icon>
-                Delete Group
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
       </div>
     </md-toolbar>
     
@@ -98,12 +43,35 @@
           {{ poll.name || '[Unamed poll]' }}
         </p>
       </md-list-item>
-      <md-list-item class="background-message"
-                    ng-show="shownPolls.length === 0">
-        <p>There are no polls in this group</p>
+      <md-list-item class="background-message" ng-click="vm.editPolls(group, true)">
+        <p>+ New Poll</p>
       </md-list-item>
     </md-list>
-    
+  
+    <md-card-actions layout="row" layout-align="start center">
+      <md-button class="md-icon-button" aria-label="Reorder: Move Up" ng-click="vm.reorderGroup($index, $index - 1)" ng-disabled="$first" ng-hide="vm.shell.search.show">
+        <md-icon class="material-icons">arrow_upward</md-icon>
+        <md-tooltip>Move Up</md-tooltip>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="Reorder: Move Down" ng-click="vm.reorderGroup($index, $index + 1)" ng-disabled="$last" ng-hide="vm.shell.search.show">
+        <md-icon class="material-icons">arrow_downward</md-icon>
+        <md-tooltip>Move Down</md-tooltip>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="Delete Group" ng-click="vm.deleteGroup(group)">
+        <md-icon class="material-icons">delete</md-icon>
+        <md-tooltip>Delete Group</md-tooltip>
+      </md-button> 
+      <md-button class="md-icon-button" aria-label="Export Results" ng-click="vm.exportResults(group)">
+        <md-icon class="material-icons">file_download</md-icon>
+        <md-tooltip>Export Results</md-tooltip>
+      </md-button>
+      <span flex></span>
+      <md-button class="md-icon-button" aria-label="Edit Polls" ng-click="vm.editPolls(group, shownPolls.length === 0)">
+        <md-icon class="material-icons">edit</md-icon>
+        <md-tooltip>Edit Polls</md-tooltip>
+      </md-button>
+    </md-card-actions>
+      
     <div class="md-actions" layout="row" layout-align="end center">
       <div ng-show="!group._id" layout="row" layout-align="end center">
         <div>Saving</div>
@@ -113,11 +81,6 @@
           </md-progress-circular>
         </div>
       </div>
-      <md-button class="md-primary"
-                 ng-show="group._id" 
-                 ng-click="vm.editPolls(group, shownPolls.length === 0)">
-        {{shownPolls.length > 0 ? 'Edit Polls' : 'Create Polls'}}
-      </md-button>
     </div>
     
   </md-card>
