@@ -28,6 +28,23 @@
           templateUrl: 'app/my-polls/collections/view-collection.html',
           controller: 'ViewCollectionController as vm'
         })
+        .state('myPolls.collections.viewCollection.cloneCollection', {
+          params: { collection: { type: Object }},
+          onEnter: [
+            '$rootScope',
+            '$stateParams',
+            '$mdDialog',
+            function($rootScope, $stateParams, $mdDialog) {
+              $mdDialog.show({
+                templateUrl: 'app/my-polls/collections/clone-collection.html',
+                controller: 'CloneCollectionController as vm',
+                locals: { collection: $stateParams.collection }
+              }).finally(function() {
+                $rootScope.goToPreviousState();
+              });
+            }
+          ]
+        })
         .state('myPolls.collections.viewCollection.editCollection', {
           params: { collection: { type: Object }},
           onEnter: [

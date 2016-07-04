@@ -10,9 +10,11 @@ var pollCollectionSchema = new Schema({
 	name: String,
   created: { type: Date, default: Date.now },
   deleted: Date,
+  archived: Date,
   token: { type: String, index: true },
   owners: [{ type: Schema.Types.ObjectId, ref: 'User', index: true }],
   groups: [{ type: Schema.Types.ObjectId, ref: 'PollGroup' }],
+  source: { type: Schema.Types.ObjectId, ref: 'PollCollection' },
   leaderboard: {}
 }, {collection: 'pollCollections'});
 pollCollectionSchema.set('toJSON', { minimize: false, retainKeyOrder: true });
@@ -100,6 +102,54 @@ pollCollectionSchema.statics.listSubscribers = function(ownerId, collectionId) {
         .exec();
     });
 };
+
+pollCollectionSchema.statics.ownerClone = function(ownerId, id, fields) {
+  var Poll = mongoose.model('Poll')
+    , PollGroup = mongoose.model('PollGroup')
+    , newCollection = null
+    , groups = []
+    , polls = [];
+  return PollCollection.ownerFindById(ownerId, id)
+    .then(function(collection) {
+      collection.leaderboard = {};
+      return collection.populate({
+        path: 'groups',
+        populate: { path: 'polls', model: Poll }
+      }).execPopulate();
+    })
+    .then(function(collection) {
+      newCollection = collection.toObject();
+      newCollection._id = new mongoose.Types.ObjectId();
+      newCollection.created = new Date();
+      newCollection.token = _generateToken();
+      newCollection.source = collection._id;
+      if (_.isObject(fields))
+        _.extend(newCollection, _.omit(fields, updateOmittedFields));
+      _.each(newCollection.groups, function(group) {
+        group._id = new mongoose.Types.ObjectId();
+        group.created = new Date();
+        group.pollCollection = newCollection._id;
+        _.each(group.polls, function(poll) {
+          poll._id = new mongoose.Types.ObjectId();
+          poll.created = new Date();
+          poll.group = group._id;
+          poll.pollCollection = newCollection._id;
+          polls.push(poll);
+        });
+        groups.push(group);
+      });
+      return PollCollection.create(newCollection);
+    })
+    .then(function(collection) {
+      return PollGroup.insertMany(groups);
+    })
+    .then(function() {
+      return Poll.insertMany(polls);
+    })
+    .then(function() {
+      return newCollection;
+    });
+}
 
 pollCollectionSchema.statics.ownerFindById = function(ownerId, id, projection, options) {
   if (_.isString(projection))

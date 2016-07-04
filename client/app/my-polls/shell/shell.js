@@ -57,6 +57,7 @@
           return $state.go('auth.forbidden');
                 
         viewSyncService.ignoreStates([
+          'myPolls.collections.viewCollection.cloneCollection',
           'myPolls.collections.viewCollection.editCollection',
           'myPolls.collections.viewCollection.addGroup',
           'myPolls.collections.viewCollection.editGroup',

@@ -51,6 +51,34 @@ module.exports = function(
       socket.join(socket.request.user);
       
 /**
+ * Clone a collection
+ *
+ */
+    socket.on('collection clone', function(data) {
+      log.trace('Socket: collection clone', data);
+      PollCollection.ownerClone(socket.request.user, data._id, data.newCollection)
+        .then(function(newCollection) {
+          log.info('Cloned collection', newCollection._id.toString());
+          log.debug(newCollection);
+          socket.join(newCollection._id.toString());
+          log.info(
+            'User %s joined room %s', 
+            socket.request.user, 
+            newCollection._id.toString()
+          );
+          socket.emit('collection clone', newCollection);
+        })
+        .then(function() {
+          if (data.archive !== true)
+            return;
+          return PollCollection.ownerUpdateById(socket.request.user, data._id, { archived: new Date() });
+        })
+        .catch(function(err) {
+          respondWithError('collection clone', err);
+        });
+    });
+
+/**
  * Create a new collection
  *
  */

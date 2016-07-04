@@ -17,6 +17,7 @@
     return {
       activatePoll: activatePoll,
       cascadeOwners: cascadeOwners,
+      cloneCollection: cloneCollection,
       createCollection: createCollection,
       createGroup: createGroup,
       createPoll: createPoll,
@@ -74,6 +75,31 @@
           poll.owners = group.owners;
         });
       });
+    }
+    
+/**
+ * Clone an existing collection
+ *
+ */
+    function cloneCollection(collection, archive, newCollection) {
+      var data = {
+        _id: marsService.id(collection),
+        archive: archive || false,
+        newCollection: newCollection
+      }
+      return marsService.request('collection clone', data)
+        .then(function(newCollection) {
+          newCollection = _reviveCollection(newCollection);
+          $log.debug('newCollection = ', newCollection);
+          collections.splice(
+            _.sortedIndex(collections, newCollection, 'name'),
+            0,
+            newCollection
+          );
+          if (archive === true)
+            collection.archive = new Date();
+          return newCollection;
+        });
     }
     
 /**

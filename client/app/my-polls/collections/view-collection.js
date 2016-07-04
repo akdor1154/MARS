@@ -72,6 +72,12 @@
       });
     }
     
+    function cloneCollection() {
+      $state.go('myPolls.collections.viewCollection.cloneCollection', {
+        collection: vm.collection
+      });
+    }
+
     function collectionExportResults() {
       exportResults(vm.collection.groups);
     }
@@ -203,6 +209,11 @@
           label: 'Edit Collection', 
           callback: editCollection, 
           icon: 'edit' 
+        },
+        { 
+          label: 'Clone Collection', 
+          callback: cloneCollection, 
+          icon: 'control_point_duplicate'
         },
         { 
           label: 'Delete Collection', 

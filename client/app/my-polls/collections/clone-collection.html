@@ -1,0 +1,42 @@
+<md-dialog aria-label="Clone collection" 
+           class="clone-collection" 
+           ng-cloak>
+  <form name="cloneCollectionForm">
+    <md-dialog-content style="max-width:650px; min-width: 480px; ">
+      <div class="md-dialog-content">
+        <h2>Clone Collection</h2>
+        <p>When you clone a collection you create a copy of all of it's groups and polls. Changes you make to the new collection will not affect the existing collection. Results are not copied.</p>
+        <md-input-container flex class="md-block" style="margin-top: 2em">
+          <label>New Name</label>
+          <input name="name"
+                  md-autofocus
+                  ng-model="vm.newCollection.name" 
+                  required>
+          <div ng-messages="cloneCollectionForm.name.$error">
+            <div ng-message="required">This is required</div>
+          </div>
+        </md-input-container>
+        <h4>Archive</h4>
+        <P>Archive the existing collection to prevent it from being shown in the sidebar. You will still be able to access the collection from the <a ui-sref="myPolls.archive">Archive</a>.</p>
+        <p>
+          <md-checkbox ng-model="vm.archive" aria-label="Archive the existing collection">
+            Archive the existing collection<br/>
+          </md-checkbox>
+        </p>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+      <mars-action-progress action="vm.action">
+        <md-button type="button" ng-click="vm.cancel()" >
+         Cancel
+        </md-button>
+        <md-button style="margin-right:20px;"
+                   type="submit"
+                   ng-click="vm.clone()"
+                   ng-disabled="cloneCollectionForm.$invalid">
+          Clone
+        </md-button>
+      </mars-action-progress>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

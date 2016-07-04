@@ -18,7 +18,7 @@
     <md-divider></md-divider>
     <md-subheader>Collections</md-subheader>
 	
-    <md-list-item ng-repeat="collection in vm.collections | filter: { deleted: '!' }" 
+    <md-list-item ng-repeat="collection in vm.collections | filter: { deleted: '!', archived: '!' }" 
                   ng-click="vm.goToState('myPolls.collections.viewCollection', { collectionId: collection._id })"
                   ng-class="{ 'bg-selected': vm.isState('myPolls.collection', { collectionId: collection._id }) }">
       <md-icon class="material-icons">keyboard_arrow_right</md-icon>
