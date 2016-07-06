@@ -2,6 +2,7 @@
 node_modules
 /client/assets/bower_components
 npm-debug.log
+/build
 
 # Mongodb data folder
 /data

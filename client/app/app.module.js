@@ -3,7 +3,7 @@
 
   angular
     .module('app', [
-      'ngMaterial', 
+      'ngMaterial',
       'ngMessages',
       'ngSanitize',
       'angular-clipboard',
@@ -11,7 +11,7 @@
       'ngFileSaver',
       'md.data.table',
       'ui.router',
-      
+
       'app.data',
       'app.debounce',
       'app.inflector',
@@ -20,15 +20,16 @@
       'app.templates',
       'app.theme',
       'app.viewSync',
-      
+
       'app.auth',
       'app.poll',
       'app.result',
       'app.myPolls',
-      
+
       'plugins.bar-chart',
       'plugins.multiple-choice',
-      'plugins.word-cloud'
+      'plugins.word-cloud',
+      'plugins.annotate'
     ]);
-    
+
 })();
