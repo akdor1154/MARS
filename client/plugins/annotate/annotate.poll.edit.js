@@ -17,12 +17,8 @@
     /* jshint validthis: true */
     var vm = this;
 
-    vm.choiceValueChanged = choiceValueChanged;
     vm.poll = $scope.poll;
     vm.questionChanged = questionChanged;
-    vm.removeChoice = removeChoice;
-    vm.newChoice = newChoice;
-    vm.relabelChoices = relabelChoices;
     
 
     function questionChanged(poll) {

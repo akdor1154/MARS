@@ -14,5 +14,5 @@
     pluginsProvider.register(PLUGIN.RESULT_TYPE, 'annotate', true);
 
   }
-  
+
 })();

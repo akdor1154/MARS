@@ -11,15 +11,11 @@
     'pollPluginService'
   ];
 
-  function AnnotatePollViewController(
-      $log,
-      $scope,
-      pollPluginService
-    ) {
+  function AnnotatePollViewController($log, $scope, pollPluginService) {
     $log = $log.getInstance('AnnotatePollViewController');
 
     /* jshint validthis: true */
     var vm = this;
-    
+
 
 })();

@@ -5,7 +5,7 @@
     .module('plugins.annotate')
     .controller('AnnotateResultViewController', AnnotateResultViewController);
 
-  MultipleChoiceResultViewController.$inject = [
+  AnnotateResultViewController.$inject = [
     '$log',
     '$scope',
     'resultPluginService'
@@ -21,14 +21,7 @@
     /* jshint validthis: true */
     var vm = this;
 
-    vm.choices = {};
     vm.responsesByUser = null;
-
-    activate();
-
-    function activate() {
-
-    }
 
 
   }
