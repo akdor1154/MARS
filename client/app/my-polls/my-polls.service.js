@@ -559,6 +559,8 @@
         collection.created = new Date(collection.created);
       if (angular.isString(collection.deleted))
         collection.deleted = new Date(collection.deleted);
+      if (angular.isString(collection.archived))
+        collection.deleted = new Date(collection.archived);
       if (angular.isArray(collection.groups))
         collection.groups = collection.groups.map(function(group) {
           group.collection = collection;
