@@ -13,6 +13,7 @@ npm-debug.log
 /client/app/app.min.js
 /client/app/core/templates/templates.js
 /client/assets/css/app.min.css
+/build
 
 # Sourcemap files
 *.map
