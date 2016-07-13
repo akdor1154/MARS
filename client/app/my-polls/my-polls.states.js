@@ -172,6 +172,11 @@
           templateUrl: 'app/my-polls/trash/trash.html',
           controller: 'TrashController as vm'
         })
+        .state('myPolls.settings', {
+          url: '/settings',
+          templateUrl: 'app/my-polls/settings/settings.html',
+          controller: 'SettingsController as vm'
+        }) 
         .state('myPolls.help', {
           url: '/help',
           template: '<ui-view class="max-width-960" />',

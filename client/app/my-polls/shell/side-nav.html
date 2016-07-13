@@ -45,9 +45,13 @@
         <p>Trash</p>
     </md-list-item>
 
-    <md-list-item ng-click="goToState('myPolls.settings')">
-        <md-icon class="material-icons"> settings </md-icon>
-        <p>Settings</p>
+    <md-list-item ng-click="vm.goToState('myPolls.settings')"
+                  ng-class="{ 'bg-selected': vm.isState('myPolls.settings') }">
+      <md-icon class="material-icons">
+        settings </md-icon>
+      <p>
+        Settings
+      </p>
     </md-list-item>
 
     <md-list-item ng-click="vm.openExternal('https://drive.google.com/a/monash.edu/file/d/0B3jrsLjSGHrINktCaDlxV29WUnc/view?usp=sharing')">
