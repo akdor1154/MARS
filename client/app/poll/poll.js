@@ -34,11 +34,11 @@
     /* jshint validthis: true */
     var vm = this;
     
-    vm.closePreview = closePreview;
+    vm.isPoller = false
     vm.logout = logout;
-    vm.isPreview = false;
     vm.multiplePollsActive = false;
     vm.nextPoll = nextPoll;
+    vm.goToPresenterMode = goToPresenterMode;
     vm.showMyDisplayNameDialog = showMyDisplayNameDialog;
     vm.showMyFeedsDialog = showMyFeedsDialog;
     vm.showSubscribeDialog = showSubscribeDialog;
@@ -47,19 +47,12 @@
     
     function activate() {
       auth.isAuthenticated().then(function(user) {
-        if (user.group === 'poller' && !$stateParams.preview)
-          return $state.go('myPolls');
+        vm.isPoller = user.group === 'poller'
         pollService.onActivePollsChanged($scope, _onActivePollsChanged);
         pollService.getActivePolls();
-        vm.isPreview = $stateParams.preview;
       }, function(err) {
         return $state.go('auth.login');
       });  
-    }
-    
-    function closePreview() {
-      vm.isPreview = false;
-      $state.go('myPolls');
     }
     
     function logout() {
@@ -69,6 +62,10 @@
     function nextPoll() {
       var active = pollService.nextActivePoll();
       _viewPoll(active);
+    }
+    
+    function goToPresenterMode () {
+      $state.go('myPolls');
     }
     
     function showMyDisplayNameDialog() {

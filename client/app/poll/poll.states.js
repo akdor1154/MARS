@@ -10,7 +10,7 @@
   function statesConfig($stateProvider) {
     $stateProvider
       .state('poll', {
-        params: { preview: { type: Boolean, default: false }},
+        url: '/poll',
         templateUrl: 'app/poll/poll.html',
         controller: 'PollController as vm'
       })

@@ -36,10 +36,10 @@
     var vm = this;
     
     vm.action = null;
+    vm.goToAudienceMode = goToAudienceMode;
     vm.addCollection = addCollection;
     vm.collections = null;
     vm.goBack = goBack;
-    vm.goToPreview = goToPreview;
     vm.goToState = goToState;
     vm.isViewSynchronized = false;
     vm.isState = isState;
@@ -100,13 +100,13 @@
       });
     }
     
-    function goBack() {
-      $state.go(vm.shell.back.state, vm.shell.back.stateParams);
+    function goToAudienceMode() {
+      viewSyncService.disable();
+      $state.go('poll')
     }
     
-    function goToPreview() {
-      viewSyncService.disable();
-      goToState('poll', { preview: true });
+    function goBack() {
+      $state.go(vm.shell.back.state, vm.shell.back.stateParams);
     }
     
     function goToState(state, params) {
