@@ -72,6 +72,21 @@
       });
     }
     
+    function archiveCollection() {
+      var collection = vm.collection;
+      $mdDialog.show(
+        $mdDialog.confirm()
+          .title('Archive Collection')
+          .content('Archive this collection to prevent it from being shown in the sidebar? ' +
+          'You\'ll still be able to access it from the Archive view.')
+          .ok('Yes')
+          .cancel('Cancel')
+      ).then(function() {
+        myPollsService.archiveCollection(collection);
+        $state.go('myPolls.upcoming');
+      });
+    }
+    
     function cloneCollection() {
       $state.go('myPolls.collections.viewCollection.cloneCollection', {
         collection: vm.collection
@@ -176,7 +191,7 @@
     function viewResult(poll) {
       $log.debug('viewResult: ', poll._id);
       var resultCallback = function(result) {
-        $state.go('result', { resultId: result._id });
+        $state.go('result', { resultId: result._id, mode: 'live' });
       };
       return myPollsService.getLastResult(poll)
         .then(resultCallback)
@@ -214,6 +229,11 @@
           label: 'Clone Collection', 
           callback: cloneCollection, 
           icon: 'control_point_duplicate'
+        },
+        {
+          label: 'Archive Collection', 
+          callback: archiveCollection, 
+          icon: 'archive'
         },
         { 
           label: 'Delete Collection', 

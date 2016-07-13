@@ -16,6 +16,7 @@
     
     return {
       activatePoll: activatePoll,
+      archiveCollection: archiveCollection,
       cascadeOwners: cascadeOwners,
       cloneCollection: cloneCollection,
       createCollection: createCollection,
@@ -44,6 +45,7 @@
       searchUsers: searchUsers,
       swapGroups: swapGroups,
       swapPolls: swapPolls,
+      unarchiveCollection: unarchiveCollection,
       updateCollection: updateCollection,
       updateGroup: updateGroup,
       updatePoll: updatePoll
@@ -57,6 +59,15 @@
       return marsService.request('poll activate', {
         _id: poll._id
       });
+    }
+    
+/**
+ * Archive a collection (no cloning)
+ *
+ */
+    function archiveCollection(collection) {
+      collection.archived = new Date();
+      return updateCollection(collection, 'archived');
     }
     
 /** 
@@ -96,8 +107,8 @@
             0,
             newCollection
           );
-          if (archive === true)
-            collection.archive = new Date();
+                if (archive === true)
+        collection.archive = new Date();
           return newCollection;
         });
     }
@@ -391,6 +402,7 @@
       return updateCollection(collection, 'deleted');
     }
     
+    
 /**
  * Restore a deleted group
  *
@@ -485,6 +497,17 @@
           if (poll1.group._id !== poll2.group._id)
             return updateGroup(poll2.group, 'polls');
         });
+    }
+    
+/**
+ * Unarchive an archived collection.
+ *
+ */
+    function unarchiveCollection(collection) {
+      if (!angular.isDate(collection.archived))
+        return $q.resolve();
+      collection.archived = null;
+      return updateCollection(collection, 'archived');
     }
     
     

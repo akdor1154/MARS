@@ -143,6 +143,30 @@
           templateUrl: 'app/my-polls/collections/leaderboard.html',
           controller: 'LeaderboardController as vm'
         })
+        .state('myPolls.archive', {
+          url: '/archive',
+          templateUrl: 'app/my-polls/archive/archive.html',
+          controller: 'ArchiveController as vm'
+        })
+        .state('myPolls.archive.exportResults', {
+          params: { groups: { type: Object }},
+          onEnter: [
+            '$rootScope',
+            '$stateParams',
+            '$mdDialog',
+            function($rootScope, $stateParams, $mdDialog) {
+              $mdDialog.show({
+                // It's no longer only a collection template.
+                // Move to 'app/my-polls/common/' ?
+                templateUrl: 'app/my-polls/collections/export-results.html',
+                controller: 'ExportResultsController as vm',
+                locals: { groups: $stateParams.groups }
+              }).finally(function() {
+                $rootScope.goToPreviousState();
+              });
+            }
+          ]
+        })
         .state('myPolls.trash', {
           url: '/trash',
           templateUrl: 'app/my-polls/trash/trash.html',

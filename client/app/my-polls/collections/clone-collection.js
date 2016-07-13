@@ -7,6 +7,7 @@
       
   CloneCollectionController.$inject = [
     '$log',
+    '$state',
     '$mdDialog',
     'myPollsService',
     'collection'
@@ -14,6 +15,7 @@
     
   function CloneCollectionController(
       $log, 
+      $state, 
       $mdDialog,
       myPollsService,
       collection
@@ -43,11 +45,20 @@
     function clone() {
       vm.action = 'Cloning';
       myPollsService.cloneCollection(
-        collection, 
+        vm.collection, 
         vm.archive, 
         vm.newCollection
       ).then(function(newCollection) {
-        $mdDialog.hide(newCollection);
+        $mdDialog.hide()
+        .then(function(){
+          // The change created by myPollsService in the collection
+          // model is not being recognised in the side nav.
+          // Work around: Update vm.collection.archived here as well.
+          if (vm.archive)
+            vm.collection.archived = new Date();
+          $state.go('myPolls.collections.viewCollection',
+          { collectionId: newCollection._id });        
+        })
       })
       .catch(function(err) {
         vm.action = null;

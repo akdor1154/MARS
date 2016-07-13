@@ -1,0 +1,94 @@
+<div ng-show="vm.collections.length == 0" class="background-message">
+  <div>You have no archived polls</div>
+</div>
+
+<div class="max-width-960">
+  
+  <div class="edit-poll"
+       ng-repeat="collection in vm.collections"
+       ng-hide="collection.deleted">
+  <!--We should generalize the edit-poll class name for cases like this.-->
+    <div class="tools" layout="row" layout-align="start center">
+      <div class="md-title md-primary">
+        {{ collection.name }}
+      </div>
+      <p>{{ collection.archived | date:'yyyy-MM-dd HH:mm' }}</p>
+      <span flex></span>
+      <md-button class="md-icon-button" 
+                 aria-label="Unarchive Collection"
+                 ng-click="vm.collectionExportResults(collection)">
+        <md-tooltip>
+          Export Collection Results
+        </md-tooltip>
+        <md-icon class="material-icons">file_download</md-icon>
+      </md-button>
+      <md-button class="md-icon-button" 
+                 aria-label="Unarchive Collection"
+                 ng-click="vm.deleteCollection(collection)">
+        <md-tooltip>
+          Delete Collection
+        </md-tooltip>
+        <md-icon class="material-icons">delete</md-icon>
+      </md-button>
+      <md-button class="md-icon-button" 
+                 aria-label="Unarchive Collection"
+                 ng-click="vm.unarchive(collection)">
+        <md-tooltip>
+          Unarchive
+        </md-tooltip>
+        <md-icon class="material-icons">unarchive</md-icon>
+      </md-button>
+    </div>
+    
+    <div ng-repeat="group in collection.groups"
+         ng-hide="group.deleted">
+      <md-card>
+        <md-toolbar class="bg-{{group.color}}">
+          <div class="md-toolbar-tools">
+            <h2 class="md-title">{{ group.name }}</h2>
+            <md-menu md-position-mode="target-right target">
+              <!-- Trigger element is a md-button with an icon -->
+              <md-button aria-label="Open collection menu"
+                        class="md-icon-button" 
+                        ng-click="$mdOpenMenu()">
+                <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
+              </md-button>
+              <md-menu-content width="4">
+                <md-menu-item>
+                  <md-button ng-click="vm.exportResults(group)">
+                    <md-icon md-menu-align-target class="material-icons">file_download</md-icon>
+                    Export Results
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="vm.deleteGroup($parent.$index, group)">
+                    <md-icon md-menu-align-target class="material-icons">delete</md-icon>
+                    Delete Group
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+        </md-toolbar>
+        
+        <md-list>
+          <md-list-item ng-class="{ 'background-message': !poll.name }"
+                        ng-repeat="poll in group.polls"
+                        ng-hide="poll.deleted"
+                        ng-click="vm.viewResult(poll)">
+            <p>{{ poll.name || '[Unamed poll]' }}</p>
+          </md-list-item>
+          <md-list-item class="background-message"
+                        ng-show="group.polls.length === 0">
+            <p>There were no polls in this group</p>
+          </md-list-item>
+        </md-list>
+                
+      </md-card>
+    </div>
+   
+    <md-divider ng-show="!$last"></md-divider>
+    
+  </div>
+  
+</div>

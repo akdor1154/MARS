@@ -64,6 +64,7 @@
           'myPolls.collections.viewCollection.exportResults',
           'myPolls.collections.editPolls',
           'myPolls.collections.editPolls.addPoll',
+          'myPolls.archive.exportResults',
         ]);
         var isViewSynchronized = 
           localStorageService.get('myPolls.shell.isViewSynchronized');

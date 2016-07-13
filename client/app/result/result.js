@@ -33,6 +33,7 @@
     
     var vm = this;
     
+    vm.archiveMode = false;
     vm.close = close;
     vm.isOwner = false;
     vm.poll = null;
@@ -60,6 +61,7 @@
             vm.poll = result.poll;
             vm.result = result;
             vm.isOwner = _.contains(result.pollCollection.owners, user._id);
+            vm.archiveMode = $stateParams.mode === 'archive';
             resultService.onResultActivate($scope, onResultActivate);
             resultService.onResultDeactivate($scope, onResultDeactivate);
             return resultService.getActivations(result.poll._id);

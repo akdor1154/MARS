@@ -12,9 +12,9 @@
       .state('result', {
         params: {
           closeState: { type: Object },
-          closeStateParams: { type: Object }
+          closeStateParams: { type: Object },
         },
-        url: '/result/:resultId',
+        url: '/result/:mode/:resultId',
         templateUrl: 'app/result/result.html',
         controller: 'ResultController as vm'
       })

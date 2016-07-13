@@ -7,14 +7,14 @@
       <md-button aria-label="Lock result"
                  class="md-icon-button" 
                  ng-click="vm.toggleActive()"
-                 ng-show="vm.isOwner">
+                 ng-show="vm.isOwner && !vm.archiveMode">
         <md-icon class="svg-icons">{{vm.result.active ? 'pause_circle_outline' : 'play_circle_outline'}}</md-icon>
         <md-tooltip>{{vm.result.active ? 'Pause poll' : 'Start poll'}}</md-tooltip>
       </md-button>
       <md-button aria-label="Reset poll"
                  class="md-icon-button" 
                  ng-click="vm.resetPoll()"
-                 ng-show="vm.isOwner">
+                 ng-show="vm.isOwner && !vm.archiveMode">
         <md-icon class="svg-icons">autorenew</md-icon>
         <md-tooltip>Reset poll</md-tooltip>
       </md-button>
@@ -53,13 +53,15 @@
     </div>
 	</md-content>
   
-  <md-toolbar style="background: rgba(0,0,0,0.54);" ng-show="vm.result.active">
+  <md-toolbar style="background: rgba(0,0,0,0.54);"
+              ng-show="vm.result.active && !vm.archiveMode">
     <div class="md-toolbar-tools">
       <span>To respond to this poll, join the feed: <span class="md-accent">{{vm.result.token}}</span></span>
     </div>
   </md-toolbar>
   
-  <md-toolbar class="md-warn" ng-show="vm.result && !vm.result.active">
+  <md-toolbar class="md-warn"
+              ng-show="vm.result && !vm.result.active && !vm.archiveMode">
     <div class="md-toolbar-tools">
       <span>The poll is locked, responses will not be accepted</span>
       <span flex></span>

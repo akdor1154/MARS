@@ -50,7 +50,7 @@
     function viewResult(poll) {
       $log.debug('viewResult: ', poll._id);
       var resultCallback = function(result) {
-        $state.go('result', { resultId: result._id });
+        $state.go('result', { resultId: result._id, mode: 'live' });
       };
       return myPollsService.getLastResult(poll)
         .then(resultCallback)
