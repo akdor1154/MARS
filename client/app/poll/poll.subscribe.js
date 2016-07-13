@@ -8,9 +8,15 @@
   PollSubscribeController.$inject = [
     '$log', 
     '$mdDialog', 
+    '$mdToast',
     'pollService'];
     
-  function PollSubscribeController($log, $mdDialog, pollService) {
+  function PollSubscribeController(
+    $log,
+    $mdDialog,
+    $mdToast,
+    pollService
+  ) {
     $log = $log.getInstance('PollSubscribeController');
     
     /* jshint validthis: true */
@@ -29,15 +35,21 @@
     function subscribe() {
       vm.action = 'Joining';
       pollService.subscribe(vm.collectionToken)
-        .then(function() {
-          vm.action = null;
-          $mdDialog.hide();
-        })
-        .catch(function(err) {
-          if(err.code)
-            vm.serverErrors[err.code] = true;
-          vm.action = null;
-        });
+      .then(function() {
+        vm.action = null;
+        $mdDialog.hide();
+        $mdToast.show(
+          $mdToast
+          .simple()
+          .textContent('Subscribed! Please wait for the presenter to start a poll.')
+          .hideDelay(6000)
+        )
+      })
+      .catch(function(err) {
+        if(err.code)
+          vm.serverErrors[err.code] = true;
+        vm.action = null;
+      });
     }
     
   }
