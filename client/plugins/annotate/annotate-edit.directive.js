@@ -38,7 +38,11 @@
       var backImage = element.find("img")[0];
       var drawingContext = drawingLayer.getContext("2d");
 
-      drawingContext.drawImage(backImage,0,0, drawingLayer.width, (480*drawingLayer.width/800));
+// console.log(backImage)
+      var backImageAng = angular.element(backImage)
+      backImageAng.bind('load', function(){
+        drawingContext.drawImage(backImage,0,0, drawingLayer.width, (480*drawingLayer.width/800));      
+      })
     }
     
   }
