@@ -67,12 +67,6 @@
           </md-button>
           <md-menu-content width="4">
             <md-menu-item>
-              <md-button ng-click="">
-                <md-icon md-menu-align-target class="material-icons">timeline</md-icon>
-                Analytics (TODO)
-              </md-button>
-            </md-menu-item>
-            <md-menu-item>
               <md-button ng-click="vm.exportResults(group)">
                 <md-icon md-menu-align-target class="material-icons">file_download</md-icon>
                 Export Results
@@ -99,7 +93,7 @@
     
     <md-list>
       <md-list-item ng-class="{ 'background-message': !poll.name }"
-                    ng-click="vm.viewResult(poll)"
+                     ng-click="vm.viewResult(poll)"
                     ng-repeat="poll in shownPolls = (group.polls | filter:{deleted:'!'})" >
         <p md-highlight-flags="i"
            md-highlight-text="vm.shell.search.phrase">
