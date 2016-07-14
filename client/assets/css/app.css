@@ -37,6 +37,17 @@ md-toolbar .beta {
   font-size: 0.5em;
 }
 
+md-toolbar .heading {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	word-wrap: break-word;
+	overflow: hidden;
+}
+
+md-toolbar .heading > h2 {
+	display: inline;
+}
+
 /**
  * Missing in version 1.0.1 of angular-material
  * Remove this once angular-material has been upgraded
