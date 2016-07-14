@@ -14,11 +14,13 @@
       
       <md-toolbar class="bg-{{group.color}}">
         <div class="md-toolbar-tools">
-          <h2 class="md-title" 
-              md-highlight-flags="i"
-              md-highlight-text="vm.shell.search.phrase">
-            {{ group.collection.name }} - {{ group.name }}
-          </h2>
+          <div class="heading">
+            <h2 class="md-title" 
+                md-highlight-flags="i"
+                md-highlight-text="vm.shell.search.phrase">
+              {{ group.collection.name }} - {{ group.name }}
+            </h2>
+          </div>
           <span flex></span>
           <md-button class="md-icon-button md-secondary" 
                      aria-label="Finished Group" 
