@@ -20,21 +20,25 @@
         <md-menu-content width="3" >
           <md-menu-item>
             <md-button ng-click="vm.showMyDisplayNameDialog()">
+              <md-icon class="material-icons">face</md-icon>
               My Display Name
             </md-button>
           </md-menu-item>
           <md-menu-item>
             <md-button ng-click="vm.showMyFeedsDialog()">
+              <md-icon class="material-icons">playlist_add</md-icon>
               My Feeds
             </md-button>
           </md-menu-item>
           <md-menu-item ng-show="vm.isPoller">
             <md-button ng-click="vm.goToPresenterMode()">
+              <md-icon class="material-icons">insert_chart</md-icon>
               Presenter Mode
             </md-button>
           </md-menu-item>
           <md-menu-item>
             <md-button ng-click="vm.logout()">
+              <md-icon class="material-icons">exit_to_app</md-icon>
               Sign out
             </md-button>
           </md-menu-item>
