@@ -56,6 +56,16 @@ md-toolbar .heading > h2 {
 	max-width: calc(100% - 190px)
 }
 
+.side-nav-list .md-list-item-inner {
+	width: 100%;
+	box-sizing: border-box;
+}
+.side-nav-list .md-list-item-inner p {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 /**
  * Missing in version 1.0.1 of angular-material
  * Remove this once angular-material has been upgraded
