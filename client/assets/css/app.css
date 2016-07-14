@@ -47,6 +47,14 @@ md-toolbar .heading {
 md-toolbar .heading > h2 {
 	display: inline;
 }
+/**
+ * Note: this is super hacky and only a temp fix for iOS bug.
+ * 190px = 40px x 4 icons + 30px padding.
+ * TODO: create general rule for any number of icons.
+ */
+.icons-4 {
+	max-width: calc(100% - 190px)
+}
 
 /**
  * Missing in version 1.0.1 of angular-material
