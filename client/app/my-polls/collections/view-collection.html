@@ -56,7 +56,7 @@
           <md-tooltip>
             {{ vm.isUpcoming(group) ? 'Mark as done' : 'Mark as upcoming' }}
           </md-tooltip>
-          <md-icon md-menu-origin class="material-icons"> {{ vm.isUpcoming(group) ? 'done' : 'autorenew' }} </md-icon>
+          <md-icon md-menu-origin class="material-icons"> {{ vm.isUpcoming(group) ? 'check_box_outline_blank' : 'check_box' }} </md-icon>
         </md-button>
         <md-menu md-position-mode="target-right target">
           <!-- Trigger element is a md-button with an icon -->
