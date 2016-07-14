@@ -32,6 +32,11 @@ md-whiteframe[md-ink-ripple] {
 	user-select: none;
 }
 
+.selected-item p, .selected-item md-icon {
+	color: #2196f3;
+}
+
+
 md-toolbar .beta {
   margin: 0px 0px 8px 5px; 
   font-size: 0.5em;
