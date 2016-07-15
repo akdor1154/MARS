@@ -21,7 +21,8 @@
       hideSearch: hideSearch,
       menu: {
         items: [],
-        show: false
+        show: false,
+        title: null
       },
       search: {
         callback: false,
@@ -78,9 +79,10 @@
       // });
     }
     
-    function setMenu($scope, menuItems) {
+    function setMenu($scope, menuItems, title) {
       service.menu.items = menuItems;
       service.menu.show = true;
+      service.menu.title = title || null;
       // $scope.$on('$destroy', function() {
       //   service.menu.items = [];
       //   service.menu.show = false;

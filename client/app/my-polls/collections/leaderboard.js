@@ -130,18 +130,19 @@
       $log.debug('collection = ', collection);
       shell.setTitle($scope, 'Leaderboard: ' + collection.name);
       shell.setBack($scope, 'myPolls.collections.viewCollection', $stateParams);
-      shell.setMenu($scope, [
-        { 
-          label: 'Select Polls', 
-          callback: showSelectPollsDialog, 
-          icon: 'polls' 
-        },
-        { 
-          label: 'Update Leaderboard', 
-          callback: updateLeaderboard, 
-          icon: 'refresh' 
-        }
-      ]);
+      // The secondary toolbar isn't working, not sure why...
+      // shell.setMenu($scope, [
+      //   { 
+      //     label: 'Select Polls', 
+      //     callback: showSelectPollsDialog, 
+      //     icon: 'polls' 
+      //   },
+      //   { 
+      //     label: 'Update Leaderboard', 
+      //     callback: updateLeaderboard, 
+      //     icon: 'refresh' 
+      //   }
+      // ]);
       vm.collection = collection;
     }
     

@@ -52,8 +52,8 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      <md-menu md-position-mode="target-right target">
-        <!-- Trigger element is a md-button with an icon -->
+      <!--<md-menu md-position-mode="target-right target">
+         Trigger element is a md-button with an icon 
         <md-button aria-label="Open menu"
                    class="md-icon-button" 
                    ng-show="vm.shell.menu.show" 
@@ -68,10 +68,10 @@
             </md-button>
           </md-menu-item>
         </md-menu-content>
-      </md-menu>
+      </md-menu>-->
     </div>
   </md-toolbar>
-  
+
   <md-toolbar class="md-hue-1 md-whiteframe-2dp"
               mars-focus-when="vm.shell.search.show"
               md-theme="search"
@@ -93,6 +93,26 @@
                  class="md-icon-button"
                  ng-click="vm.shell.hideSearch()">
         <md-icon class="material-icons">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-toolbar class="md-hue-1 md-whiteframe-1dp"
+              md-theme="search"
+              ng-show="vm.shell.menu.show">
+    <div class="md-toolbar-tools">
+      <div class="heading icons-4"
+           ng-if="vm.shell.menu.title">
+        <h2><span>{{vm.shell.menu.title}}</span></h2>
+      </div>
+      <span flex></span>
+      <md-button aria-label="Search"
+                 class="md-icon-button" 
+                 ng-repeat="item in vm.shell.menu.items"
+                 ng-click="item.callback()"
+                 ng-show="vm.shell.search.callback" >
+          <md-tooltip>{{item.label}}</md-tooltip>
+          <md-icon class="material-icons">{{item.icon}}</md-icon>
       </md-button>
     </div>
   </md-toolbar>
