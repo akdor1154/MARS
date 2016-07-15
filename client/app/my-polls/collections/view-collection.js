@@ -77,8 +77,8 @@
       $mdDialog.show(
         $mdDialog.confirm()
           .title('Archive Collection')
-          .content('Archive this collection to prevent it from being shown in the sidebar? ' +
-          'You\'ll still be able to access it from the Archive view.')
+          .htmlContent('<p>Are you sure you would like to archive ' + collection.name + '?</p><p>Archived collections are not shown in the sidebar. ' +
+          'You can still access them from the Archive.</p>')
           .ok('Yes')
           .cancel('Cancel')
       ).then(function() {
