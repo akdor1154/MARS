@@ -240,7 +240,7 @@
           callback: deleteCollection, 
           icon: 'delete' 
         }
-      ]);
+      ], 'Feed Code: ' + collection.token);
       vm.collection = collection;
       vm.groups = _.filter(collection.groups, function(group) {
         return !angular.isDate(group.deleted);
