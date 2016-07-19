@@ -71,14 +71,16 @@
     function showMyDisplayNameDialog() {
       $mdDialog.show({
         templateUrl: 'app/poll/my-display-name.html',
-        controller: 'MyDisplayNameController as vm'
+        controller: 'MyDisplayNameController as vm',
+        fullscreen: true
       });
     }
     
     function showMyFeedsDialog() {
       $mdDialog.show({
         templateUrl: 'app/poll/my-feeds.html',
-        controller: 'MyFeedsController as vm'
+        controller: 'MyFeedsController as vm',
+        fullscreen: true
       });
     }
     
