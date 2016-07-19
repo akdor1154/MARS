@@ -54,7 +54,7 @@
         .padding(5)
         .rotate(0)
         .font('Impact')
-        .text(function(d) { return d.text })
+        .text(function(d) { return d.text.substring(0,24); })
         .on('end', render);
         
       
@@ -62,7 +62,7 @@
         $log.debug('render');
         
         var cloud = g.selectAll('text')
-          .data(words, function(d) { return d.text; });
+          .data(words, function(d) { return d.text.substring(0,24); });
         
         cloud.enter()
           .append('text')
@@ -70,7 +70,7 @@
             .attr('text-anchor', 'middle')
             .style('fill', function(d, i) { return fill(i); })
             .style('font-family', 'Impact')
-            .text(function(d) { return d.text; })
+            .text(function(d) { return d.text.substring(0,24); });
             
         cloud
           .transition()
@@ -97,14 +97,14 @@
         // A 5:2 aspect ratio seemed to work well with the space available
         // at common screen resolutions.
         svg.style('width', '100%');
-        width = parseInt(svg.style('width'), 10)
+        width = parseInt(svg.style('width'), 10);
         height = width * 2 / 5;
         
         // Don't proceed if height or width is NaN, it can cause the 
         // browser to lock up during layout.
         if (isNaN(width) || isNaN(height))
           return;
-          
+
         svg
           .attr('width', width)
           .attr('height', height);
@@ -115,9 +115,9 @@
             sumOfUnique = _.reduce(_.unique(values), function(a, b) {
               return a + b;
             });
-        
-        var minFontSize = Math.max(100 - 10 * values.length, 25),
-            maxFontSize = Math.min(minFontSize + 10 * sumOfUnique, 100),
+
+        var minFontSize = Math.min( width/10/(values.length/3), 25),
+            maxFontSize = 3*minFontSize,
             fontSize = d3.scale.log()
               .range([minFontSize, maxFontSize]);
         if (words.length)
