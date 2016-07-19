@@ -37,7 +37,7 @@
         <md-button type="button" ng-click="vm.cancel()" >
          Cancel
         </md-button>
-        <md-button type="submit" ng-click="vm.save()" style="margin-right:20px;">
+        <md-button type="submit" ng-click="vm.save()" style="margin-right:20px;" ng-disabled="!vm.group.name">
           Save
         </md-button>
       </mars-action-progress>
