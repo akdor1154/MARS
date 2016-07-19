@@ -9,7 +9,8 @@
           <p>Choose how your name will be displayed on leaderboards.</p>
           <md-input-container class="md-block" flex-gt-sm>
             <label>Display name</label>
-            <input ng-model="vm.user.name.display">
+            <input ng-model="vm.user.name.display"
+                   ng-disabled="vm.user.name.anonymous">
           </md-input-container>
           <md-checkbox ng-model="vm.user.name.anonymous" aria-label="Anonymous">
             I wish to remain anonymous.
