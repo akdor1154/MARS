@@ -2,7 +2,7 @@
   <div>You have no archived polls</div>
 </div>
 
-<div class="max-width-960">
+<div ng-show="vm.collections.length > 0"  class="max-width-960">
   
   <div class="edit-poll"
        ng-repeat="collection in vm.collections"
