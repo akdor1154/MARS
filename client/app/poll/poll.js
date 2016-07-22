@@ -52,7 +52,13 @@
         pollService.getActivePolls();
       }, function(err) {
         return $state.go('auth.login');
-      });  
+      });
+
+      pollService.getSubscriptions()
+      .then(function(subscriptions) {
+        if (subscriptions.length === 0)
+          showUserAgreement();
+      });
     }
     
     function logout() {
@@ -64,7 +70,7 @@
       _viewPoll(active);
     }
     
-    function goToPresenterMode () {
+    function goToPresenterMode() {
       $state.go('myPolls');
     }
     
@@ -92,6 +98,23 @@
       }).then(function() {
         pollService.getActivePolls();
       });
+    }
+
+    function showUserAgreement() {
+      $mdDialog.show(
+        $mdDialog.confirm()
+        .title('User Agreement')
+        .htmlContent(
+          '<p>' +
+          '  The information you provide may be used and published in an aggregated format. No individual or their response will be published.' +
+          '</p>' +
+          '<p>' +
+          '  For information regarding how your personal information is handled, please refer to the <a href="http://privacy.monash.edu.au/guidelines/collection-personal-information.html#enrol">Student Privacy Collection Statement</a>.' +
+          '</p>'
+        )
+        .ariaLabel('User Agreement')
+        .ok('Accept')
+      );      
     }
     
     function _onActivePollsChanged(event, count) {
