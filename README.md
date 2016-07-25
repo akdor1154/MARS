@@ -4,7 +4,9 @@ Monash Audience Response System
 
 
 ## Setup
-* Run `npm install`
+* Install Node.js and MongoDB (with npm)
+* Run `npm install` to install all components needed
+* Run `npm start` to start the web server
 
 ## Development Environment
 From repository root:
@@ -12,7 +14,7 @@ From repository root:
 * `nodemon`
 
 ## Monash Production Environment
-* Ensure MongoDB is running with `service mongod start`
+* Ensure MongoDB is running with `service mongod start`. If that command doesn't work, `mongod` can be started manually in the command line.
 * Run the MARS service `service mars start`
 
 
