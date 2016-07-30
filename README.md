@@ -5,9 +5,10 @@ Monash Audience Response System
 
 ## Setup
 * Run `npm install`
+* Run `node bin/www` to run the server on port 3000
 
 ## Development Environment
-From repository root:
+From repository root (make sure you have these processes running during development):
 * `gulp watch`
 * `nodemon`
 

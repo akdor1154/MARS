@@ -29,7 +29,8 @@
       'plugins.bar-chart',
       'plugins.multiple-choice',
       'plugins.word-cloud',
-      'plugins.annotate'
+      'plugins.annotate',
+      'plugins.queue'
     ]);
 
 })();
