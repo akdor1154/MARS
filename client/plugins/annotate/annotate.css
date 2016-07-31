@@ -4,3 +4,13 @@ md-whiteframe.annotate {
 	margin: 8px;
 	padding: 16px;
 }
+
+#back-image {
+	width: 100%;
+	display:none;
+}
+
+#drawing-layer {
+	width: 100%;
+}
+

@@ -17,5 +17,10 @@
     /* jshint validthis: true */
     var vm = this;
 
+    vm.printDebug = printDebug;
+
+    function printDebug() {
+      console.log($scope.savedDraws);
+    }
   }
 })();

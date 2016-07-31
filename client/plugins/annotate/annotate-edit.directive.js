@@ -26,9 +26,7 @@
       link: link,
       restrict: 'EA',
       template: '<md-card><img id="back-image" src="assets/img/sample.jpg"><canvas id="drawing-layer" width="800" height="480"></canvas></md-card>',
-      scope: {
-        words: '='
-      },
+      scope: {},
     }
     return directive;
 
@@ -38,6 +36,11 @@
       var backImage = element.find("img")[0];
       var drawingContext = drawingLayer.getContext("2d");
 
+      var isDragging = false;
+
+      scope.savedDraws = {
+        strokes: []
+      };
 
       // Creating an angular element from the <img> and only setting up the canvas once the image has loaded
       var backImageAng = angular.element(backImage);
@@ -53,7 +56,7 @@
       drawingLayerAng.on('mousedown', handleMouseDown);
       drawingLayerAng.on('mouseup', handleMouseUpOut);
       drawingLayerAng.on('mouseout', handleMouseUpOut);
-      drawingLayerAng.on('touchmove', handleMouseMove);
+      drawingLayerAng.on('mousemove', handleMouseMove);
 
       function handleTouchStart(event) {
 
@@ -92,8 +95,10 @@
 
         var newObject = {X: fixedX, Y: fixedY};
 
-        savedDraws.strokes.push(new Array());
-        savedDraws.strokes[savedDraws.strokes.length-1].push(copyTouch(newObject));
+        scope.savedDraws.strokes.push(new Array());
+        scope.savedDraws.strokes[scope.savedDraws.strokes.length-1].push(copyTouch(newObject));
+
+	console.log(scope.savedDraws);
         return;
       }
 
@@ -141,7 +146,7 @@
       }
 
       function continueStroke(event) {
-        var ongoingTouches = savedDraws.strokes[savedDraws.strokes.length-1];
+        var ongoingTouches = scope.savedDraws.strokes[scope.savedDraws.strokes.length-1];
 
         var fixedX = event.X;
         var fixedY = event.Y;
