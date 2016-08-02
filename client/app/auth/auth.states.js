@@ -44,7 +44,8 @@
           function($mdDialog, $state) {
             $mdDialog.show({
               templateUrl: 'app/auth/login.html',
-              controller: 'LoginController as vm'
+              controller: 'LoginController as vm',
+              fullscreen: true
             }).finally(function() {
               $state.go('auth.entry');
             });
