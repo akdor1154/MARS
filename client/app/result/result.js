@@ -43,6 +43,10 @@
     vm.resume = resume;
     vm.showClose = false;
     vm.toast = null;
+    vm.viewSettings = {
+      highlightCorrectAnswers: false
+    };
+    vm.toggleHighlightCorrectAnswers = toggleHighlightCorrectAnswers;
     vm.toggleActive = toggleActive;
     vm.viewResult = viewResult;
     
@@ -184,6 +188,10 @@
             // closeStateParams: closeStateParams
           // });
         // });
+    }
+
+    function toggleHighlightCorrectAnswers() {
+      vm.viewSettings.highlightCorrectAnswers = !vm.viewSettings.highlightCorrectAnswers;
     }
     
     $scope.$on('$destroy', function() {

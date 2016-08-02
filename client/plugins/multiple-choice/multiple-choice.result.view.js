@@ -40,6 +40,7 @@
             return {
               label: choice.label,
               text: choice.text,
+              correct: choice.correct,
               value: 0
             }
           }

@@ -15,7 +15,8 @@
       link: link,
       restrict: 'EA',
       scope: {
-        data: '='
+        data: '=',
+        highlightCorrectAnswers: '='
       },
     }
     return directive;
@@ -59,6 +60,7 @@
           
           // Add rectangles
           bar.append('rect')
+            .attr('class', 'choice-bar')
             .attr('width', 0)
             .attr('height', barHeight)
             .attr('x', labelMargin)
@@ -105,6 +107,10 @@
 
           // Nothing to render if there's no data
           if (!data) return;
+
+          // Not sure if this is the best way of passing this in, I didn't want
+          // to change the call signature to avoid bugs.
+          var highlightCorrectAnswers = scope.highlightCorrectAnswers;
           
           var width = d3.select(parentElement).node().offsetWidth - labelMargin,
               xScale = d3.scale.linear()
@@ -130,11 +136,19 @@
               return 'translate(' + x + ',' + y + ')';
             });
               
-          bar.select('rect')
+          bar.select('rect.choice-bar')
             .transition()
               .duration(transitionDuration)
               .attr('width', function(d, i) {
                 return barWidths[i];
+              });
+
+          bar.transition()
+              .duration(transitionDuration)
+              .attr('opacity', function(choice) {
+                return (highlightCorrectAnswers && !choice.correct)
+                  ? 0.3
+                  : 1.0;
               });
                   
           bar.select('text.choice-percentage')
@@ -184,6 +198,10 @@
         // Watch for data changes and update bar sizes
         scope.$watch('data', function(newData, oldData) {
           return scope.update(newData);
+        }, true);
+
+        scope.$watch('highlightCorrectAnswers', function(highlight, oldHighlight) {
+          return scope.update(scope.data);
         }, true);
 
         // Truncate text helper function

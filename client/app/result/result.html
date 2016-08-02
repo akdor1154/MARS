@@ -4,6 +4,21 @@
       <span>{{vm.result ? vm.result.pollCollection.name : 'Mars'}}</span>
       <!--<span class="beta">beta</span>-->
       <span flex></span>
+      <md-button aria-label="Highlight correct answers"
+                 class="md-icon-button"
+                 ng-click="vm.toggleHighlightCorrectAnswers()"
+                 ng-show="vm.isOwner">
+        <md-icon class="svg-icons">{{
+          vm.viewSettings.highlightCorrectAnswers
+            ? 'visibility_off'
+            : 'visibility'
+        }}</md-icon>
+        <md-tooltip>{{
+          vm.viewSettings.highlightCorrectAnswers
+            ? 'Hide correct answers'
+            : 'Highlight correct answers'
+        }}</md-tooltip>
+      </md-button>
       <md-button aria-label="Lock result"
                  class="md-icon-button" 
                  ng-click="vm.toggleActive()"
@@ -49,7 +64,8 @@
       <mars-plugin mars-plugin-name="vm.result.type"
                    mars-plugin-view="result.view"
                    poll="vm.poll"
-                   result="vm.result"></mars-plugin>
+                   result="vm.result"
+                   view-settings="vm.viewSettings"></mars-plugin>
     </div>
 	</md-content>
   

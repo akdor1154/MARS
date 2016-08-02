@@ -17,7 +17,8 @@
         'marsPluginName': '=',
         'marsPluginView': '@',
         'poll': '=',
-        'result': '='
+        'result': '=',
+        'viewSettings': '='
       },
       template: '<ng-include src="marsPluginTemplatePath"></ng-include>'
     }
