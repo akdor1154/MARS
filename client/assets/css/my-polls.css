@@ -88,7 +88,6 @@ span.title-number {
 .group .md-list-item-inner p {
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 .edit-collection .icon-autocomplete md-icon {
@@ -169,5 +168,16 @@ span.title-number {
 .update-leaderboard .md-list-item-inner p {
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+}
+
+.poll-question {
+	white-space: pre-wrap;
+	line-height: initial; 
+}
+
+/* Material uses line-height to get list item spacing,
+   which we have just clobbered. */
+md-list-item .poll-question {
+	padding-top: 8px;
+	padding-bottom: 8px;
 }

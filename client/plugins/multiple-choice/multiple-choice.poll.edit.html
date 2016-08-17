@@ -25,8 +25,10 @@
     <h2>{{choice.label}}</h2> 
     <md-input-container flex>
       <label>{{ choice.blank ? 'Start typing to create choice' : 'Text' }}</label>
+      <!-- change to textarea when we allow multiline answers -->
       <input ng-model="choice.text" 
              ng-change="vm.choiceValueChanged($index, choice)">
+      </input>
     </md-input-container>
     <md-checkbox aria-label="Correct choice"
                  flex="initial" 

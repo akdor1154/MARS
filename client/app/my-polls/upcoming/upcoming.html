@@ -36,7 +36,8 @@
                       ng-click="upcomingVm.viewResult(poll)"
                       ng-repeat="poll in shownPolls = (group.polls | filter:{deleted:'!'})" >
           <p md-highlight-flags="i"
-             md-highlight-text="vm.shell.search.phrase">
+             md-highlight-text="vm.shell.search.phrase"
+             class="poll-question">
             {{ poll.name || '[Unamed poll]' }}
           </p>
         </md-list-item>
